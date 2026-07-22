@@ -1,0 +1,865 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TCRNo12 — Race Against the Cut-Off</title>
+<meta name="description" content="Interactive time-distance chart of all 376 Transcontinental Race No12 riders against the 8 August cut-off.">
+<meta name="robots" content="index, follow">
+<meta property="og:title" content="TCRNo12 — Race Against the Cut-Off">
+<meta property="og:description" content="Every rider is a line. Above the black diagonal is inside the time limit; below it is not.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ctext y=%22.9em%22 font-size=%2290%22%3E%F0%9F%9A%B4%3C/text%3E%3C/svg%3E">
+<style>*,*::before,*::after{box-sizing:border-box}html{-webkit-text-size-adjust:100%}body{margin:0}img,svg{max-width:100%}button,input{font:inherit;color:inherit}</style>
+</head>
+<body>
+<style>
+  :root {
+    color-scheme: light;
+    --paper:   #f4f4f1;
+    --panel:   #fdfdfc;
+    --surface: #fdfdfc;
+    --ink:     #0b0c0c;
+    --ink-2:   #4a4b4b;
+    --muted:   #86867f;
+    --grid:    #e2e2dd;
+    --rule:    #c1c1c1;
+    --hair:    #d6d6d0;
+    --mast-bg: #0b0c0c;
+    --mast-fg: #f4f4f1;
+    --ahead:   #00719e;
+    --edge:    #8a8a82;
+    --behind:  #c8352b;
+    --field:   #ffffff;
+    --display: "Oswald", "Roboto Condensed", "Arial Narrow", "Helvetica Neue", system-ui, sans-serif;
+    --sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:where(:not([data-theme="light"])) {
+      color-scheme: dark;
+      --paper:   #0b0c0c;
+      --panel:   #151617;
+      --surface: #151617;
+      --ink:     #fefefe;
+      --ink-2:   #c1c1c1;
+      --muted:   #8d8d86;
+      --grid:    #262728;
+      --rule:    #3a3b3c;
+      --hair:    #2a2b2c;
+      --mast-bg: #17181a;
+      --mast-fg: #fefefe;
+      --ahead:   #1f93c4;
+      --edge:    #a8a8a0;
+      --behind:  #e05a51;
+      --field:   #0f1011;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --paper:   #0b0c0c;
+    --panel:   #151617;
+    --surface: #151617;
+    --ink:     #fefefe;
+    --ink-2:   #c1c1c1;
+    --muted:   #8d8d86;
+    --grid:    #262728;
+    --rule:    #3a3b3c;
+    --hair:    #2a2b2c;
+    --mast-bg: #17181a;
+    --mast-fg: #fefefe;
+    --ahead:   #1f93c4;
+    --edge:    #a8a8a0;
+    --behind:  #e05a51;
+    --field:   #0f1011;
+  }
+
+  body { background: var(--paper); color: var(--ink); font-family: var(--sans);
+         line-height: 1.55; -webkit-font-smoothing: antialiased; }
+  * { border-radius: 0; }
+
+  .lbl { font-family: var(--display); font-weight: 500; text-transform: uppercase;
+         letter-spacing: .1em; font-stretch: 87.5%; }
+
+  /* masthead — the one solid block, TCR's hard-edged register */
+  .mast { background: var(--mast-bg); color: var(--mast-fg); }
+  .mast-in { max-width: 1180px; margin: 0 auto; padding: 26px 22px 30px; }
+  .mast .kicker { font-size: 11px; letter-spacing: .2em; opacity: .72; }
+  h1 { font-family: var(--display); font-weight: 600; font-stretch: 87.5%;
+       text-transform: uppercase; letter-spacing: .015em; line-height: .96;
+       font-size: clamp(38px, 7.2vw, 78px); margin: 10px 0 0; text-wrap: balance; }
+  .lede { max-width: 64ch; margin: 16px 0 0; font-size: 15px; opacity: .88; }
+  .lede b { font-weight: 600; opacity: 1; }
+
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 22px 72px;
+          display: flex; flex-direction: column; gap: 0; }
+
+  .block { border: 1px solid var(--hair); border-top: none; background: var(--panel); }
+  .block:first-of-type { border-top: 3px solid var(--ink); }
+
+  /* parameters */
+  .params { display: flex; flex-wrap: wrap; gap: 20px 30px; padding: 16px 18px; align-items: flex-end; }
+  .field { display: flex; flex-direction: column; gap: 8px; }
+  .field > .lbl { font-size: 10.5px; color: var(--muted); line-height: 1; }
+  .pills { display: flex; }
+  .pill { font-family: var(--display); font-stretch: 87.5%; text-transform: uppercase;
+          letter-spacing: .07em; font-size: 13px; font-weight: 500; padding: 9px 14px;
+          background: var(--field); color: var(--ink-2); border: 1px solid var(--rule);
+          margin-left: -1px; cursor: pointer; }
+  .pill:first-child { margin-left: 0; }
+  .pill[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); position: relative; }
+  .pill:focus-visible, input:focus-visible, svg:focus-visible { outline: 2px solid var(--ahead); outline-offset: 1px; }
+  input[type="search"] { font: 400 13px var(--sans); padding: 9px 11px; width: 172px;
+          border: 1px solid var(--rule); background: var(--field); color: var(--ink); }
+  input[type="range"] { width: 190px; accent-color: var(--ink); }
+  .rangeval { font-family: var(--display); font-stretch: 87.5%; font-size: 15px; font-weight: 500;
+              font-variant-numeric: tabular-nums; }
+  .check { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--ink-2); cursor: pointer; }
+  .spacer { flex: 1 1 auto; }
+
+  /* stat strip — hairline-divided, no cards */
+  .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
+  .tile { padding: 16px 18px; border-left: 1px solid var(--hair); display: flex; flex-direction: column; gap: 3px; }
+  .tile:first-child { border-left: none; }
+  .tile .v { font-family: var(--display); font-stretch: 87.5%; font-size: 40px; font-weight: 600;
+             line-height: 1; letter-spacing: -.005em; }
+  .tile .k { font-size: 12.5px; color: var(--ink-2); }
+  .tile .u { font-size: 11px; color: var(--muted); }
+  .tile.c-ahead .v { color: var(--ahead); }
+  .tile.c-edge  .v { color: var(--edge); }
+  .tile.c-behind .v { color: var(--behind); }
+
+  /* chart */
+  .chartcard { padding: 16px 18px 10px; }
+  .chart-head { display: flex; flex-wrap: wrap; gap: 10px 22px; align-items: baseline;
+                justify-content: space-between; margin-bottom: 10px; }
+  .chart-title { font-family: var(--display); font-stretch: 87.5%; text-transform: uppercase;
+                 letter-spacing: .08em; font-size: 14px; font-weight: 600; }
+  .legend { display: flex; flex-wrap: wrap; gap: 16px; }
+  .lg { display: flex; align-items: center; gap: 7px; font-size: 12px; color: var(--ink-2); }
+  .sw { width: 10px; height: 10px; flex: none; }
+  .sw.line { width: 17px; height: 0; border-top: 2px solid var(--ink); }
+  svg { display: block; width: 100%; height: auto; }
+  text { font-family: var(--sans); fill: var(--muted); font-size: 11px; font-variant-numeric: tabular-nums; }
+  .axname { font-family: var(--display); font-stretch: 87.5%; text-transform: uppercase;
+            letter-spacing: .12em; fill: var(--muted); font-size: 10.5px; }
+  .marklab { font-family: var(--display); font-stretch: 87.5%; text-transform: uppercase;
+             letter-spacing: .07em; font-size: 11.5px; font-weight: 600;
+             stroke: var(--surface); stroke-width: 3.5px; paint-order: stroke fill; }
+  .hint { font-size: 12.5px; color: var(--muted); padding: 4px 2px 8px; }
+
+  /* tooltip */
+  .tip { position: fixed; z-index: 9; pointer-events: none; opacity: 0; transition: opacity .1s;
+         background: var(--panel); border: 1px solid var(--ink); padding: 10px 12px; max-width: 265px; }
+  .tip.on { opacity: 1; }
+  .tip .n { font-family: var(--display); font-stretch: 87.5%; text-transform: uppercase;
+            letter-spacing: .05em; font-size: 15px; font-weight: 600; margin-bottom: 7px; }
+  .tip dl { display: grid; grid-template-columns: auto auto; gap: 3px 16px; margin: 0; }
+  .tip dt { font-size: 11.5px; color: var(--ink-2); }
+  .tip dd { font-size: 11.5px; margin: 0; text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; }
+  .tip .st { margin-top: 8px; padding-top: 7px; border-top: 1px solid var(--hair);
+             font-family: var(--display); font-stretch: 87.5%; text-transform: uppercase;
+             letter-spacing: .06em; font-size: 12px; font-weight: 600;
+             display: flex; align-items: center; gap: 6px; }
+
+  /* table */
+  .tblwrap { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; font-size: 13px; }
+  th, td { text-align: right; padding: 8px 13px; border-bottom: 1px solid var(--grid); white-space: nowrap; }
+  th { font-family: var(--display); font-stretch: 87.5%; text-transform: uppercase; letter-spacing: .09em;
+       font-size: 11px; color: var(--muted); font-weight: 500; position: sticky; top: 0;
+       background: var(--panel); border-bottom: 1px solid var(--rule); }
+  td.l, th.l { text-align: left; }
+  td.num { font-variant-numeric: tabular-nums; }
+  .badge { display: inline-flex; align-items: center; gap: 6px; font-family: var(--display);
+           font-stretch: 87.5%; text-transform: uppercase; letter-spacing: .05em;
+           font-size: 12px; font-weight: 600; }
+  .tblcap { padding: 14px 18px 2px; font-size: 12.5px; color: var(--muted); }
+
+  footer { color: var(--ink-2); font-size: 12.5px; padding: 22px 2px 0; }
+  footer p { margin: 0 0 9px; max-width: 82ch; }
+  footer b { font-family: var(--display); font-stretch: 87.5%; text-transform: uppercase;
+             letter-spacing: .07em; font-weight: 600; color: var(--ink); }
+  a { color: inherit; }
+  [hidden] { display: none !important; }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<header class="mast">
+  <div class="mast-in">
+    <div class="kicker lbl">Transcontinental Race No12 · Trondheim → Kalamata</div>
+    <h1>Race against<br>the cut-off</h1>
+    <p class="lede">Every rider is a line — their average kilometres per day since the start.
+      The <b>black diagonal</b> is the minimum pace needed to stamp in at Kalamata before the cut-off on
+      <b>8 August, 23:59 CEST</b>. Above the line is inside the limit. Below it is not.
+      Snapshot taken 22 July 2026, 16:00 CEST — day 4 of the race.</p>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <section class="block params" aria-label="Parameters">
+    <div class="field">
+      <span class="lbl" id="lb-cat">Category</span>
+      <div class="pills" role="group" aria-labelledby="lb-cat" id="cats"></div>
+    </div>
+    <div class="field">
+      <label class="lbl" for="q">Find rider</label>
+      <input type="search" id="q" placeholder="e.g. Strasser" autocomplete="off">
+    </div>
+    <div class="field">
+      <label class="lbl" for="tot">Estimated total distance</label>
+      <div style="display:flex;align-items:center;gap:11px">
+        <input type="range" id="tot" min="4700" max="5200" step="50" value="4950">
+        <span class="rangeval" id="totv">4950 km</span>
+      </div>
+    </div>
+    <div class="field">
+      <span class="lbl">Filter</span>
+      <label class="check"><input type="checkbox" id="risk"> Only riders off the pace</label>
+    </div>
+    <div class="spacer"></div>
+    <div class="field">
+      <span class="lbl" id="lb-view">View</span>
+      <div class="pills" role="group" aria-labelledby="lb-view">
+        <button class="pill" id="v-chart" aria-pressed="true">Chart</button>
+        <button class="pill" id="v-table" aria-pressed="false">Table</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="block tiles" aria-label="Summary">
+    <div class="tile"><span class="v" id="s-req">—</span><span class="k">Minimum pace required</span><span class="u">kilometres per day</span></div>
+    <div class="tile c-ahead"><span class="v" id="s-ahead">—</span><span class="k">Inside, with margin</span><span class="u">at least 10% over the minimum</span></div>
+    <div class="tile c-edge"><span class="v" id="s-edge">—</span><span class="k">On the edge</span><span class="u">−5% to +10%</span></div>
+    <div class="tile c-behind"><span class="v" id="s-behind">—</span><span class="k">Off the pace</span><span class="u">more than 5% below</span></div>
+  </section>
+
+  <section class="block chartcard" id="chartview">
+    <div class="chart-head">
+      <span class="chart-title">Distance covered against the cut-off</span>
+      <div class="legend">
+        <span class="lg"><span class="sw" style="background:var(--ahead)"></span>Inside</span>
+        <span class="lg"><span class="sw" style="background:var(--edge)"></span>On the edge</span>
+        <span class="lg"><span class="sw" style="background:var(--behind)"></span>Off the pace</span>
+        <span class="lg"><span class="sw line"></span>Minimum pace</span>
+      </div>
+    </div>
+    <svg id="plot" viewBox="0 0 1000 566" role="img" tabindex="0"
+         aria-label="Time-distance diagram: each rider is a projection line compared against the cut-off diagonal. The table view below carries the same data."></svg>
+    <p class="hint">Hover the chart to identify a rider — or focus the diagram and use the ← → keys.
+      Each line stops where that rider would cross the finish at their current pace.</p>
+  </section>
+
+  <section class="block" id="tableview" hidden>
+    <p class="tblcap">The same data as the chart, ordered from the most critical margin. <span id="tcount"></span></p>
+    <div class="tblwrap">
+      <table>
+        <thead><tr>
+          <th class="l">Rider</th><th class="l">Cat.</th><th>Pos.</th><th>km</th><th>km/day</th>
+          <th>Margin</th><th>Est. finish</th><th>Stopped</th><th class="l">Status</th>
+        </tr></thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer>
+    <p><b>How to read this.</b> Each rider's line is kilometres ÷ days elapsed, projected to the finish on the
+      assumption they hold that same average. It is a linear projection, not a forecast: nobody holds one pace for
+      twenty days. It answers who has margin right now — not who will arrive.</p>
+    <p><b>The assumptions.</b> Start 19 July 2026 at 20:00 CEST, cut-off 8 August at 23:59 CEST — 20 days and 4 hours
+      (source: Lost Dot, who mark these details as provisional). The nominal route is roughly 4,800–5,000 km, but every
+      rider plots their own line, so the slider exists to show how much the threshold depends on that guess. Current
+      averages are depressed by the Norwegian opening and the westward detour to CP1 Flåm, so the group just below the
+      line is less compromised than it looks. The four riders outside the General Classification are excluded.</p>
+    <p>Rider data: FollowMyChallenge live leaderboard, TCRNo12. This is an independent dot-watcher's analysis — not
+      affiliated with, nor endorsed by, Lost Dot or the Transcontinental Race.</p>
+  </footer>
+</div>
+
+<div class="tip" id="tip" role="status" aria-live="polite"></div>
+
+<script>
+const RAW = `Robin Gemperle;1st;1714.5;604.5;S;8
+Max Agut;2nd;1580.9;557.7;S;11
+Nicolas Chatelet;3rd;1521.3;536.4;S;15
+Jocelyn Roth;4th;1546.8;545.6;S;12
+Christoph Strasser;5th;1550.6;546.4;S;12
+Robert Müller;6th;1492.3;526.3;S;11
+Martin Moritz;7th;1451.5;511.7;S;18
+Jonas Verest;8th;1492.8;526.1;S;11
+Jakub Tomasik;9th;1506.3;530.9;S;15
+Wojciech Wronka;10th;1457.5;513.7;S;8
+Tim De Witte;11th;1384.0;487.8;S;13
+Pawel Pulawski;12th;1334.6;470.9;S;8
+Dieuwe Van Bergen en Henegouwen;13th;1429.5;504.0;S;8
+Thomas Boury;14th;1370.6;483.4;S;12
+Omar Di Felice;15th;1436.3;506.6;S;14
+Simon Flury;16th;1415.8;499.4;S;15
+Philip Tellen;17th;1248.9;440.2;S;25
+Riccardo Mosconi;18th;1349.1;475.4;S;19
+Manuel Rudaz;19th;1423.7;502.1;S;17
+Nils Oyen;20th;1315.2;463.8;S;22
+Laurens Van Gucht;21st;1499.2;528.5;S;10
+Christoph Pernsteiner;22nd;1256.6;443.0;S;25
+Guillaume Poinsot;23rd;1397.3;492.6;S;15
+Björn Wirsching;24th;1294.3;456.4;S;17
+Lucas Strittmatter;25th;1393.9;491.4;S;16
+Riccardo Kuhar;26th;1259.5;444.2;S;18
+Jos Koop;27th;1450.3;511.6;S;17
+Mike Fawcett;28th;1212.6;427.4;S;18
+Nico Schleippmann;29th;1271.8;448.6;S;19
+Josh Ibbett;30th;1299.9;458.6;S;16
+Sebi Lehmann;31st;1202.2;423.9;S;23
+George Hodgkinson;32nd;1250.1;442.0;S;18
+Markus Zimmermann;33rd;1253.6;442.2;S;18
+Ulf Bannick;34th;1253.7;442.1;S;21
+Manuel Feldbaumer;35th;1246.2;439.3;S;21
+Stephan Simmermacher;36th;1121.9;395.8;S;15
+Oliver Glen;37th;1146.8;404.4;S;20
+Camille Albisser;38th;1225.4;432.0;F;17
+Sarah Bosslet;39th;1234.1;435.1;F;17
+Lea Hamberger;40th;1216.4;429.1;F;18
+Wojciech Nogalski;41st;1182.4;417.2;S;22
+Hannah Hiecke;42nd;1024.5;380.1;F;21
+Jakub Micorek;43rd;1161.2;409.6;S;18
+Axel Restrup;44th;1190.7;427.4;S;21
+Hélène Fromenty;45th;1132.3;399.1;F;17
+Anna Carlqvist;46th;1145.6;404.0;F;16
+Viggo Vea;47th;1147.0;404.2;S;20
+Arthur Jan;48th;1214.0;428.2;S;22
+Elise Sauvinet;49th;1089.3;384.3;F;18
+Michal Wolff;50th;1049.1;370.0;S;22
+Kristian Buljan;51st;1098.4;387.6;S;22
+Henri Do;52nd;1053.9;376.0;S;26
+Francesco Vettore;53rd;1144.3;403.7;S;27
+Filip Slomski;54th;1192.3;420.4;S;23
+Aleksander Konieczny;55th;1109.8;391.3;S;20
+Joanna Ruminska-Pietrzyk;56th;1072.4;379.1;F;19
+Nicole van Batenburg;57th;1116.6;393.6;F;19
+Valentin Cuenot;58th;1118.5;394.4;S;20
+Brice Douet;59th;1091.1;384.7;S;25
+Roel Massink;60th;1072.1;378.6;S;21
+Rodrigue Lombard;61st;1097.7;386.9;S;16
+Christian Höra;62nd;1134.6;399.9;S;25
+Daniel Molino;63rd;1181.2;417.2;S;25
+Tobias Johansson;64th;1157.0;407.9;S;26
+Jonas Heyberger;65th;1173.7;414.4;S;19
+Mikke Luostarinen;66th;1067.1;376.2;S;19
+Juan Pedro Moreno;67th;1153.1;406.9;S;17
+Raymond Dulieu;68th;1112.2;392.3;S;26
+Markus Carlos hein;69th;1067.1;376.2;S;18
+Luís Manuel Silva Carvalho;70th;1082.8;382.0;S;12
+Robin Reinsch;71st;1047.7;369.6;S;19
+Maximilian Siering;72nd;1149.8;405.7;S;22
+Marten Sprecher;73rd;1102.9;389.0;S;21
+Joep van Luijt;74th;1013.2;357.1;S;29
+Maxime Prieur;75th;1203.2;424.1;S;18
+Larissa Unsinn;76th;1137.2;401.0;F;20
+Adrian Vogel;77th;1030.4;363.3;S;22
+Florian Thiessen;78th;1113.3;392.6;S;20
+Harald Rinner;79th;959.8;338.4;S;22
+Gergely Bartalos;80th;1037.8;365.7;S;26
+Pierre-Yves Robert;81st;1031.9;364.0;S;23
+Jim Visschers;82nd;992.4;350.1;S;29
+Dragomir Titei;83rd;1034.1;364.6;S;24
+Andreas Herrig;84th;967.0;340.8;S;27
+Sebastian Ritter;85th;1063.8;374.9;S;28
+Adrien Charlot;86th;1073.4;378.4;S;26
+Hsi Chun Tsai;87th;1019.3;359.6;S;21
+Aleksei Konev;88th;1005.3;354.5;S;24
+Matthew Spooner;89th;1031.6;363.7;S;28
+Thomas Groenewegen;90th;989.4;349.0;S;28
+Lukas Müller;91st;1072.2;378.0;S;23
+Larissa Sauter;92nd;989.2;348.9;F;18
+Carl von Walter;93rd;1041.3;367.2;S;22
+Franz Nawrocki;94th;1115.2;394.8;S;27
+Peter Kronberger;95th;1126.9;397.4;S;31
+Daniel Schulze Waltrup;96th;1072.3;378.1;S;22
+Dan Sharp;97th;987.7;348.9;S;22
+Anja Longyka;98th;992.9;350.1;F;26
+Simon Van Teutem;99th;965.2;340.5;S;32
+Christoph Zabel;100th;1050.8;370.6;S;28
+Martin Carlsson;101st;1047.3;369.4;S;21
+Jannis Rieb;102nd;1007.0;355.3;S;28
+Mark Turnbull;103rd;1034.7;364.7;S;28
+Maciej Baranowski;104th;945.4;333.6;S;32
+Martin Zettel;105th;944.4;333.0;S;25
+Fredi Maeder;106th;970.9;342.5;S;17
+Oona Baumann;107th;927.0;327.0;F;28
+Adrien Ponteville;108th;955.4;336.9;S;29
+Gabriel Delattre;109th;998.0;352.9;S;32
+Noah Schmid;110th;1026.2;362.0;S;28
+Severin Ehrengruber;111th;923.6;325.6;S;30
+Julian Manrique;112th;979.4;345.3;S;25
+Quirin Taubert;113th;879.3;309.9;S;34
+Yiqun Fu;114th;912.5;321.6;S;26
+Gerald Huber;115th;987.3;348.1;S;28
+Alec Gates;116th;846.7;298.7;S;39
+Roel Hamers;117th;955.1;336.9;S;29
+Robin Skoge;118th;952.2;335.6;S;27
+Bjørn Kåre Amdal;119th;1003.5;353.7;S;29
+Christian Chesta;120th;949.9;335.1;S;30
+Sarah Cinquini;121st;892.8;314.6;F;27
+Bernhard Kämmerer;122nd;960.5;338.9;S;30
+Markus Taubner;123rd;971.8;342.6;S;26
+Christian Pany;124th;924.3;326.1;S;26
+Jack Wright;125th;942.0;332.3;F;33
+Clayton Anderson;126th;963.4;339.7;S;28
+Emiliano Baravalle;127th;944.1;332.8;S;33
+Alexander Eder;128th;991.7;349.8;S;27
+Lisa Schrader;129th;949.9;334.8;F;30
+Alexander Stramma;130th;930.8;328.4;S;27
+Valentin Reichelt;131st;956.3;337.1;S;32
+Niklas Hanses;132nd;954.7;336.6;S;31
+Matthew Falconer;133rd;937.2;330.5;S;31
+Bart Pombreu;134th;917.9;323.7;S;33
+Michael Ærenlund Buch;135th;934.6;330.4;S;32
+Maximilian Pahl;136th;878.1;309.8;S;32
+Philip Renders;137th;850.6;299.9;S;30
+Niel Dunnage;138th;875.6;309.3;S;35
+Byron Buck;139th;931.8;328.4;S;33
+Nicolas Müller;140th;916.7;323.4;S;30
+Tomasz Kuś;141st;953.0;336.1;S;26
+Marcin Zielkowski;142nd;895.9;316.3;S;25
+Sam Wilson;143rd;956.1;337.1;S;25
+Katharina Wirth;144th;954.4;336.4;F;24
+Kim Heikkinen;145th;878.0;309.6;S;31
+Florian Imgrund;146th;901.7;317.9;S;32
+Lars Olausson;147th;867.8;306.1;S;32
+Florent De Boisvilliers;148th;936.9;330.3;S;28
+Alexander Stojkovic;149th;892.8;319.9;S;27
+Malte Hager;150th;911.9;321.7;S;29
+James Auburn;151st;901.0;317.7;S;33
+Pauline Neuber;152nd;933.1;328.9;F;32
+Grzegorz Oszast;153rd;943.6;332.7;S;21
+Henry Jacobson;154th;929.1;327.6;S;26
+Alexander Kuehn;155th;849.0;299.4;S;27
+Josh Roberts;156th;887.5;312.8;S;30
+Adrian Lai;157th;869.0;306.5;S;24
+Mikko Mäkipää;158th;873.0;307.9;S;28
+Michal Kramář;159th;843.9;297.6;S;29
+Robbie Jebb;160th;885.1;312.0;S;20
+Seth Kennard;161st;944.2;333.0;S;27
+Alberto Vaghi;162nd;879.8;311.8;S;34
+Peter Geldhof;163rd;889.1;313.9;S;32
+Walter Reiterer;164th;640.3;225.7;S;44
+Michael Cannon;165th;849.2;299.6;S;27
+Jean-François Badias;166th;831.1;293.0;S;28
+Pierre Beck;167th;862.3;304.2;S;33
+Nora Battermann;168th;907.9;319.9;F;30
+Roland Salowsky;169th;842.2;297.1;S;26
+Arnold Graef;170th;863.2;304.4;S;27
+Niklas Wich;171st;909.1;320.5;S;33
+Jens Ritter;172nd;869.1;306.5;S;31
+Sara Lundberg;173rd;830.7;294.1;F;30
+Mudit Kohli;174th;861.3;303.8;S;24
+Pierre Picard;175th;868.6;306.9;S;33
+Frank Gussenstätter;176th;862.6;304.3;S;30
+Lukas Stiller;177th;840.6;296.4;S;40
+Thomas Achtner;178th;780.8;275.3;S;36
+Mohamed Jawhara;179th;813.5;286.9;S;33
+Erick Saudubray;180th;819.2;289.3;S;31
+Jorn Baan Hofman;181st;870.5;307.1;S;34
+Oliver Neumann;182nd;820.5;289.4;S;31
+Chun man Lau;183rd;829.8;292.7;S;30
+Jacob Fahrenkrug;184th;840.3;296.1;S;31
+Aneta Lamik;185th;831.6;293.1;F;25
+Floris Bakker;186th;869.4;306.5;S;32
+Falk Döring;187th;948.5;334.3;S;30
+Gerald Rumpf;188th;885.6;312.1;S;29
+Rainer Huelsse;189th;842.7;297.1;S;35
+Nathan Offord;190th;765.2;269.9;S;35
+Thilo Kutzer;191st;833.1;293.9;S;31
+Tomáš Žižlavský;192nd;838.5;295.9;S;30
+Noah Boe-Whitehorn;193rd;825.1;291.1;S;31
+Robert Tremblay;194th;784.0;276.3;S;41
+John Read;195th;833.7;294.0;S;29
+David Lacey;196th;772.8;272.4;S;35
+Niko Dangel;197th;826.1;291.3;S;30
+Maris Goldmanis;198th;814.9;287.3;S;32
+Filip Bullens;199th;826.5;291.3;S;31
+Tom Dockal;200th;832.3;295.2;S;24
+Mathilde Germanier;201st;820.2;289.2;F;30
+Paul Williams;202nd;827.1;291.5;S;33
+Dan Jones;203rd;798.1;281.3;S;34
+Bambang Anggoro Jati;204th;825.0;290.8;S;21
+Cornelis Nicolaas Leek;205th;773.9;272.8;S;39
+Knut Kvaran;206th;815.2;287.4;S;40
+Till Moosberger;207th;825.6;291.1;S;30
+Mihael Šandro;208th;786.7;277.4;S;34
+Luca Bessems;209th;762.9;269.1;F;33
+Hugo Manson;210th;822.4;289.9;S;34
+Colin Halliwell;211th;841.3;296.6;S;33
+Isaac Kuehnle-Nelson;212th;785.2;278.8;S;43
+Bart Noëth;213th;744.6;264.0;S;36
+James Soteriou;214th;795.3;280.3;S;37
+Cody Hughes;215th;768.8;271.0;S;32
+Christo Dingozov;216th;915.9;322.8;S;27
+Jean-paul Sachet;217th;785.9;277.1;S;28
+David Tribe;218th;762.3;269.6;S;28
+Valerio Cecchini;219th;816.0;288.0;S;23
+Carys Brimble;220th;752.2;265.5;F;37
+Darron Burns;221st;771.6;272.0;S;31
+David Sealey;222nd;730.2;257.5;S;38
+Armin Seitz;223rd;839.6;296.2;S;23
+Gawan Berentelg;224th;797.8;281.3;S;26
+Koen Heselmans;225th;780.5;275.2;S;29
+Daniel Tulla;226th;849.3;299.4;S;19
+Emily Maille;227th;787.7;277.9;F;30
+Maximilian Droste;228th;817.3;288.1;S;35
+Lucio Buergisser;229th;766.3;270.7;S;37
+Stuart Featherstone;230th;788.5;278.1;S;29
+Simon Heppell;231st;812.1;286.4;S;30
+Mike Watson;232nd;751.8;266.4;S;29
+Sebastian Kerschbaumer;233rd;782.9;275.9;S;34
+Alexander Latham-boal;234th;791.3;279.1;S;34
+Christian Gfeller;235th;775.7;273.4;S;24
+Kenneth Lamont;236th;784.4;279.5;S;30
+Nod Nelson;237th;873.4;307.9;S;26
+Xingjian (Tom) Zhai;238th;752.6;265.3;S;33
+Tom Bryan;239th;740.7;261.1;S;28
+Samuel Hussain;240th;752.3;265.3;S;30
+Cesare Pedrini;241st;785.3;277.0;S;23
+Eric Banh;242nd;817.7;288.3;S;24
+Michael Grobe;243rd;742.1;261.7;S;33
+Maksym Matvieiev;244th;755.1;266.3;S;29
+Nicole Farrier;245th;783.9;276.5;F;26
+Martin Lau;246th;747.2;264.5;S;22
+Erhard Wälchli;247th;888.0;313.0;S;25
+Paul Rollings;248th;743.9;265.2;S;29
+Jesko von Werthern;249th;877.8;309.4;S;28
+Tobias Geißler;250th;807.5;284.8;S;32
+Bjorn Menze;251st;740.6;261.3;S;26
+Stev Krembs;252nd;713.2;251.7;S;33
+Stephen Dummett;253rd;695.4;245.1;S;33
+Lili Delannoy;254th;725.6;256.7;F;29
+Erik Olsson;255th;764.2;269.4;S;27
+Jakob Wall;256th;801.6;282.9;S;36
+Boris Krutov;257th;900.2;317.3;S;29
+Thomas Chateau;258th;754.4;266.2;S;23
+Alain Rodriguez;259th;699.8;246.7;S;43
+Christian Romero;260th;804.2;283.9;S;41
+Ramona Troxler;261st;817.0;288.0;F;28
+Hanif Meeran;262nd;774.4;275.3;S;30
+Hauke Kottek;263rd;847.5;298.9;S;30
+Max Kraus;264th;793.3;279.7;S;32
+Rene Wach;265th;813.1;286.5;S;39
+Frédéric Rudant;266th;815.6;287.6;S;30
+Russell Cairns;267th;719.3;253.7;S;29
+Sofia Passaretti;268th;705.5;254.7;F;38
+Dennis Wolckenhauer;269th;826.9;291.6;S;33
+Artem Soldatkin;270th;763.0;269.0;S;29
+Sarah Hübner;271st;778.7;274.6;F;34
+Marc Förschler;272nd;789.9;278.7;S;29
+Patrick O'connor;273rd;707.6;249.6;S;28
+Sönke Kreft;274th;811.5;286.0;S;24
+Amelia Linnett;275th;738.5;260.5;F;31
+Manuel Kaufer;276th;767.7;270.7;S;36
+Susi Pariasek;277th;792.4;279.5;F;30
+Fabian Graber;278th;717.8;253.1;S;37
+Fritjof Schirmer;279th;734.2;259.0;S;32
+Stephan Haß;280th;694.8;245.0;S;44
+Gabi Winck;281st;746.8;263.2;F;31
+Tim Lamb;282nd;745.2;263.0;S;31
+Ian Budden;283rd;741.7;261.7;S;35
+Karl Björklund;284th;768.3;270.9;S;34
+Matthew Wright;285th;753.9;269.2;S;39
+Peter Corkill;286th;792.6;279.5;S;36
+Zuzanna Bogucka;287th;744.9;266.5;F;25
+Andrew Speers;288th;744.0;262.4;S;34
+Greg Fong;289th;696.7;245.6;S;36
+Sebastian Van den bergen;290th;711.4;250.7;S;37
+Hans Markus Broja;291st;722.8;261.9;S;26
+Tim Hunt;292nd;778.5;274.6;S;36
+Kristin Lome;293rd;744.7;262.6;F;35
+Harvey Bates;294th;748.7;264.5;S;30
+Christoph Adrian Schneider;295th;713.0;251.5;S;42
+Michael Welker;296th;682.0;241.3;S;40
+Henry White;297th;709.0;250.5;S;31
+Eric Lamboley;298th;760.0;267.9;S;34
+Christian Trenkle;299th;751.2;264.8;S;30
+Lissa Breugelmans;300th;695.7;245.4;F;35
+Hank Beerstecher;301st;745.7;263.0;S;36
+Philippe Villepontoux;302nd;700.1;246.7;S;33
+Jürgen Ress;303rd;707.7;249.8;S;41
+Olli Büttel;304th;689.6;245.1;S;40
+Ro Alegre;305th;712.3;251.1;S;31
+Baptiste Estela;306th;684.3;241.3;S;40
+Sarah Steels;307th;693.1;247.0;F;35
+Thibault Sabatier;308th;674.3;237.9;S;38
+Andreas Wittkemper;309th;684.6;242.0;S;28
+Mateusz Andrulewicz;310th;698.7;246.3;S;36
+Jp De Groot;311th;503.5;183.6;S;54
+Mariusz Kolodziej;312th;821.8;289.7;S;26
+Douglas Migden;313th;615.9;217.3;S;35
+George Surjopurnomo;314th;643.6;227.0;S;31
+Ate van Steenbergen;315th;540.5;190.5;S;42
+Mike Passmann;316th;588.0;207.4;S;34
+Grinshina Kartik;317th;693.3;260.1;F;19
+Peter Magill;318th;695.1;245.0;S;26
+Ronja Derr;319th;579.5;204.3;F;53
+Lionel Bobb;320th;562.6;198.3;S;33
+Luis Cardoso;321st;544.4;194.4;S;41
+Maris Brugis;322nd;809.2;285.2;S;29
+Rafael Martinez Gonzalez;323rd;487.7;171.9;S;48
+Mohamed Almarar;324th;555.0;223.7;S;53
+Erekle Bagashvili;325th;601.8;212.3;S;44
+Thomas Weber;326th;709.6;251.6;S;38
+Erik Arentz-Hansen;327th;660.8;237.0;S;36
+Satomi Yamada;328th;416.0;146.7;F;45
+Albert Coigné;329th;646.8;228.6;S;46
+Rene Vera-armenta;330th;575.5;203.0;S;45
+Conor O'Sullivan;331st;655.2;240.7;S;34
+Ben Strause;332nd;519.6;243.7;S;35
+Carsten Dreyer;333rd;500.7;176.4;S;57
+Mex Wieshofer;334th;606.8;213.9;S;35
+Mark Clements;335th;646.0;228.4;S;30
+Dirk Hermans;336th;638.9;225.2;S;47
+Juliette Day;337th;575.4;204.9;F;47
+Sebastien Nolens;338th;773.1;273.3;S;44
+Bryn Thomas;339th;605.1;213.3;F;39
+Stefan Lindkvist;340th;578.3;203.8;S;38
+Benno Raj;341st;572.0;201.7;S;28
+Poh Huat Tan;342nd;677.6;241.5;S;27
+Karin Eder;343rd;660.4;232.8;F;37
+Aaron Poll;344th;517.8;182.5;S;52
+Ian Mitchinson;345th;706.1;258.6;S;46
+Thomas Martraire;346th;820.6;289.2;S;23
+Rumen Vachev;347th;679.5;246.1;S;30
+Robert Coy;348th;601.0;211.8;S;48
+Pierre-yves Fontaine;1st;1292.4;455.8;P;18
+Adrien Mabileau;2nd;1297.7;457.7;P;17
+Rémi Mejean;3rd;1150.3;405.7;P;27
+Marguerite Mulhaus;4th;1174.3;414.0;P;24
+Christian Dupraz;5th;1058.5;374.3;P;23
+Dina Byland;6th;1059.1;373.7;P;23
+Martin Reichert;7th;1000.2;352.8;P;28
+Melanie Müller-reichert;8th;1002.7;353.4;P;28
+Damian Ludlow;9th;893.7;315.0;P;29
+Paul Jennings;10th;893.4;315.2;P;28
+Bartek Was;11th;887.6;316.0;P;27
+Wojtek Was;12th;890.9;314.2;P;26
+Stéphane David;13th;829.7;292.6;P;32
+Carl Carini;14th;817.7;288.5;P;32
+Andreas Steinke;15th;812.0;288.7;P;38
+Christel Vieth;16th;800.1;282.2;P;27
+Bastien Sentubery;17th;791.8;279.3;P;29
+Mylene Vicente;18th;792.1;279.4;P;31
+Małgorzata Gryszczuk;19th;722.1;254.5;P;29
+Kinga Perzyńska;20th;718.3;253.3;P;29
+Jan Bähler;21st;760.1;268.1;P;29
+Mirjam Bonfadelli;22nd;759.1;267.8;P;28
+Richard Parry;23rd;729.5;257.1;P;38
+Sarah Burns;24th;730.3;257.5;P;38
+Michael Hunziker;25th;689.5;255.1;P;30
+Björn Frey;26th;684.4;250.2;P;30
+Andrea Nichelson;27th;665.0;241.0;P;46
+Luisa Nichelson;28th;665.5;241.2;P;45`;
+
+const START_MS = Date.UTC(2026, 6, 19, 18, 0);   // 19 Jul 2026, 20:00 CEST
+const CUTOFF_MS = Date.UTC(2026, 7, 8, 21, 59);  //  8 Aug 2026, 23:59 CEST
+const LIMIT_D = (CUTOFF_MS - START_MS) / 864e5;  // 20.166 days
+const CATNAME = { S: 'Solo', F: 'FLINTA', P: 'Pair' };
+const GLYPH = { ahead: '▲', edge: '●', behind: '▼' };
+const LABEL = { ahead: 'Inside', edge: 'On the edge', behind: 'Off the pace' };
+const MONTH = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+const RIDERS = RAW.trim().split('\n').map(function (l) {
+  const p = l.split(';');
+  const km = +p[2], kmd = +p[3];
+  return { name: p[0], pos: p[1], km: km, kmd: kmd, cat: p[4], idle: +p[5], elapsed: km / kmd };
+});
+
+let state = { cat: 'ALL', q: '', total: 4950, riskOnly: false, sel: -1 };
+
+const CATS = [['ALL', 'All'], ['S', 'Solo'], ['F', 'FLINTA'], ['P', 'Pairs']];
+const catBox = document.getElementById('cats');
+CATS.forEach(function (c) {
+  const b = document.createElement('button');
+  b.className = 'pill'; b.textContent = c[1];
+  b.setAttribute('aria-pressed', String(c[0] === state.cat));
+  b.onclick = function () {
+    state.cat = c[0]; state.sel = -1;
+    catBox.querySelectorAll('.pill').forEach(function (x) { x.setAttribute('aria-pressed', 'false'); });
+    b.setAttribute('aria-pressed', 'true'); render();
+  };
+  catBox.appendChild(b);
+});
+
+function classify(r, req) {
+  const m = r.kmd / req - 1;
+  return m >= 0.10 ? 'ahead' : (m >= -0.05 ? 'edge' : 'behind');
+}
+function visible() {
+  const q = state.q.trim().toLowerCase();
+  const req = state.total / LIMIT_D;
+  return RIDERS.filter(function (r) {
+    if (state.cat !== 'ALL' && r.cat !== state.cat) return false;
+    if (state.riskOnly && classify(r, req) === 'ahead') return false;
+    if (q && r.name.toLowerCase().indexOf(q) === -1) return false;
+    return true;
+  });
+}
+function fmtDate(days) {
+  const t = new Date(START_MS + days * 864e5 + 2 * 36e5); // CEST = UTC+2
+  const p = function (n) { return String(n).padStart(2, '0'); };
+  return t.getUTCDate() + ' ' + MONTH[t.getUTCMonth()] + ' ' + p(t.getUTCHours()) + ':' + p(t.getUTCMinutes());
+}
+function kfmt(n) { return n.toLocaleString('en-GB'); }
+
+const VW = 1000, VH = 566, ML = 62, MR = 22, MT = 22, MB = 46;
+const PW = VW - ML - MR, PH = VH - MT - MB;
+const XMAX = 24;
+const svg = document.getElementById('plot');
+const tip = document.getElementById('tip');
+let hitList = [];
+
+function render() {
+  const req = state.total / LIMIT_D;
+  const YMAX = state.total * 1.07;
+  const X = function (d) { return ML + d / XMAX * PW; };
+  const Y = function (k) { return MT + (1 - k / YMAX) * PH; };
+  const rows = visible();
+
+  const all = RIDERS.filter(function (r) { return state.cat === 'ALL' || r.cat === state.cat; });
+  const n = { ahead: 0, edge: 0, behind: 0 };
+  all.forEach(function (r) { n[classify(r, req)]++; });
+  document.getElementById('s-req').textContent = Math.round(req);
+  document.getElementById('s-ahead').textContent = n.ahead;
+  document.getElementById('s-edge').textContent = n.edge;
+  document.getElementById('s-behind').textContent = n.behind;
+  document.getElementById('totv').textContent = kfmt(state.total) + ' km';
+
+  let s = '';
+  s += '<rect x="0" y="0" width="' + VW + '" height="' + VH + '" fill="var(--surface)"/>';
+
+  for (let k = 1000; k < state.total - 150; k += 1000) {
+    s += '<line x1="' + ML + '" y1="' + Y(k).toFixed(1) + '" x2="' + (ML + PW) + '" y2="' + Y(k).toFixed(1) +
+         '" stroke="var(--grid)" stroke-width="1"/>';
+    s += '<text x="' + (ML - 10) + '" y="' + (Y(k) + 4).toFixed(1) + '" text-anchor="end">' + kfmt(k) + '</text>';
+  }
+  for (let d = 0; d <= XMAX; d += 2) {
+    s += '<text x="' + X(d).toFixed(1) + '" y="' + (MT + PH + 20) + '" text-anchor="middle">' + d + '</text>';
+  }
+  s += '<text class="axname" x="' + (ML + PW / 2) + '" y="' + (MT + PH + 40) + '" text-anchor="middle">race days</text>';
+  s += '<text class="axname" x="' + (ML - 46) + '" y="' + (MT + PH / 2) + '" text-anchor="middle" ' +
+       'transform="rotate(-90 ' + (ML - 46) + ' ' + (MT + PH / 2) + ')">kilometres covered</text>';
+  s += '<line x1="' + ML + '" y1="' + (MT + PH) + '" x2="' + (ML + PW) + '" y2="' + (MT + PH) + '" stroke="var(--rule)" stroke-width="1"/>';
+
+  s += '<line x1="' + ML + '" y1="' + Y(state.total).toFixed(1) + '" x2="' + (ML + PW) + '" y2="' + Y(state.total).toFixed(1) +
+       '" stroke="var(--rule)" stroke-width="1.5"/>';
+  s += '<text class="marklab" x="' + (ML + 8) + '" y="' + (Y(state.total) - 8).toFixed(1) + '" fill="var(--ink-2)">Kalamata · ' + kfmt(state.total) + ' km</text>';
+  s += '<line x1="' + X(LIMIT_D).toFixed(1) + '" y1="' + MT + '" x2="' + X(LIMIT_D).toFixed(1) + '" y2="' + (MT + PH) +
+       '" stroke="var(--rule)" stroke-width="1.5"/>';
+  s += '<text class="marklab" x="' + (X(LIMIT_D) - 9).toFixed(1) + '" y="' + (MT + 16) + '" text-anchor="end" fill="var(--ink-2)">8 Aug 23:59 · cut-off</text>';
+
+  hitList = [];
+  rows.forEach(function (r, i) {
+    const end = Math.min(state.total / r.kmd, XMAX);
+    const cls = classify(r, req);
+    s += '<line x1="' + X(r.elapsed).toFixed(1) + '" y1="' + Y(r.km).toFixed(1) + '" x2="' + X(end).toFixed(1) +
+         '" y2="' + Y(Math.min(state.total, r.kmd * end)).toFixed(1) + '" stroke="var(--' + cls +
+         ')" stroke-width="1" opacity=".28" data-i="' + i + '"/>';
+    hitList.push({ r: r, cls: cls, end: end });
+  });
+
+  s += '<line x1="' + ML + '" y1="' + Y(0).toFixed(1) + '" x2="' + X(LIMIT_D).toFixed(1) + '" y2="' + Y(state.total).toFixed(1) +
+       '" stroke="var(--ink)" stroke-width="2"/>';
+  s += '<text class="marklab" x="' + X(13.3).toFixed(1) + '" y="' + (Y(req * 13.3) + 21).toFixed(1) + '" fill="var(--ink)">minimum pace · ' + Math.round(req) + ' km/day</text>';
+
+  rows.forEach(function (r, i) {
+    s += '<circle cx="' + X(r.elapsed).toFixed(1) + '" cy="' + Y(r.km).toFixed(1) + '" r="2.6" fill="var(--' +
+         hitList[i].cls + ')" opacity=".82"/>';
+  });
+
+  s += '<g id="hi"></g>';
+  svg.innerHTML = s;
+
+  const sorted = rows.slice().sort(function (a, b) { return a.kmd - b.kmd; });
+  document.getElementById('tcount').textContent = sorted.length + ' riders in the current selection.';
+  document.getElementById('tbody').innerHTML = sorted.map(function (r) {
+    const cls = classify(r, req), m = (r.kmd / req - 1) * 100;
+    return '<tr><td class="l">' + esc(r.name) + '</td><td class="l">' + CATNAME[r.cat] + '</td>' +
+      '<td class="num">' + r.pos + '</td><td class="num">' + kfmt(Math.round(r.km)) + '</td>' +
+      '<td class="num">' + r.kmd.toFixed(0) + '</td>' +
+      '<td class="num" style="color:var(--' + cls + ');font-weight:600">' + (m >= 0 ? '+' : '') + m.toFixed(0) + '%</td>' +
+      '<td class="num">' + fmtDate(state.total / r.kmd) + '</td>' +
+      '<td class="num">' + r.idle + '%</td>' +
+      '<td class="l"><span class="badge" style="color:var(--' + cls + ')">' + GLYPH[cls] + ' ' + LABEL[cls] + '</span></td></tr>';
+  }).join('');
+}
+function esc(t) { return t.replace(/&/g, '&amp;').replace(/</g, '&lt;'); }
+
+function highlight(idx, cx, cy) {
+  const g = document.getElementById('hi');
+  if (!g) return;
+  if (idx < 0) { g.innerHTML = ''; tip.classList.remove('on'); return; }
+  const h = hitList[idx], r = h.r;
+  const YMAX = state.total * 1.07;
+  const X = function (d) { return ML + d / XMAX * PW; };
+  const Y = function (k) { return MT + (1 - k / YMAX) * PH; };
+  g.innerHTML =
+    '<line x1="' + X(r.elapsed).toFixed(1) + '" y1="' + Y(r.km).toFixed(1) + '" x2="' + X(h.end).toFixed(1) +
+    '" y2="' + Y(Math.min(state.total, r.kmd * h.end)).toFixed(1) + '" stroke="var(--' + h.cls + ')" stroke-width="2.5"/>' +
+    '<circle cx="' + X(r.elapsed).toFixed(1) + '" cy="' + Y(r.km).toFixed(1) + '" r="5.5" fill="var(--' + h.cls +
+    ')" stroke="var(--surface)" stroke-width="2"/>';
+  const req = state.total / LIMIT_D, m = (r.kmd / req - 1) * 100, pf = state.total / r.kmd;
+  tip.innerHTML = '<div class="n">' + esc(r.name) + '</div><dl>' +
+    '<dt>Category</dt><dd>' + CATNAME[r.cat] + ' · ' + r.pos + '</dd>' +
+    '<dt>Covered</dt><dd>' + kfmt(Math.round(r.km)) + ' km</dd>' +
+    '<dt>Average</dt><dd>' + r.kmd.toFixed(0) + ' km/day</dd>' +
+    '<dt>Margin</dt><dd>' + (m >= 0 ? '+' : '') + m.toFixed(0) + '%</dd>' +
+    '<dt>Stopped</dt><dd>' + r.idle + '%</dd>' +
+    '<dt>Est. finish</dt><dd>' + fmtDate(pf) + '</dd></dl>' +
+    '<div class="st" style="color:var(--' + h.cls + ')">' + GLYPH[h.cls] + ' ' + LABEL[h.cls] +
+    (pf > LIMIT_D ? ' · ' + (pf - LIMIT_D).toFixed(1) + ' days late' : '') + '</div>';
+  const b = svg.getBoundingClientRect();
+  const px = b.left + (cx / VW) * b.width, py = b.top + (cy / VH) * b.height;
+  tip.classList.add('on');
+  const tw = tip.offsetWidth, th = tip.offsetHeight;
+  tip.style.left = Math.min(window.innerWidth - tw - 10, Math.max(10, px + 16)) + 'px';
+  tip.style.top = Math.max(10, py - th - 12) + 'px';
+}
+
+svg.addEventListener('pointermove', function (e) {
+  const b = svg.getBoundingClientRect();
+  const vx = (e.clientX - b.left) / b.width * VW, vy = (e.clientY - b.top) / b.height * VH;
+  const dx = (vx - ML) / PW * XMAX;
+  const YMAX = state.total * 1.07;
+  let best = -1, bd = 1e9, bx = 0, by = 0;
+  hitList.forEach(function (h, i) {
+    const d = Math.max(h.r.elapsed, Math.min(dx, h.end));
+    const yk = Math.min(state.total, h.r.kmd * d);
+    const py = MT + (1 - yk / YMAX) * PH, px = ML + d / XMAX * PW;
+    const dist = Math.hypot(px - vx, py - vy);
+    if (dist < bd) { bd = dist; best = i; bx = px; by = py; }
+  });
+  if (bd > 26) best = -1;
+  state.sel = best;
+  highlight(best, bx, by);
+});
+svg.addEventListener('pointerleave', function () { state.sel = -1; highlight(-1); });
+svg.addEventListener('keydown', function (e) {
+  if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+  e.preventDefault();
+  if (!hitList.length) return;
+  state.sel = (state.sel + (e.key === 'ArrowRight' ? 1 : -1) + hitList.length) % hitList.length;
+  const h = hitList[state.sel], YMAX = state.total * 1.07;
+  highlight(state.sel, ML + h.r.elapsed / XMAX * PW, MT + (1 - h.r.km / YMAX) * PH);
+});
+
+document.getElementById('q').addEventListener('input', function (e) { state.q = e.target.value; state.sel = -1; render(); });
+document.getElementById('tot').addEventListener('input', function (e) { state.total = +e.target.value; state.sel = -1; render(); });
+document.getElementById('risk').addEventListener('change', function (e) { state.riskOnly = e.target.checked; state.sel = -1; render(); });
+const vc = document.getElementById('v-chart'), vt = document.getElementById('v-table');
+vc.onclick = function () { vc.setAttribute('aria-pressed', 'true'); vt.setAttribute('aria-pressed', 'false');
+  document.getElementById('chartview').hidden = false; document.getElementById('tableview').hidden = true; };
+vt.onclick = function () { vt.setAttribute('aria-pressed', 'true'); vc.setAttribute('aria-pressed', 'false');
+  document.getElementById('tableview').hidden = false; document.getElementById('chartview').hidden = true; };
+
+render();
+</script>
+
+</body>
+</html>
