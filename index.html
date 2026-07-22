@@ -224,6 +224,13 @@
       <span class="lbl">Filter</span>
       <label class="check"><input type="checkbox" id="risk"> Only riders off the pace</label>
     </div>
+    <div class="field">
+      <span class="lbl" id="lb-scale">Scale</span>
+      <div class="pills" role="group" aria-labelledby="lb-scale">
+        <button class="pill" id="z-now" aria-pressed="true">Now</button>
+        <button class="pill" id="z-full" aria-pressed="false">Whole race</button>
+      </div>
+    </div>
     <div class="spacer"></div>
     <div class="field">
       <span class="lbl" id="lb-view">View</span>
@@ -253,8 +260,9 @@
     </div>
     <svg id="plot" viewBox="0 0 1000 566" role="img" tabindex="0"
          aria-label="Time-distance diagram: each rider is a projection line compared against the cut-off diagonal. The table view below carries the same data."></svg>
-    <p class="hint">Hover the chart to identify a rider — or focus the diagram and use the ← → keys.
-      Each line stops where that rider would cross the finish at their current pace.</p>
+    <p class="hint"><b>Now</b> frames the field as it stands today, so individual riders separate;
+      <b>Whole race</b> opens the scale out to the cut-off and the finish line. The black diagonal is the
+      same line in both. Hover to identify a rider — or focus the diagram and use the ← → keys.</p>
   </section>
 
   <section class="block" id="tableview" hidden>
@@ -682,7 +690,7 @@ const RIDERS = RAW.trim().split('\n').map(function (l) {
   return { name: p[0], pos: p[1], km: km, kmd: kmd, cat: p[4], idle: +p[5], elapsed: km / kmd };
 });
 
-let state = { cat: 'ALL', q: '', total: 4950, riskOnly: false, sel: -1 };
+let state = { cat: 'ALL', q: '', total: 4950, riskOnly: false, sel: -1, zoom: 'now' };
 
 const CATS = [['ALL', 'All'], ['S', 'Solo'], ['F', 'FLINTA'], ['P', 'Pairs']];
 const catBox = document.getElementById('cats');
@@ -721,15 +729,31 @@ function kfmt(n) { return n.toLocaleString('en-GB'); }
 
 const VW = 1000, VH = 566, ML = 62, MR = 22, MT = 22, MB = 46;
 const PW = VW - ML - MR, PH = VH - MT - MB;
-const XMAX = 24;
 const svg = document.getElementById('plot');
 const tip = document.getElementById('tip');
 let hitList = [];
+// Current viewport. "Now" frames the live field so individual dots separate;
+// "Whole race" opens out to the cut-off. Both are recomputed on every render.
+let CUR = { xmax: 24, ymax: 5000, ystep: 1000, xstep: 2 };
+
+function bounds() {
+  if (state.zoom === 'full') {
+    return { xmin: 0, xmax: 24, ymax: state.total * 1.07, ystep: 1000, xstep: 2 };
+  }
+  // A three-day window ending well past the field, so the dots sit mid-plot and
+  // the projections still have room to fan out to the right.
+  let maxKm = 0, maxEl = 0;
+  RIDERS.forEach(function (r) { if (r.km > maxKm) maxKm = r.km; if (r.elapsed > maxEl) maxEl = r.elapsed; });
+  const ymax = Math.min(state.total * 1.07, Math.ceil(maxKm * 1.12 / 500) * 500);
+  const xmin = Math.max(0, Math.floor((maxEl - 1.3) * 2) / 2);
+  return { xmin: xmin, xmax: xmin + 3, ymax: ymax, ystep: 500, xstep: 0.5 };
+}
 
 function render() {
   const req = state.total / LIMIT_D;
-  const YMAX = state.total * 1.07;
-  const X = function (d) { return ML + d / XMAX * PW; };
+  CUR = bounds();
+  const XMIN = CUR.xmin, XMAX = CUR.xmax, YMAX = CUR.ymax, zoomed = state.zoom === 'now';
+  const X = function (d) { return ML + (d - XMIN) / (XMAX - XMIN) * PW; };
   const Y = function (k) { return MT + (1 - k / YMAX) * PH; };
   const rows = visible();
 
@@ -745,43 +769,55 @@ function render() {
   let s = '';
   s += '<rect x="0" y="0" width="' + VW + '" height="' + VH + '" fill="var(--surface)"/>';
 
-  for (let k = 1000; k < state.total - 150; k += 1000) {
+  const gridTop = state.zoom === 'full' ? state.total - 150 : YMAX;
+  for (let k = CUR.ystep; k < gridTop; k += CUR.ystep) {
     s += '<line x1="' + ML + '" y1="' + Y(k).toFixed(1) + '" x2="' + (ML + PW) + '" y2="' + Y(k).toFixed(1) +
          '" stroke="var(--grid)" stroke-width="1"/>';
     s += '<text x="' + (ML - 10) + '" y="' + (Y(k) + 4).toFixed(1) + '" text-anchor="end">' + kfmt(k) + '</text>';
   }
-  for (let d = 0; d <= XMAX; d += 2) {
-    s += '<text x="' + X(d).toFixed(1) + '" y="' + (MT + PH + 20) + '" text-anchor="middle">' + d + '</text>';
+  for (let d = XMIN; d <= XMAX + 1e-9; d += CUR.xstep) {
+    const lab = CUR.xstep < 1 ? (Math.round(d * 10) / 10).toFixed(1) : String(d);
+    s += '<text x="' + X(d).toFixed(1) + '" y="' + (MT + PH + 20) + '" text-anchor="middle">' + lab + '</text>';
   }
   s += '<text class="axname" x="' + (ML + PW / 2) + '" y="' + (MT + PH + 40) + '" text-anchor="middle">race days</text>';
   s += '<text class="axname" x="' + (ML - 46) + '" y="' + (MT + PH / 2) + '" text-anchor="middle" ' +
        'transform="rotate(-90 ' + (ML - 46) + ' ' + (MT + PH / 2) + ')">kilometres covered</text>';
   s += '<line x1="' + ML + '" y1="' + (MT + PH) + '" x2="' + (ML + PW) + '" y2="' + (MT + PH) + '" stroke="var(--rule)" stroke-width="1"/>';
 
-  s += '<line x1="' + ML + '" y1="' + Y(state.total).toFixed(1) + '" x2="' + (ML + PW) + '" y2="' + Y(state.total).toFixed(1) +
-       '" stroke="var(--rule)" stroke-width="1.5"/>';
-  s += '<text class="marklab" x="' + (ML + 8) + '" y="' + (Y(state.total) - 8).toFixed(1) + '" fill="var(--ink-2)">Kalamata · ' + kfmt(state.total) + ' km</text>';
-  s += '<line x1="' + X(LIMIT_D).toFixed(1) + '" y1="' + MT + '" x2="' + X(LIMIT_D).toFixed(1) + '" y2="' + (MT + PH) +
-       '" stroke="var(--rule)" stroke-width="1.5"/>';
-  s += '<text class="marklab" x="' + (X(LIMIT_D) - 9).toFixed(1) + '" y="' + (MT + 16) + '" text-anchor="end" fill="var(--ink-2)">8 Aug 23:59 · cut-off</text>';
+  if (state.total <= YMAX) {
+    s += '<line x1="' + ML + '" y1="' + Y(state.total).toFixed(1) + '" x2="' + (ML + PW) + '" y2="' + Y(state.total).toFixed(1) +
+         '" stroke="var(--rule)" stroke-width="1.5"/>';
+    s += '<text class="marklab" x="' + (ML + 8) + '" y="' + (Y(state.total) - 8).toFixed(1) + '" fill="var(--ink-2)">Kalamata · ' + kfmt(state.total) + ' km</text>';
+  }
+  if (LIMIT_D <= XMAX) {
+    s += '<line x1="' + X(LIMIT_D).toFixed(1) + '" y1="' + MT + '" x2="' + X(LIMIT_D).toFixed(1) + '" y2="' + (MT + PH) +
+         '" stroke="var(--rule)" stroke-width="1.5"/>';
+    s += '<text class="marklab" x="' + (X(LIMIT_D) - 9).toFixed(1) + '" y="' + (MT + 16) + '" text-anchor="end" fill="var(--ink-2)">8 Aug 23:59 · cut-off</text>';
+  }
 
+  // Each rider's line is y = kmd · x, so it leaves the frame at whichever comes
+  // first: the finish, the right edge, or the top edge.
   hitList = [];
   rows.forEach(function (r, i) {
-    const end = Math.min(state.total / r.kmd, XMAX);
+    const end = Math.min(state.total / r.kmd, XMAX, YMAX / r.kmd);
     const cls = classify(r, req);
     s += '<line x1="' + X(r.elapsed).toFixed(1) + '" y1="' + Y(r.km).toFixed(1) + '" x2="' + X(end).toFixed(1) +
-         '" y2="' + Y(Math.min(state.total, r.kmd * end)).toFixed(1) + '" stroke="var(--' + cls +
-         ')" stroke-width="1" opacity=".28" data-i="' + i + '"/>';
+         '" y2="' + Y(r.kmd * end).toFixed(1) + '" stroke="var(--' + cls +
+         ')" stroke-width="' + (zoomed ? 1.2 : 1) + '" opacity="' + (zoomed ? .34 : .28) + '" data-i="' + i + '"/>';
     hitList.push({ r: r, cls: cls, end: end });
   });
 
-  s += '<line x1="' + ML + '" y1="' + Y(0).toFixed(1) + '" x2="' + X(LIMIT_D).toFixed(1) + '" y2="' + Y(state.total).toFixed(1) +
-       '" stroke="var(--ink)" stroke-width="2"/>';
-  s += '<text class="marklab" x="' + X(13.3).toFixed(1) + '" y="' + (Y(req * 13.3) + 21).toFixed(1) + '" fill="var(--ink)">minimum pace · ' + Math.round(req) + ' km/day</text>';
+  const paceEnd = Math.min(LIMIT_D, XMAX, YMAX / req);
+  s += '<line x1="' + X(XMIN).toFixed(1) + '" y1="' + Y(req * XMIN).toFixed(1) + '" x2="' + X(paceEnd).toFixed(1) +
+       '" y2="' + Y(req * paceEnd).toFixed(1) + '" stroke="var(--ink)" stroke-width="2"/>';
+  // Keep the label clear of the dot column, which sits at the riders' shared elapsed time.
+  const labX = zoomed ? XMIN + (XMAX - XMIN) * 0.13 : paceEnd * 0.66;
+  s += '<text class="marklab" x="' + X(labX).toFixed(1) + '" y="' + (Y(req * labX) + 21).toFixed(1) + '" fill="var(--ink)">minimum pace · ' + Math.round(req) + ' km/day</text>';
 
   rows.forEach(function (r, i) {
-    s += '<circle cx="' + X(r.elapsed).toFixed(1) + '" cy="' + Y(r.km).toFixed(1) + '" r="2.6" fill="var(--' +
-         hitList[i].cls + ')" opacity=".82"/>';
+    s += '<circle cx="' + X(r.elapsed).toFixed(1) + '" cy="' + Y(r.km).toFixed(1) + '" r="' + (zoomed ? 3.4 : 2.6) +
+         '" fill="var(--' + hitList[i].cls + ')" opacity="' + (zoomed ? .9 : .82) + '"' +
+         (zoomed ? ' stroke="var(--surface)" stroke-width="1"' : '') + '/>';
   });
 
   s += '<g id="hi"></g>';
@@ -807,12 +843,12 @@ function highlight(idx, cx, cy) {
   if (!g) return;
   if (idx < 0) { g.innerHTML = ''; tip.classList.remove('on'); return; }
   const h = hitList[idx], r = h.r;
-  const YMAX = state.total * 1.07;
-  const X = function (d) { return ML + d / XMAX * PW; };
+  const XMIN = CUR.xmin, XMAX = CUR.xmax, YMAX = CUR.ymax;
+  const X = function (d) { return ML + (d - XMIN) / (XMAX - XMIN) * PW; };
   const Y = function (k) { return MT + (1 - k / YMAX) * PH; };
   g.innerHTML =
     '<line x1="' + X(r.elapsed).toFixed(1) + '" y1="' + Y(r.km).toFixed(1) + '" x2="' + X(h.end).toFixed(1) +
-    '" y2="' + Y(Math.min(state.total, r.kmd * h.end)).toFixed(1) + '" stroke="var(--' + h.cls + ')" stroke-width="2.5"/>' +
+    '" y2="' + Y(r.kmd * h.end).toFixed(1) + '" stroke="var(--' + h.cls + ')" stroke-width="2.5"/>' +
     '<circle cx="' + X(r.elapsed).toFixed(1) + '" cy="' + Y(r.km).toFixed(1) + '" r="5.5" fill="var(--' + h.cls +
     ')" stroke="var(--surface)" stroke-width="2"/>';
   const req = state.total / LIMIT_D, m = (r.kmd / req - 1) * 100, pf = state.total / r.kmd;
@@ -836,13 +872,13 @@ function highlight(idx, cx, cy) {
 svg.addEventListener('pointermove', function (e) {
   const b = svg.getBoundingClientRect();
   const vx = (e.clientX - b.left) / b.width * VW, vy = (e.clientY - b.top) / b.height * VH;
-  const dx = (vx - ML) / PW * XMAX;
-  const YMAX = state.total * 1.07;
+  const XMIN = CUR.xmin, XMAX = CUR.xmax, YMAX = CUR.ymax;
+  const dx = XMIN + (vx - ML) / PW * (XMAX - XMIN);
   let best = -1, bd = 1e9, bx = 0, by = 0;
   hitList.forEach(function (h, i) {
     const d = Math.max(h.r.elapsed, Math.min(dx, h.end));
-    const yk = Math.min(state.total, h.r.kmd * d);
-    const py = MT + (1 - yk / YMAX) * PH, px = ML + d / XMAX * PW;
+    const yk = h.r.kmd * d;
+    const py = MT + (1 - yk / YMAX) * PH, px = ML + (d - XMIN) / (XMAX - XMIN) * PW;
     const dist = Math.hypot(px - vx, py - vy);
     if (dist < bd) { bd = dist; best = i; bx = px; by = py; }
   });
@@ -856,13 +892,23 @@ svg.addEventListener('keydown', function (e) {
   e.preventDefault();
   if (!hitList.length) return;
   state.sel = (state.sel + (e.key === 'ArrowRight' ? 1 : -1) + hitList.length) % hitList.length;
-  const h = hitList[state.sel], YMAX = state.total * 1.07;
-  highlight(state.sel, ML + h.r.elapsed / XMAX * PW, MT + (1 - h.r.km / YMAX) * PH);
+  const h = hitList[state.sel];
+  highlight(state.sel, ML + (h.r.elapsed - CUR.xmin) / (CUR.xmax - CUR.xmin) * PW, MT + (1 - h.r.km / CUR.ymax) * PH);
 });
 
 document.getElementById('q').addEventListener('input', function (e) { state.q = e.target.value; state.sel = -1; render(); });
 document.getElementById('tot').addEventListener('input', function (e) { state.total = +e.target.value; state.sel = -1; render(); });
 document.getElementById('risk').addEventListener('change', function (e) { state.riskOnly = e.target.checked; state.sel = -1; render(); });
+const zn = document.getElementById('z-now'), zf = document.getElementById('z-full');
+function setZoom(z) {
+  state.zoom = z; state.sel = -1;
+  zn.setAttribute('aria-pressed', String(z === 'now'));
+  zf.setAttribute('aria-pressed', String(z === 'full'));
+  highlight(-1); render();
+}
+zn.onclick = function () { setZoom('now'); };
+zf.onclick = function () { setZoom('full'); };
+
 const vc = document.getElementById('v-chart'), vt = document.getElementById('v-table');
 vc.onclick = function () { vc.setAttribute('aria-pressed', 'true'); vt.setAttribute('aria-pressed', 'false');
   document.getElementById('chartview').hidden = false; document.getElementById('tableview').hidden = true; };
