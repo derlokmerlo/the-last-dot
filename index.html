@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>The Last Dot — TCRNo12 Race Against the Cut-Off</title>
-<meta name="description" content="The Last Dot — an interactive time-distance chart of all 376 Transcontinental Race No12 riders against the 8 August cut-off. An independent dot-watcher project, not affiliated with Lost Dot.">
+<meta name="description" content="The Last Dot - interactive time-distance chart of all 376 Transcontinental Race No12 riders against the checkpoint and finish cut-offs. An independent dot-watcher project, not affiliated with Lost Dot.">
 <meta name="robots" content="index, follow">
-<meta property="og:title" content="The Last Dot — Race against the cut-off">
-<meta property="og:description" content="Every rider is a line. Above the black diagonal is inside the time limit; below it is not. TCRNo12, day 4.">
+<meta property="og:title" content="The Last Dot - Race against the cut-off">
+<meta property="og:description" content="Every rider is a line. Above the black diagonal is inside the time limit; below it is not. CP1 closed on 22 July and 48 riders missed it.">
 <meta property="og:type" content="website">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ctext y=%22.9em%22 font-size=%2290%22%3E%F0%9F%9A%B4%3C/text%3E%3C/svg%3E">
 <style>*,*::before,*::after{box-sizing:border-box}html{-webkit-text-size-adjust:100%}body{margin:0}img,svg{max-width:100%}button,input{font:inherit;color:inherit}</style>
@@ -197,8 +197,11 @@
     <p class="deck lbl">Race against the cut-off</p>
     <p class="lede">Every rider is a line — their average kilometres per day since the start.
       The <b>black diagonal</b> is the minimum pace needed to stamp in at Kalamata before the cut-off on
-      <b>8 August, 23:59 CEST</b>. Above the line is inside the limit. Below it is not.
-      Snapshot taken 22 July 2026, 16:00 CEST — day 4 of the race.</p>
+      <b>8 August, 23:59 CEST</b>. Above the line is inside the limit. Below it is not. Each control point
+      closes on its own deadline too — miss one and you keep riding, but you drop out of the General
+      Classification. <b>CP1 Flåm closed at 11:00 on 22 July, and 48 riders did not make it.</b></p>
+    <p class="lede" style="opacity:.6;font-size:13px">Rider positions read
+      <span id="freshness">22 July 2026, 21:00 CEST</span>. Deadlines update live.</p>
   </div>
 </header>
 
@@ -256,6 +259,7 @@
         <span class="lg"><span class="sw" style="background:var(--edge)"></span>On the edge</span>
         <span class="lg"><span class="sw" style="background:var(--behind)"></span>Off the pace</span>
         <span class="lg"><span class="sw line"></span>Minimum pace</span>
+        <span class="lg"><span style="font-size:14px;line-height:1">☠</span>Missed CP1 · out of GC</span>
       </div>
     </div>
     <svg id="plot" viewBox="0 0 1000 566" role="img" tabindex="0"
@@ -271,7 +275,7 @@
       <table>
         <thead><tr>
           <th class="l">Rider</th><th class="l">Cat.</th><th>Pos.</th><th>km</th><th>km/day</th>
-          <th>Margin</th><th>Est. finish</th><th>Stopped</th><th class="l">Status</th>
+          <th>Margin</th><th>Est. finish</th><th>Stopped</th><th class="l">Status</th><th class="l">Classification</th>
         </tr></thead>
         <tbody id="tbody"></tbody>
       </table>
@@ -286,7 +290,16 @@
       (source: Lost Dot, who mark these details as provisional). The nominal route is roughly 4,800–5,000 km, but every
       rider plots their own line, so the slider exists to show how much the threshold depends on that guess. Current
       averages are depressed by the Norwegian opening and the westward detour to CP1 Flåm, so the group just below the
-      line is less compromised than it looks. The four riders outside the General Classification are excluded.</p>
+      line is less compromised than it looks.</p>
+    <p><b>The control points.</b> Each has its own closing time, taken from the organiser's configuration in the
+      live tracker: CP1 Flåm 22 July 11:00, CP2 Tatra 30 July 11:00, CP3 Sarajevo 2 August 23:59, CP4 Leskovik
+      5 August 23:59, all CEST. Under the Lost Dot rules, qualifying for the General Classification requires
+      validating at every control within its window. Riders who miss one are not thrown out — they can carry on
+      to Kalamata — but they forfeit their classification, and no official race time is awarded. They are drawn
+      here as a calavera rather than a dot: still riding, no longer classified. Colour keeps its meaning for
+      them, because reaching Kalamata at all still depends on pace. The next deadline that binds is CP2, on
+      30 July. The four riders the organiser listed as outside the General Classification from the start are
+      excluded entirely.</p>
     <p>Rider data: FollowMyChallenge live leaderboard, TCRNo12.</p>
     <p class="disclaimer"><b>Not an official page.</b> <em>The Last Dot</em> is an independent dot-watcher's
       analysis, made by a spectator. It is not affiliated with, endorsed by, or connected to
@@ -299,386 +312,388 @@
 <div class="tip" id="tip" role="status" aria-live="polite"></div>
 
 <script>
-const RAW = `Robin Gemperle;1st;1714.5;604.5;S;8
-Max Agut;2nd;1580.9;557.7;S;11
-Nicolas Chatelet;3rd;1521.3;536.4;S;15
-Jocelyn Roth;4th;1546.8;545.6;S;12
-Christoph Strasser;5th;1550.6;546.4;S;12
-Robert Müller;6th;1492.3;526.3;S;11
-Martin Moritz;7th;1451.5;511.7;S;18
-Jonas Verest;8th;1492.8;526.1;S;11
-Jakub Tomasik;9th;1506.3;530.9;S;15
-Wojciech Wronka;10th;1457.5;513.7;S;8
-Tim De Witte;11th;1384.0;487.8;S;13
-Pawel Pulawski;12th;1334.6;470.9;S;8
-Dieuwe Van Bergen en Henegouwen;13th;1429.5;504.0;S;8
-Thomas Boury;14th;1370.6;483.4;S;12
-Omar Di Felice;15th;1436.3;506.6;S;14
-Simon Flury;16th;1415.8;499.4;S;15
-Philip Tellen;17th;1248.9;440.2;S;25
-Riccardo Mosconi;18th;1349.1;475.4;S;19
-Manuel Rudaz;19th;1423.7;502.1;S;17
-Nils Oyen;20th;1315.2;463.8;S;22
-Laurens Van Gucht;21st;1499.2;528.5;S;10
-Christoph Pernsteiner;22nd;1256.6;443.0;S;25
-Guillaume Poinsot;23rd;1397.3;492.6;S;15
-Björn Wirsching;24th;1294.3;456.4;S;17
-Lucas Strittmatter;25th;1393.9;491.4;S;16
-Riccardo Kuhar;26th;1259.5;444.2;S;18
-Jos Koop;27th;1450.3;511.6;S;17
-Mike Fawcett;28th;1212.6;427.4;S;18
-Nico Schleippmann;29th;1271.8;448.6;S;19
-Josh Ibbett;30th;1299.9;458.6;S;16
-Sebi Lehmann;31st;1202.2;423.9;S;23
-George Hodgkinson;32nd;1250.1;442.0;S;18
-Markus Zimmermann;33rd;1253.6;442.2;S;18
-Ulf Bannick;34th;1253.7;442.1;S;21
-Manuel Feldbaumer;35th;1246.2;439.3;S;21
-Stephan Simmermacher;36th;1121.9;395.8;S;15
-Oliver Glen;37th;1146.8;404.4;S;20
-Camille Albisser;38th;1225.4;432.0;F;17
-Sarah Bosslet;39th;1234.1;435.1;F;17
-Lea Hamberger;40th;1216.4;429.1;F;18
-Wojciech Nogalski;41st;1182.4;417.2;S;22
-Hannah Hiecke;42nd;1024.5;380.1;F;21
-Jakub Micorek;43rd;1161.2;409.6;S;18
-Axel Restrup;44th;1190.7;427.4;S;21
-Hélène Fromenty;45th;1132.3;399.1;F;17
-Anna Carlqvist;46th;1145.6;404.0;F;16
-Viggo Vea;47th;1147.0;404.2;S;20
-Arthur Jan;48th;1214.0;428.2;S;22
-Elise Sauvinet;49th;1089.3;384.3;F;18
-Michal Wolff;50th;1049.1;370.0;S;22
-Kristian Buljan;51st;1098.4;387.6;S;22
-Henri Do;52nd;1053.9;376.0;S;26
-Francesco Vettore;53rd;1144.3;403.7;S;27
-Filip Slomski;54th;1192.3;420.4;S;23
-Aleksander Konieczny;55th;1109.8;391.3;S;20
-Joanna Ruminska-Pietrzyk;56th;1072.4;379.1;F;19
-Nicole van Batenburg;57th;1116.6;393.6;F;19
-Valentin Cuenot;58th;1118.5;394.4;S;20
-Brice Douet;59th;1091.1;384.7;S;25
-Roel Massink;60th;1072.1;378.6;S;21
-Rodrigue Lombard;61st;1097.7;386.9;S;16
-Christian Höra;62nd;1134.6;399.9;S;25
-Daniel Molino;63rd;1181.2;417.2;S;25
-Tobias Johansson;64th;1157.0;407.9;S;26
-Jonas Heyberger;65th;1173.7;414.4;S;19
-Mikke Luostarinen;66th;1067.1;376.2;S;19
-Juan Pedro Moreno;67th;1153.1;406.9;S;17
-Raymond Dulieu;68th;1112.2;392.3;S;26
-Markus Carlos hein;69th;1067.1;376.2;S;18
-Luís Manuel Silva Carvalho;70th;1082.8;382.0;S;12
-Robin Reinsch;71st;1047.7;369.6;S;19
-Maximilian Siering;72nd;1149.8;405.7;S;22
-Marten Sprecher;73rd;1102.9;389.0;S;21
-Joep van Luijt;74th;1013.2;357.1;S;29
-Maxime Prieur;75th;1203.2;424.1;S;18
-Larissa Unsinn;76th;1137.2;401.0;F;20
-Adrian Vogel;77th;1030.4;363.3;S;22
-Florian Thiessen;78th;1113.3;392.6;S;20
-Harald Rinner;79th;959.8;338.4;S;22
-Gergely Bartalos;80th;1037.8;365.7;S;26
-Pierre-Yves Robert;81st;1031.9;364.0;S;23
-Jim Visschers;82nd;992.4;350.1;S;29
-Dragomir Titei;83rd;1034.1;364.6;S;24
-Andreas Herrig;84th;967.0;340.8;S;27
-Sebastian Ritter;85th;1063.8;374.9;S;28
-Adrien Charlot;86th;1073.4;378.4;S;26
-Hsi Chun Tsai;87th;1019.3;359.6;S;21
-Aleksei Konev;88th;1005.3;354.5;S;24
-Matthew Spooner;89th;1031.6;363.7;S;28
-Thomas Groenewegen;90th;989.4;349.0;S;28
-Lukas Müller;91st;1072.2;378.0;S;23
-Larissa Sauter;92nd;989.2;348.9;F;18
-Carl von Walter;93rd;1041.3;367.2;S;22
-Franz Nawrocki;94th;1115.2;394.8;S;27
-Peter Kronberger;95th;1126.9;397.4;S;31
-Daniel Schulze Waltrup;96th;1072.3;378.1;S;22
-Dan Sharp;97th;987.7;348.9;S;22
-Anja Longyka;98th;992.9;350.1;F;26
-Simon Van Teutem;99th;965.2;340.5;S;32
-Christoph Zabel;100th;1050.8;370.6;S;28
-Martin Carlsson;101st;1047.3;369.4;S;21
-Jannis Rieb;102nd;1007.0;355.3;S;28
-Mark Turnbull;103rd;1034.7;364.7;S;28
-Maciej Baranowski;104th;945.4;333.6;S;32
-Martin Zettel;105th;944.4;333.0;S;25
-Fredi Maeder;106th;970.9;342.5;S;17
-Oona Baumann;107th;927.0;327.0;F;28
-Adrien Ponteville;108th;955.4;336.9;S;29
-Gabriel Delattre;109th;998.0;352.9;S;32
-Noah Schmid;110th;1026.2;362.0;S;28
-Severin Ehrengruber;111th;923.6;325.6;S;30
-Julian Manrique;112th;979.4;345.3;S;25
-Quirin Taubert;113th;879.3;309.9;S;34
-Yiqun Fu;114th;912.5;321.6;S;26
-Gerald Huber;115th;987.3;348.1;S;28
-Alec Gates;116th;846.7;298.7;S;39
-Roel Hamers;117th;955.1;336.9;S;29
-Robin Skoge;118th;952.2;335.6;S;27
-Bjørn Kåre Amdal;119th;1003.5;353.7;S;29
-Christian Chesta;120th;949.9;335.1;S;30
-Sarah Cinquini;121st;892.8;314.6;F;27
-Bernhard Kämmerer;122nd;960.5;338.9;S;30
-Markus Taubner;123rd;971.8;342.6;S;26
-Christian Pany;124th;924.3;326.1;S;26
-Jack Wright;125th;942.0;332.3;F;33
-Clayton Anderson;126th;963.4;339.7;S;28
-Emiliano Baravalle;127th;944.1;332.8;S;33
-Alexander Eder;128th;991.7;349.8;S;27
-Lisa Schrader;129th;949.9;334.8;F;30
-Alexander Stramma;130th;930.8;328.4;S;27
-Valentin Reichelt;131st;956.3;337.1;S;32
-Niklas Hanses;132nd;954.7;336.6;S;31
-Matthew Falconer;133rd;937.2;330.5;S;31
-Bart Pombreu;134th;917.9;323.7;S;33
-Michael Ærenlund Buch;135th;934.6;330.4;S;32
-Maximilian Pahl;136th;878.1;309.8;S;32
-Philip Renders;137th;850.6;299.9;S;30
-Niel Dunnage;138th;875.6;309.3;S;35
-Byron Buck;139th;931.8;328.4;S;33
-Nicolas Müller;140th;916.7;323.4;S;30
-Tomasz Kuś;141st;953.0;336.1;S;26
-Marcin Zielkowski;142nd;895.9;316.3;S;25
-Sam Wilson;143rd;956.1;337.1;S;25
-Katharina Wirth;144th;954.4;336.4;F;24
-Kim Heikkinen;145th;878.0;309.6;S;31
-Florian Imgrund;146th;901.7;317.9;S;32
-Lars Olausson;147th;867.8;306.1;S;32
-Florent De Boisvilliers;148th;936.9;330.3;S;28
-Alexander Stojkovic;149th;892.8;319.9;S;27
-Malte Hager;150th;911.9;321.7;S;29
-James Auburn;151st;901.0;317.7;S;33
-Pauline Neuber;152nd;933.1;328.9;F;32
-Grzegorz Oszast;153rd;943.6;332.7;S;21
-Henry Jacobson;154th;929.1;327.6;S;26
-Alexander Kuehn;155th;849.0;299.4;S;27
-Josh Roberts;156th;887.5;312.8;S;30
-Adrian Lai;157th;869.0;306.5;S;24
-Mikko Mäkipää;158th;873.0;307.9;S;28
-Michal Kramář;159th;843.9;297.6;S;29
-Robbie Jebb;160th;885.1;312.0;S;20
-Seth Kennard;161st;944.2;333.0;S;27
-Alberto Vaghi;162nd;879.8;311.8;S;34
-Peter Geldhof;163rd;889.1;313.9;S;32
-Walter Reiterer;164th;640.3;225.7;S;44
-Michael Cannon;165th;849.2;299.6;S;27
-Jean-François Badias;166th;831.1;293.0;S;28
-Pierre Beck;167th;862.3;304.2;S;33
-Nora Battermann;168th;907.9;319.9;F;30
-Roland Salowsky;169th;842.2;297.1;S;26
-Arnold Graef;170th;863.2;304.4;S;27
-Niklas Wich;171st;909.1;320.5;S;33
-Jens Ritter;172nd;869.1;306.5;S;31
-Sara Lundberg;173rd;830.7;294.1;F;30
-Mudit Kohli;174th;861.3;303.8;S;24
-Pierre Picard;175th;868.6;306.9;S;33
-Frank Gussenstätter;176th;862.6;304.3;S;30
-Lukas Stiller;177th;840.6;296.4;S;40
-Thomas Achtner;178th;780.8;275.3;S;36
-Mohamed Jawhara;179th;813.5;286.9;S;33
-Erick Saudubray;180th;819.2;289.3;S;31
-Jorn Baan Hofman;181st;870.5;307.1;S;34
-Oliver Neumann;182nd;820.5;289.4;S;31
-Chun man Lau;183rd;829.8;292.7;S;30
-Jacob Fahrenkrug;184th;840.3;296.1;S;31
-Aneta Lamik;185th;831.6;293.1;F;25
-Floris Bakker;186th;869.4;306.5;S;32
-Falk Döring;187th;948.5;334.3;S;30
-Gerald Rumpf;188th;885.6;312.1;S;29
-Rainer Huelsse;189th;842.7;297.1;S;35
-Nathan Offord;190th;765.2;269.9;S;35
-Thilo Kutzer;191st;833.1;293.9;S;31
-Tomáš Žižlavský;192nd;838.5;295.9;S;30
-Noah Boe-Whitehorn;193rd;825.1;291.1;S;31
-Robert Tremblay;194th;784.0;276.3;S;41
-John Read;195th;833.7;294.0;S;29
-David Lacey;196th;772.8;272.4;S;35
-Niko Dangel;197th;826.1;291.3;S;30
-Maris Goldmanis;198th;814.9;287.3;S;32
-Filip Bullens;199th;826.5;291.3;S;31
-Tom Dockal;200th;832.3;295.2;S;24
-Mathilde Germanier;201st;820.2;289.2;F;30
-Paul Williams;202nd;827.1;291.5;S;33
-Dan Jones;203rd;798.1;281.3;S;34
-Bambang Anggoro Jati;204th;825.0;290.8;S;21
-Cornelis Nicolaas Leek;205th;773.9;272.8;S;39
-Knut Kvaran;206th;815.2;287.4;S;40
-Till Moosberger;207th;825.6;291.1;S;30
-Mihael Šandro;208th;786.7;277.4;S;34
-Luca Bessems;209th;762.9;269.1;F;33
-Hugo Manson;210th;822.4;289.9;S;34
-Colin Halliwell;211th;841.3;296.6;S;33
-Isaac Kuehnle-Nelson;212th;785.2;278.8;S;43
-Bart Noëth;213th;744.6;264.0;S;36
-James Soteriou;214th;795.3;280.3;S;37
-Cody Hughes;215th;768.8;271.0;S;32
-Christo Dingozov;216th;915.9;322.8;S;27
-Jean-paul Sachet;217th;785.9;277.1;S;28
-David Tribe;218th;762.3;269.6;S;28
-Valerio Cecchini;219th;816.0;288.0;S;23
-Carys Brimble;220th;752.2;265.5;F;37
-Darron Burns;221st;771.6;272.0;S;31
-David Sealey;222nd;730.2;257.5;S;38
-Armin Seitz;223rd;839.6;296.2;S;23
-Gawan Berentelg;224th;797.8;281.3;S;26
-Koen Heselmans;225th;780.5;275.2;S;29
-Daniel Tulla;226th;849.3;299.4;S;19
-Emily Maille;227th;787.7;277.9;F;30
-Maximilian Droste;228th;817.3;288.1;S;35
-Lucio Buergisser;229th;766.3;270.7;S;37
-Stuart Featherstone;230th;788.5;278.1;S;29
-Simon Heppell;231st;812.1;286.4;S;30
-Mike Watson;232nd;751.8;266.4;S;29
-Sebastian Kerschbaumer;233rd;782.9;275.9;S;34
-Alexander Latham-boal;234th;791.3;279.1;S;34
-Christian Gfeller;235th;775.7;273.4;S;24
-Kenneth Lamont;236th;784.4;279.5;S;30
-Nod Nelson;237th;873.4;307.9;S;26
-Xingjian (Tom) Zhai;238th;752.6;265.3;S;33
-Tom Bryan;239th;740.7;261.1;S;28
-Samuel Hussain;240th;752.3;265.3;S;30
-Cesare Pedrini;241st;785.3;277.0;S;23
-Eric Banh;242nd;817.7;288.3;S;24
-Michael Grobe;243rd;742.1;261.7;S;33
-Maksym Matvieiev;244th;755.1;266.3;S;29
-Nicole Farrier;245th;783.9;276.5;F;26
-Martin Lau;246th;747.2;264.5;S;22
-Erhard Wälchli;247th;888.0;313.0;S;25
-Paul Rollings;248th;743.9;265.2;S;29
-Jesko von Werthern;249th;877.8;309.4;S;28
-Tobias Geißler;250th;807.5;284.8;S;32
-Bjorn Menze;251st;740.6;261.3;S;26
-Stev Krembs;252nd;713.2;251.7;S;33
-Stephen Dummett;253rd;695.4;245.1;S;33
-Lili Delannoy;254th;725.6;256.7;F;29
-Erik Olsson;255th;764.2;269.4;S;27
-Jakob Wall;256th;801.6;282.9;S;36
-Boris Krutov;257th;900.2;317.3;S;29
-Thomas Chateau;258th;754.4;266.2;S;23
-Alain Rodriguez;259th;699.8;246.7;S;43
-Christian Romero;260th;804.2;283.9;S;41
-Ramona Troxler;261st;817.0;288.0;F;28
-Hanif Meeran;262nd;774.4;275.3;S;30
-Hauke Kottek;263rd;847.5;298.9;S;30
-Max Kraus;264th;793.3;279.7;S;32
-Rene Wach;265th;813.1;286.5;S;39
-Frédéric Rudant;266th;815.6;287.6;S;30
-Russell Cairns;267th;719.3;253.7;S;29
-Sofia Passaretti;268th;705.5;254.7;F;38
-Dennis Wolckenhauer;269th;826.9;291.6;S;33
-Artem Soldatkin;270th;763.0;269.0;S;29
-Sarah Hübner;271st;778.7;274.6;F;34
-Marc Förschler;272nd;789.9;278.7;S;29
-Patrick O'connor;273rd;707.6;249.6;S;28
-Sönke Kreft;274th;811.5;286.0;S;24
-Amelia Linnett;275th;738.5;260.5;F;31
-Manuel Kaufer;276th;767.7;270.7;S;36
-Susi Pariasek;277th;792.4;279.5;F;30
-Fabian Graber;278th;717.8;253.1;S;37
-Fritjof Schirmer;279th;734.2;259.0;S;32
-Stephan Haß;280th;694.8;245.0;S;44
-Gabi Winck;281st;746.8;263.2;F;31
-Tim Lamb;282nd;745.2;263.0;S;31
-Ian Budden;283rd;741.7;261.7;S;35
-Karl Björklund;284th;768.3;270.9;S;34
-Matthew Wright;285th;753.9;269.2;S;39
-Peter Corkill;286th;792.6;279.5;S;36
-Zuzanna Bogucka;287th;744.9;266.5;F;25
-Andrew Speers;288th;744.0;262.4;S;34
-Greg Fong;289th;696.7;245.6;S;36
-Sebastian Van den bergen;290th;711.4;250.7;S;37
-Hans Markus Broja;291st;722.8;261.9;S;26
-Tim Hunt;292nd;778.5;274.6;S;36
-Kristin Lome;293rd;744.7;262.6;F;35
-Harvey Bates;294th;748.7;264.5;S;30
-Christoph Adrian Schneider;295th;713.0;251.5;S;42
-Michael Welker;296th;682.0;241.3;S;40
-Henry White;297th;709.0;250.5;S;31
-Eric Lamboley;298th;760.0;267.9;S;34
-Christian Trenkle;299th;751.2;264.8;S;30
-Lissa Breugelmans;300th;695.7;245.4;F;35
-Hank Beerstecher;301st;745.7;263.0;S;36
-Philippe Villepontoux;302nd;700.1;246.7;S;33
-Jürgen Ress;303rd;707.7;249.8;S;41
-Olli Büttel;304th;689.6;245.1;S;40
-Ro Alegre;305th;712.3;251.1;S;31
-Baptiste Estela;306th;684.3;241.3;S;40
-Sarah Steels;307th;693.1;247.0;F;35
-Thibault Sabatier;308th;674.3;237.9;S;38
-Andreas Wittkemper;309th;684.6;242.0;S;28
-Mateusz Andrulewicz;310th;698.7;246.3;S;36
-Jp De Groot;311th;503.5;183.6;S;54
-Mariusz Kolodziej;312th;821.8;289.7;S;26
-Douglas Migden;313th;615.9;217.3;S;35
-George Surjopurnomo;314th;643.6;227.0;S;31
-Ate van Steenbergen;315th;540.5;190.5;S;42
-Mike Passmann;316th;588.0;207.4;S;34
-Grinshina Kartik;317th;693.3;260.1;F;19
-Peter Magill;318th;695.1;245.0;S;26
-Ronja Derr;319th;579.5;204.3;F;53
-Lionel Bobb;320th;562.6;198.3;S;33
-Luis Cardoso;321st;544.4;194.4;S;41
-Maris Brugis;322nd;809.2;285.2;S;29
-Rafael Martinez Gonzalez;323rd;487.7;171.9;S;48
-Mohamed Almarar;324th;555.0;223.7;S;53
-Erekle Bagashvili;325th;601.8;212.3;S;44
-Thomas Weber;326th;709.6;251.6;S;38
-Erik Arentz-Hansen;327th;660.8;237.0;S;36
-Satomi Yamada;328th;416.0;146.7;F;45
-Albert Coigné;329th;646.8;228.6;S;46
-Rene Vera-armenta;330th;575.5;203.0;S;45
-Conor O'Sullivan;331st;655.2;240.7;S;34
-Ben Strause;332nd;519.6;243.7;S;35
-Carsten Dreyer;333rd;500.7;176.4;S;57
-Mex Wieshofer;334th;606.8;213.9;S;35
-Mark Clements;335th;646.0;228.4;S;30
-Dirk Hermans;336th;638.9;225.2;S;47
-Juliette Day;337th;575.4;204.9;F;47
-Sebastien Nolens;338th;773.1;273.3;S;44
-Bryn Thomas;339th;605.1;213.3;F;39
-Stefan Lindkvist;340th;578.3;203.8;S;38
-Benno Raj;341st;572.0;201.7;S;28
-Poh Huat Tan;342nd;677.6;241.5;S;27
-Karin Eder;343rd;660.4;232.8;F;37
-Aaron Poll;344th;517.8;182.5;S;52
-Ian Mitchinson;345th;706.1;258.6;S;46
-Thomas Martraire;346th;820.6;289.2;S;23
-Rumen Vachev;347th;679.5;246.1;S;30
-Robert Coy;348th;601.0;211.8;S;48
-Pierre-yves Fontaine;1st;1292.4;455.8;P;18
-Adrien Mabileau;2nd;1297.7;457.7;P;17
-Rémi Mejean;3rd;1150.3;405.7;P;27
-Marguerite Mulhaus;4th;1174.3;414.0;P;24
-Christian Dupraz;5th;1058.5;374.3;P;23
-Dina Byland;6th;1059.1;373.7;P;23
-Martin Reichert;7th;1000.2;352.8;P;28
-Melanie Müller-reichert;8th;1002.7;353.4;P;28
-Damian Ludlow;9th;893.7;315.0;P;29
-Paul Jennings;10th;893.4;315.2;P;28
-Bartek Was;11th;887.6;316.0;P;27
-Wojtek Was;12th;890.9;314.2;P;26
-Stéphane David;13th;829.7;292.6;P;32
-Carl Carini;14th;817.7;288.5;P;32
-Andreas Steinke;15th;812.0;288.7;P;38
-Christel Vieth;16th;800.1;282.2;P;27
-Bastien Sentubery;17th;791.8;279.3;P;29
-Mylene Vicente;18th;792.1;279.4;P;31
-Małgorzata Gryszczuk;19th;722.1;254.5;P;29
-Kinga Perzyńska;20th;718.3;253.3;P;29
-Jan Bähler;21st;760.1;268.1;P;29
-Mirjam Bonfadelli;22nd;759.1;267.8;P;28
-Richard Parry;23rd;729.5;257.1;P;38
-Sarah Burns;24th;730.3;257.5;P;38
-Michael Hunziker;25th;689.5;255.1;P;30
-Björn Frey;26th;684.4;250.2;P;30
-Andrea Nichelson;27th;665.0;241.0;P;46
-Luisa Nichelson;28th;665.5;241.2;P;45`;
+const RAW = `Robin Gemperle;1st;1628.8;535.4;S;16;1
+Max Agut;2nd;1661.9;552.5;S;11;1
+Nicolas Chatelet;3rd;1614.7;535.5;S;15;1
+Jocelyn Roth;4th;1624.6;534.3;S;13;1
+Christoph Strasser;5th;1637.3;542.8;S;12;1
+Robert Müller;6th;1610.5;528.1;S;11;1
+Martin Moritz;7th;1587.7;520.8;S;17;1
+Jonas Verest;8th;1630.0;534.6;S;10;1
+Jakub Tomasik;9th;1622.2;532.3;S;15;1
+Wojciech Wronka;10th;1580.5;518.3;S;8;1
+Tim De Witte;11th;1517.5;497.7;S;12;1
+Pawel Pulawski;12th;1446.4;474.6;S;8;1
+Dieuwe Van Bergen en Henegouwen;13th;1541.4;505.7;S;8;1
+Thomas Boury;14th;1512.2;495.8;S;11;1
+Omar Di Felice;15th;1559.2;511.2;S;14;1
+Simon Flury;16th;1569.5;514.6;S;14;1
+Philip Tellen;17th;1314.4;445.7;S;24;1
+Riccardo Mosconi;18th;1461.9;479.5;S;19;1
+Manuel Rudaz;19th;1554.5;513.7;S;16;1
+Nils Oyen;20th;1443.8;473.8;S;21;1
+Laurens Van Gucht;21st;1625.4;533.3;S;10;1
+Christoph Pernsteiner;22nd;1390.2;456.1;S;24;1
+Guillaume Poinsot;23rd;1536.5;504.0;S;14;1
+Björn Wirsching;24th;1413.9;463.9;S;16;1
+Lucas Strittmatter;25th;1532.0;502.6;S;15;1
+Riccardo Kuhar;26th;1390.8;456.2;S;17;1
+Jos Koop;27th;1600.3;524.7;S;16;1
+Mike Fawcett;28th;1325.8;434.8;S;17;1
+Nico Schleippmann;29th;1385.6;454.7;S;18;1
+Josh Ibbett;30th;1410.5;462.8;S;16;1
+Sebi Lehmann;31st;1287.2;425.8;S;22;1
+George Hodgkinson;32nd;1378.2;452.3;S;18;1
+Markus Zimmermann;33rd;1377.6;451.9;S;17;1
+Ulf Bannick;34th;1366.5;448.1;S;21;1
+Manuel Feldbaumer;35th;1354.3;444.2;S;21;1
+Stephan Simmermacher;36th;1202.6;394.4;S;16;1
+Oliver Glen;37th;1270.8;417.0;S;19;1
+Camille Albisser;38th;1337.2;438.6;F;17;1
+Sarah Bosslet;39th;1352.5;443.4;F;16;1
+Lea Hamberger;40th;1313.6;430.6;F;18;1
+Wojciech Nogalski;41st;1296.7;427.6;S;21;1
+Hannah Hiecke;42nd;1024.5;380.1;F;21;1
+Jakub Micorek;43rd;1288.8;422.9;S;17;1
+Axel Restrup;44th;1308.2;432.2;S;23;1
+Hélène Fromenty;45th;1222.2;405.0;F;16;1
+Anna Carlqvist;46th;1253.3;411.3;F;15;1
+Viggo Vea;47th;1249.1;409.6;S;19;1
+Arthur Jan;48th;1214.0;427.6;S;22;1
+Elise Sauvinet;49th;1183.5;388.1;F;18;1
+Michal Wolff;50th;1137.7;373.0;S;21;1
+Kristian Buljan;51st;1134.4;382.0;S;23;1
+Henri Do;52nd;1054.3;345.6;S;32;1
+Francesco Vettore;53rd;1258.8;412.6;S;26;1
+Filip Slomski;54th;1229.2;416.1;S;24;1
+Aleksander Konieczny;55th;1223.6;402.4;S;19;1
+Joanna Ruminska-Pietrzyk;56th;1104.8;362.2;F;23;1
+Nicole van Batenburg;57th;1209.5;396.8;F;18;1
+Valentin Cuenot;58th;1211.1;397.2;S;19;1
+Brice Douet;59th;1200.5;393.6;S;24;1
+Roel Massink;60th;1203.0;394.4;S;19;1
+Rodrigue Lombard;61st;1202.0;394.2;S;16;1
+Christian Höra;62nd;1234.8;404.9;S;24;1
+Daniel Molino;63rd;1303.7;427.7;S;23;1
+Tobias Johansson;64th;1262.7;417.1;S;25;1
+Jonas Heyberger;65th;1281.0;420.4;S;18;1
+Mikke Luostarinen;66th;1149.5;377.1;S;19;1
+Juan Pedro Moreno;67th;1230.9;411.2;S;16;1
+Raymond Dulieu;68th;1223.8;401.5;S;24;1
+Markus Carlos hein;69th;1174.7;385.3;S;17;1
+Luís Manuel Silva Carvalho;70th;1184.3;388.3;S;12;1
+Robin Reinsch;71st;1107.9;363.4;S;20;1
+Maximilian Siering;72nd;1229.0;413.9;S;21;1
+Marten Sprecher;73rd;1170.4;388.7;S;21;1
+Joep van Luijt;74th;1106.1;362.6;S;29;1
+Maxime Prieur;75th;1316.1;431.7;S;17;1
+Larissa Unsinn;76th;1236.3;405.5;F;18;1
+Adrian Vogel;77th;1135.7;372.6;S;21;1
+Florian Thiessen;78th;1219.4;400.1;S;20;1
+Harald Rinner;79th;1047.6;343.7;S;21;1
+Gergely Bartalos;80th;1158.0;379.7;S;24;1
+Pierre-Yves Robert;81st;1140.6;373.9;S;22;1
+Jim Visschers;82nd;1037.3;349.2;S;28;1
+Dragomir Titei;83rd;1130.7;371.0;S;24;1
+Andreas Herrig;84th;1074.6;352.4;S;25;1
+Sebastian Ritter;85th;1156.7;379.5;S;28;1
+Adrien Charlot;86th;1203.6;394.7;S;24;1
+Hsi Chun Tsai;87th;1108.8;363.7;S;20;1
+Aleksei Konev;88th;1107.0;363.1;S;23;1
+Matthew Spooner;89th;1137.2;372.9;S;27;1
+Thomas Groenewegen;90th;1091.8;357.9;S;27;1
+Lukas Müller;91st;1165.2;382.1;S;23;1
+Larissa Sauter;92nd;1070.1;351.0;F;18;1
+Carl von Walter;93rd;1133.0;371.5;S;21;1
+Franz Nawrocki;94th;1217.4;399.3;S;26;1
+Peter Kronberger;95th;1255.1;411.8;S;29;1
+Daniel Schulze Waltrup;96th;1152.0;379.3;S;21;1
+Dan Sharp;97th;1070.0;356.1;S;22;1
+Anja Longyka;98th;1055.2;352.2;F;25;1
+Simon Van Teutem;99th;1073.3;352.2;S;30;1
+Christoph Zabel;100th;1138.4;373.5;S;27;1
+Martin Carlsson;101st;1147.2;376.1;S;20;1
+Jannis Rieb;102nd;1052.8;351.0;S;28;1
+Mark Turnbull;103rd;1139.4;373.7;S;26;1
+Maciej Baranowski;104th;1023.4;335.5;S;32;1
+Martin Zettel;105th;1032.8;338.9;S;24;1
+Fredi Maeder;106th;1079.2;354.1;S;16;1
+Oona Baumann;107th;1023.8;337.2;F;26;1
+Adrien Ponteville;108th;1054.1;345.7;S;27;1
+Gabriel Delattre;109th;1092.1;358.4;S;31;1
+Noah Schmid;110th;1111.2;366.1;S;27;1
+Severin Ehrengruber;111th;1029.5;337.5;S;29;1
+Julian Manrique;112th;1039.1;350.2;S;25;1
+Quirin Taubert;113th;998.2;327.6;S;32;1
+Yiqun Fu;114th;1006.8;330.2;S;25;1
+Gerald Huber;115th;1092.4;358.1;S;27;1
+Alec Gates;116th;948.5;312.7;S;37;1
+Roel Hamers;117th;1016.8;340.7;S;28;1
+Robin Skoge;118th;1043.7;343.9;S;26;1
+Bjørn Kåre Amdal;119th;1091.7;358.1;S;28;1
+Christian Chesta;120th;1056.6;346.4;S;29;1
+Sarah Cinquini;121st;1014.5;332.7;F;25;1
+Bernhard Kämmerer;122nd;1050.5;345.4;S;29;1
+Markus Taubner;123rd;1071.2;351.5;S;25;1
+Christian Pany;124th;1034.7;339.3;S;24;1
+Jack Wright;125th;1034.3;339.3;F;32;1
+Clayton Anderson;126th;1060.5;347.8;S;26;1
+Emiliano Baravalle;127th;1057.7;346.9;S;31;1
+Alexander Eder;128th;1105.0;362.4;S;25;1
+Lisa Schrader;129th;1049.1;344.1;F;28;1
+Alexander Stramma;130th;1022.3;335.4;S;26;1
+Valentin Reichelt;131st;1073.3;352.3;S;29;1
+Niklas Hanses;132nd;1046.9;343.5;S;30;1
+Matthew Falconer;133rd;1031.4;339.6;S;30;1
+Bart Pombreu;134th;1029.3;337.4;S;32;1
+Michael Ærenlund Buch;135th;1034.0;339.8;S;31;1
+Maximilian Pahl;136th;999.2;327.6;S;30;1
+Philip Renders;137th;959.5;316.3;S;29;1
+Niel Dunnage;138th;958.2;318.3;S;33;1
+Byron Buck;139th;1031.5;341.9;S;31;1
+Nicolas Müller;140th;1024.2;335.8;S;28;1
+Tomasz Kuś;141st;1074.1;352.5;S;24;1
+Marcin Zielkowski;142nd;1007.9;331.1;S;23;1
+Sam Wilson;143rd;1051.2;345.3;S;24;1
+Katharina Wirth;144th;1050.2;344.3;F;23;1
+Kim Heikkinen;145th;971.0;318.4;S;30;1
+Florian Imgrund;146th;1000.3;328.1;S;31;1
+Lars Olausson;147th;974.8;319.7;S;31;1
+Florent De Boisvilliers;148th;1013.4;332.5;S;27;1
+Alexander Stojkovic;149th;1015.8;333.3;S;25;1
+Malte Hager;150th;1012.3;332.0;S;28;1
+James Auburn;151st;1032.1;338.6;S;30;1
+Pauline Neuber;152nd;1026.0;336.7;F;32;1
+Grzegorz Oszast;153rd;1039.3;341.0;S;21;1
+Henry Jacobson;154th;1041.6;341.7;S;25;1
+Alexander Kuehn;155th;945.8;310.1;S;25;1
+Josh Roberts;156th;971.5;326.4;S;29;1
+Adrian Lai;157th;952.1;312.3;S;24;1
+Mikko Mäkipää;158th;961.2;315.3;S;27;1
+Michal Kramář;159th;940.4;309.3;S;28;1
+Robbie Jebb;160th;983.2;322.6;S;20;1
+Seth Kennard;161st;1055.3;346.0;S;25;1
+Alberto Vaghi;162nd;884.8;298.2;S;37;1
+Peter Geldhof;163rd;1002.7;329.0;S;31;1
+Walter Reiterer;164th;721.8;236.6;S;43;1
+Michael Cannon;165th;950.8;311.8;S;26;1
+Jean-François Badias;166th;933.5;306.0;S;27;1
+Pierre Beck;167th;976.7;320.4;S;31;1
+Nora Battermann;168th;1009.5;331.0;F;28;1
+Roland Salowsky;169th;920.5;303.4;S;26;1
+Arnold Graef;170th;946.2;310.3;S;26;1
+Niklas Wich;171st;1023.1;335.7;S;32;1
+Jens Ritter;172nd;990.9;325.1;S;30;1
+Sara Lundberg;173rd;918.3;301.7;F;29;1
+Mudit Kohli;174th;958.9;314.6;S;23;1
+Pierre Picard;175th;931.6;310.5;S;33;1
+Frank Gussenstätter;176th;962.6;315.8;S;28;1
+Lukas Stiller;177th;932.4;306.0;S;39;1
+Thomas Achtner;178th;848.6;278.2;S;35;1
+Mohamed Jawhara;179th;900.9;295.4;S;32;1
+Erick Saudubray;180th;927.3;304.1;S;29;1
+Jorn Baan Hofman;181st;987.9;323.9;S;32;1
+Oliver Neumann;182nd;914.1;299.9;S;30;1
+Chun man Lau;183rd;946.2;310.3;S;28;1
+Jacob Fahrenkrug;184th;943.1;309.3;S;29;1
+Aneta Lamik;185th;917.1;300.6;F;25;1
+Floris Bakker;186th;986.4;323.6;S;30;1
+Falk Döring;187th;1023.4;335.8;S;30;1
+Gerald Rumpf;188th;993.7;326.1;S;27;1
+Rainer Huelsse;189th;962.4;315.7;S;33;1
+Nathan Offord;190th;845.8;277.3;S;34;1
+Thilo Kutzer;191st;943.6;309.5;S;29;1
+Tomáš Žižlavský;192nd;940.7;308.6;S;28;1
+Noah Boe-Whitehorn;193rd;947.7;311.0;S;30;1
+Robert Tremblay;194th;857.6;281.4;S;40;1
+John Read;195th;922.0;302.4;S;28;1
+David Lacey;196th;877.0;287.7;S;33;1
+Niko Dangel;197th;938.4;307.7;S;29;1
+Maris Goldmanis;198th;912.8;299.4;S;31;1
+Filip Bullens;199th;916.8;300.8;S;30;1
+Tom Dockal;200th;906.8;303.7;S;23;1
+Mathilde Germanier;201st;902.1;295.8;F;29;1
+Paul Williams;202nd;928.0;304.4;S;31;1
+Dan Jones;203rd;879.8;288.5;S;33;1
+Bambang Anggoro Jati;204th;911.8;299.0;S;20;1
+Cornelis Nicolaas Leek;205th;853.9;282.3;S;37;1
+Knut Kvaran;206th;888.9;291.6;S;39;1
+Till Moosberger;207th;932.9;306.1;S;28;1
+Mihael Šandro;208th;878.3;288.1;S;32;1
+Luca Bessems;209th;842.8;276.5;F;32;1
+Hugo Manson;210th;895.7;293.9;S;33;1
+Colin Halliwell;211th;895.6;301.0;S;31;1
+Isaac Kuehnle-Nelson;212th;798.0;269.4;S;44;1
+Bart Noëth;213th;795.1;270.5;S;35;1
+James Soteriou;214th;888.4;291.5;S;35;1
+Cody Hughes;215th;834.7;273.6;S;32;1
+Christo Dingozov;216th;1025.4;336.3;S;25;1
+Jean-paul Sachet;217th;878.5;288.0;S;27;1
+David Tribe;218th;830.6;277.1;S;26;1
+Valerio Cecchini;219th;875.7;287.1;S;24;1
+Carys Brimble;220th;855.7;280.5;F;35;1
+Darron Burns;221st;772.0;253.1;S;36;1
+David Sealey;222nd;739.2;252.3;S;39;1
+Armin Seitz;223rd;913.5;300.6;S;23;1
+Gawan Berentelg;224th;867.1;284.4;S;25;1
+Koen Heselmans;225th;851.9;279.9;S;28;1
+Daniel Tulla;226th;935.8;307.0;S;18;1
+Emily Maille;227th;892.6;292.7;F;29;1
+Maximilian Droste;228th;923.1;302.7;S;33;1
+Lucio Buergisser;229th;872.4;286.0;S;35;1
+Stuart Featherstone;230th;885.7;290.4;S;28;1
+Simon Heppell;231st;888.4;291.2;S;29;1
+Mike Watson;232nd;826.6;271.2;S;29;1
+Sebastian Kerschbaumer;233rd;850.2;278.8;S;33;1
+Alexander Latham-boal;234th;871.3;285.9;S;32;1
+Christian Gfeller;235th;821.6;275.1;S;23;1
+Kenneth Lamont;236th;861.9;282.6;S;30;1
+Nod Nelson;237th;956.4;313.8;S;26;1
+Xingjian (Tom) Zhai;238th;801.7;273.0;S;32;1
+Tom Bryan;239th;832.9;273.2;S;26;1
+Samuel Hussain;240th;785.4;265.6;S;30;1
+Cesare Pedrini;241st;860.2;282.0;S;21;1
+Eric Banh;242nd;866.8;284.1;S;24;1
+Michael Grobe;243rd;809.5;265.5;S;32;1
+Maksym Matvieiev;244th;811.8;266.3;S;30;1
+Nicole Farrier;245th;820.0;269.1;F;27;1
+Martin Lau;246th;786.8;260.1;S;24;1
+Erhard Wälchli;247th;993.9;326.7;S;24;1
+Paul Rollings;248th;819.4;268.8;S;29;1
+Jesko von Werthern;249th;989.9;326.2;S;27;1
+Tobias Geißler;250th;846.2;281.6;S;32;1
+Bjorn Menze;251st;800.7;262.5;S;26;1
+Stev Krembs;252nd;742.5;243.4;S;33;1
+Stephen Dummett;253rd;731.5;240.1;S;33;1
+Lili Delannoy;254th;764.2;250.7;F;30;1
+Erik Olsson;255th;824.9;271.0;S;27;1
+Jakob Wall;256th;802.1;280.0;S;36;1
+Boris Krutov;257th;989.7;324.8;S;27;1
+Thomas Chateau;258th;818.2;270.2;S;22;1
+Alain Rodriguez;259th;700.0;233.7;S;46;1
+Christian Romero;260th;804.2;283.9;S;41;1
+Ramona Troxler;261st;891.4;292.5;F;28;1
+Hanif Meeran;262nd;873.0;286.5;S;29;1
+Hauke Kottek;263rd;922.1;302.5;S;31;1
+Max Kraus;264th;869.1;284.9;S;31;1
+Rene Wach;265th;901.2;297.4;S;37;1
+Frédéric Rudant;266th;883.7;290.8;S;29;1
+Russell Cairns;267th;757.2;248.3;S;28;1
+Sofia Passaretti;268th;705.6;233.7;F;43;1
+Dennis Wolckenhauer;269th;913.0;299.4;S;31;1
+Artem Soldatkin;270th;817.9;268.4;S;28;1
+Sarah Hübner;271st;844.9;281.7;F;33;1
+Marc Förschler;272nd;891.4;292.2;S;28;1
+Patrick O'connor;273rd;767.4;251.6;S;27;1
+Sönke Kreft;274th;877.4;287.8;S;23;1
+Amelia Linnett;275th;801.3;267.5;F;30;1
+Manuel Kaufer;276th;794.6;260.5;S;39;1
+Susi Pariasek;277th;869.5;285.1;F;29;1
+Fabian Graber;278th;751.9;246.7;S;36;1
+Fritjof Schirmer;279th;801.4;263.0;S;31;1
+Stephan Haß;280th;695.4;234.5;S;46;1
+Gabi Winck;281st;781.5;262.1;F;31;1
+Tim Lamb;282nd;822.4;269.6;S;30;1
+Ian Budden;283rd;825.6;270.9;S;33;1
+Karl Björklund;284th;814.4;275.4;S;33;1
+Matthew Wright;285th;819.6;272.8;S;38;1
+Peter Corkill;286th;861.6;282.6;S;35;1
+Zuzanna Bogucka;287th;776.0;254.9;F;29;1
+Andrew Speers;288th;824.1;270.4;S;32;1
+Greg Fong;289th;732.8;242.0;S;36;1
+Sebastian Van den bergen;290th;744.2;247.1;S;36;1
+Hans Markus Broja;291st;766.3;251.8;S;27;1
+Tim Hunt;292nd;846.4;277.5;S;35;1
+Kristin Lome;293rd;830.4;272.2;F;34;1
+Harvey Bates;294th;795.5;269.6;S;30;1
+Christoph Adrian Schneider;295th;742.3;243.9;S;42;1
+Michael Welker;296th;711.3;233.3;S;40;1
+Henry White;297th;746.9;245.1;S;31;1
+Eric Lamboley;298th;812.3;266.4;S;32;1
+Christian Trenkle;299th;787.1;259.0;S;29;1
+Lissa Breugelmans;300th;736.8;241.5;F;33;1
+Hank Beerstecher;301st;752.8;255.5;S;37;1
+Philippe Villepontoux;302nd;718.5;235.8;S;34;1
+Jürgen Ress;303rd;698.7;264.9;S;38;0
+Olli Büttel;304th;692.8;228.1;S;44;0
+Ro Alegre;305th;734.6;242.7;S;31;0
+Baptiste Estela;306th;684.5;235.8;S;41;0
+Sarah Steels;307th;723.9;237.4;F;35;0
+Thibault Sabatier;308th;694.5;227.8;S;39;0
+Andreas Wittkemper;309th;709.7;233.6;S;28;0
+Mateusz Andrulewicz;310th;718.0;235.6;S;37;0
+Mark Clements;311th;705.7;235.1;S;32;0
+Peter Magill;312th;707.9;233.7;S;29;0
+Conor O'Sullivan;313th;703.1;230.9;S;34;0
+Erik Arentz-Hansen;314th;701.4;230.2;S;37;0
+Grinshina Kartik;315th;734.3;242.4;F;19;0
+Rumen Vachev;316th;724.7;237.6;S;32;0
+Poh Huat Tan;317th;719.4;239.2;S;27;0
+Dirk Hermans;318th;681.5;223.7;S;45;0
+Albert Coigné;319th;746.4;244.9;S;45;0
+Jp De Groot;320th;503.7;166.7;S;58;0
+Mariusz Kolodziej;321st;874.1;290.8;S;26;0
+Douglas Migden;322nd;682.6;224.0;S;34;0
+George Surjopurnomo;323rd;668.5;219.3;S;29;0
+Ate van Steenbergen;324th;585.8;192.1;S;40;0
+Mike Passmann;325th;614.7;207.1;S;33;0
+Ronja Derr;326th;645.6;212.6;F;53;0
+Lionel Bobb;327th;583.5;196.4;S;34;0
+Luis Cardoso;328th;556.1;186.6;S;44;0
+Maris Brugis;329th;887.8;291.1;S;29;0
+Rafael Martinez Gonzalez;330th;522.1;171.4;S;48;0
+Mohamed Almarar;331st;555.0;223.7;S;53;0
+Erekle Bagashvili;332nd;654.3;215.7;S;42;0
+Thomas Weber;333rd;753.6;254.4;S;37;0
+Satomi Yamada;334th;438.4;144.8;F;43;0
+Rene Vera-armenta;335th;583.5;196.1;S;46;0
+Ben Strause;336th;519.7;172.8;S;54;0
+Carsten Dreyer;337th;571.2;189.2;S;55;0
+Mex Wieshofer;338th;659.7;217.5;S;34;0
+Juliette Day;339th;588.9;196.3;F;50;0
+Sebastien Nolens;340th;894.5;293.3;S;46;0
+Bryn Thomas;341st;605.6;199.2;F;43;0
+Stefan Lindkvist;342nd;911.7;299.6;S;36;0
+Benno Raj;343rd;638.9;209.7;S;28;0
+Karin Eder;344th;696.2;229.4;F;35;0
+Aaron Poll;345th;562.4;184.5;S;50;0
+Ian Mitchinson;346th;706.1;258.6;S;46;0
+Thomas Martraire;347th;902.7;296.2;S;22;0
+Robert Coy;348th;659.2;218.7;S;46;0
+Pierre-yves Fontaine;1st;1413.4;463.6;P;16;1
+Adrien Mabileau;2nd;1417.8;465.0;P;16;1
+Rémi Mejean;3rd;1251.5;411.5;P;26;1
+Marguerite Mulhaus;4th;1275.4;419.4;P;24;1
+Christian Dupraz;5th;1148.2;376.6;P;22;1
+Dina Byland;6th;1131.0;378.8;P;22;1
+Martin Reichert;7th;1083.7;355.3;P;26;1
+Melanie Müller-reichert;8th;1096.8;359.6;P;26;1
+Damian Ludlow;9th;992.9;325.6;P;28;1
+Paul Jennings;10th;996.0;326.7;P;27;1
+Bartek Was;11th;968.4;318.9;P;27;1
+Wojtek Was;12th;969.7;319.3;P;26;1
+Stéphane David;13th;897.3;294.1;P;32;1
+Carl Carini;14th;884.3;290.1;P;33;1
+Andreas Steinke;15th;868.5;290.4;P;38;1
+Christel Vieth;16th;848.2;284.8;P;27;1
+Bastien Sentubery;17th;855.9;280.6;P;28;1
+Mylene Vicente;18th;854.1;280.3;P;30;1
+Małgorzata Gryszczuk;19th;767.5;252.6;P;28;1
+Kinga Perzyńska;20th;766.0;251.8;P;28;1
+Jan Bähler;21st;817.7;274.1;P;28;1
+Mirjam Bonfadelli;22nd;829.7;272.0;P;27;1
+Richard Parry;23rd;800.2;262.4;P;37;1
+Sarah Burns;24th;801.8;263.0;P;36;1
+Michael Hunziker;25th;691.2;235.1;P;36;1
+Björn Frey;26th;686.2;231.4;P;35;1
+Luisa Nichelson;27th;704.5;232.5;P;45;0
+Andrea Nichelson;28th;708.1;234.3;P;45;0`;
 
 const START_MS = Date.UTC(2026, 6, 19, 18, 0);   // 19 Jul 2026, 20:00 CEST
 const CUTOFF_MS = Date.UTC(2026, 7, 8, 21, 59);  //  8 Aug 2026, 23:59 CEST
 const LIMIT_D = (CUTOFF_MS - START_MS) / 864e5;  // 20.166 days
+const NOW_MS = Date.now();                       // live clock, for deadline state
+const DATA_MS = Date.UTC(2026, 6, 22, 19, 0);    // when the rider positions were read
 const CATNAME = { S: 'Solo', F: 'FLINTA', P: 'Pair' };
 const GLYPH = { ahead: '▲', edge: '●', behind: '▼' };
 const LABEL = { ahead: 'Inside', edge: 'On the edge', behind: 'Off the pace' };
@@ -687,8 +702,33 @@ const MONTH = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov'
 const RIDERS = RAW.trim().split('\n').map(function (l) {
   const p = l.split(';');
   const km = +p[2], kmd = +p[3];
-  return { name: p[0], pos: p[1], km: km, kmd: kmd, cat: p[4], idle: +p[5], elapsed: km / kmd };
+  return { name: p[0], pos: p[1], km: km, kmd: kmd, cat: p[4], idle: +p[5],
+           gc: p[6] !== '0', elapsed: km / kmd };
 });
+
+// Control point closing times, from the organiser's own configuration in the
+// live tracker. Missing a control's window costs General Classification
+// qualification — the rider may continue, but no official race time is awarded.
+const CHECKPOINTS = [
+  { name: 'CP1', place: 'Flåm',        ms: Date.UTC(2026, 6, 22,  9, 0) },
+  { name: 'CP2', place: 'Tatra',       ms: Date.UTC(2026, 6, 30,  9, 0) },
+  { name: 'CP3', place: 'Sarajevo',    ms: Date.UTC(2026, 7,  2, 21, 59) },
+  { name: 'CP4', place: 'Leskovik',    ms: Date.UTC(2026, 7,  5, 21, 59) }
+].map(function (c) { c.day = (c.ms - START_MS) / 864e5; return c; });
+
+// A calavera rather than a plain dot: these riders are out of the classification
+// but still on the road. Drawn as a 20x20 glyph, scaled and centred on the point.
+function skull(cx, cy, size, colorVar) {
+  const k = size / 20, x = cx - size / 2, y = cy - size / 2;
+  return '<g transform="translate(' + x.toFixed(1) + ',' + y.toFixed(1) + ') scale(' + k.toFixed(3) + ')">' +
+    '<path d="M10 0.8C4.4 0.8 1.4 4.5 1.4 9c0 2.7 1.1 4.5 2.7 5.4v2.2c0 1.6 1.3 2.9 2.9 2.9h6c1.6 0 2.9-1.3 2.9-2.9v-2.2c1.6-0.9 2.7-2.7 2.7-5.4C18.6 4.5 15.6 0.8 10 0.8Z" fill="var(--' + colorVar + ')"/>' +
+    '<circle cx="6.5" cy="8.7" r="2.5" fill="var(--surface)"/>' +
+    '<circle cx="13.5" cy="8.7" r="2.5" fill="var(--surface)"/>' +
+    '<path d="M10 11.4l1.5 2.6h-3Z" fill="var(--surface)"/>' +
+    '<rect x="7.4" y="16.1" width="1.5" height="3.5" fill="var(--surface)"/>' +
+    '<rect x="11.1" y="16.1" width="1.5" height="3.5" fill="var(--surface)"/>' +
+    '</g>';
+}
 
 let state = { cat: 'ALL', q: '', total: 4950, riskOnly: false, sel: -1, zoom: 'now' };
 
@@ -726,6 +766,16 @@ function fmtDate(days) {
   return t.getUTCDate() + ' ' + MONTH[t.getUTCMonth()] + ' ' + p(t.getUTCHours()) + ':' + p(t.getUTCMinutes());
 }
 function kfmt(n) { return n.toLocaleString('en-GB'); }
+// Race day -> wall-clock label. Sub-day steps read as times, with the date
+// carried by the midnight tick; day-scale steps read as dates.
+function axisLabel(days, step) {
+  const t = new Date(START_MS + days * 864e5 + 2 * 36e5);
+  const dd = t.getUTCDate(), mo = MONTH[t.getUTCMonth()], hh = t.getUTCHours(), mm = t.getUTCMinutes();
+  const p = function (n) { return String(n).padStart(2, '0'); };
+  if (step >= 1) return dd + ' ' + mo;
+  if (hh === 0 && mm === 0) return dd + ' ' + mo;
+  return p(hh) + ':' + p(mm);
+}
 
 const VW = 1000, VH = 566, ML = 62, MR = 22, MT = 22, MB = 46;
 const PW = VW - ML - MR, PH = VH - MT - MB;
@@ -775,11 +825,29 @@ function render() {
          '" stroke="var(--grid)" stroke-width="1"/>';
     s += '<text x="' + (ML - 10) + '" y="' + (Y(k) + 4).toFixed(1) + '" text-anchor="end">' + kfmt(k) + '</text>';
   }
-  for (let d = XMIN; d <= XMAX + 1e-9; d += CUR.xstep) {
-    const lab = CUR.xstep < 1 ? (Math.round(d * 10) / 10).toFixed(1) : String(d);
-    s += '<text x="' + X(d).toFixed(1) + '" y="' + (MT + PH + 20) + '" text-anchor="middle">' + lab + '</text>';
+  // Ticks land on wall-clock boundaries (midnight / midday CEST), not on
+  // multiples of race-day — otherwise the date label never falls on a tick.
+  const stepMs = CUR.xstep * 864e5, TZ = 2 * 36e5;
+  const startMs = START_MS + XMIN * 864e5, endMs = START_MS + XMAX * 864e5;
+  for (let m = Math.ceil((startMs + TZ) / stepMs) * stepMs - TZ; m <= endMs; m += stepMs) {
+    const d = (m - START_MS) / 864e5;
+    const lab = axisLabel(d, CUR.xstep);
+    const isDate = /[A-Za-z]/.test(lab);
+    s += '<text x="' + X(d).toFixed(1) + '" y="' + (MT + PH + 20) + '" text-anchor="middle"' +
+         (isDate ? ' font-weight="600" fill="var(--ink-2)"' : '') + '>' + lab + '</text>';
   }
-  s += '<text class="axname" x="' + (ML + PW / 2) + '" y="' + (MT + PH + 40) + '" text-anchor="middle">race days</text>';
+  s += '<text class="axname" x="' + (ML + PW / 2) + '" y="' + (MT + PH + 40) + '" text-anchor="middle">' +
+       (zoomed ? 'date and time · CEST' : 'date · CEST') + '</text>';
+
+  // Control point closings — the deadlines that actually bind before the finish.
+  CHECKPOINTS.forEach(function (c) {
+    if (c.day < XMIN || c.day > XMAX) return;
+    const gone = c.ms <= NOW_MS;
+    s += '<line x1="' + X(c.day).toFixed(1) + '" y1="' + MT + '" x2="' + X(c.day).toFixed(1) + '" y2="' + (MT + PH) +
+         '" stroke="var(--rule)" stroke-width="1.5"/>';
+    s += '<text class="marklab" x="' + (X(c.day) + 7).toFixed(1) + '" y="' + (MT + PH - 8) +
+         '" fill="var(--ink-2)">' + c.name + ' ' + c.place + (gone ? ' · closed' : ' · closes') + '</text>';
+  });
   s += '<text class="axname" x="' + (ML - 46) + '" y="' + (MT + PH / 2) + '" text-anchor="middle" ' +
        'transform="rotate(-90 ' + (ML - 46) + ' ' + (MT + PH / 2) + ')">kilometres covered</text>';
   s += '<line x1="' + ML + '" y1="' + (MT + PH) + '" x2="' + (ML + PW) + '" y2="' + (MT + PH) + '" stroke="var(--rule)" stroke-width="1"/>';
@@ -815,9 +883,14 @@ function render() {
   s += '<text class="marklab" x="' + X(labX).toFixed(1) + '" y="' + (Y(req * labX) + 21).toFixed(1) + '" fill="var(--ink)">minimum pace · ' + Math.round(req) + ' km/day</text>';
 
   rows.forEach(function (r, i) {
-    s += '<circle cx="' + X(r.elapsed).toFixed(1) + '" cy="' + Y(r.km).toFixed(1) + '" r="' + (zoomed ? 3.4 : 2.6) +
-         '" fill="var(--' + hitList[i].cls + ')" opacity="' + (zoomed ? .9 : .82) + '"' +
-         (zoomed ? ' stroke="var(--surface)" stroke-width="1"' : '') + '/>';
+    const cx = X(r.elapsed), cy = Y(r.km);
+    if (!r.gc) {
+      s += skull(cx, cy, zoomed ? 13 : 10, hitList[i].cls);
+    } else {
+      s += '<circle cx="' + cx.toFixed(1) + '" cy="' + cy.toFixed(1) + '" r="' + (zoomed ? 3.4 : 2.6) +
+           '" fill="var(--' + hitList[i].cls + ')" opacity="' + (zoomed ? .9 : .82) + '"' +
+           (zoomed ? ' stroke="var(--surface)" stroke-width="1"' : '') + '/>';
+    }
   });
 
   s += '<g id="hi"></g>';
@@ -833,7 +906,9 @@ function render() {
       '<td class="num" style="color:var(--' + cls + ');font-weight:600">' + (m >= 0 ? '+' : '') + m.toFixed(0) + '%</td>' +
       '<td class="num">' + fmtDate(state.total / r.kmd) + '</td>' +
       '<td class="num">' + r.idle + '%</td>' +
-      '<td class="l"><span class="badge" style="color:var(--' + cls + ')">' + GLYPH[cls] + ' ' + LABEL[cls] + '</span></td></tr>';
+      '<td class="l"><span class="badge" style="color:var(--' + cls + ')">' + GLYPH[cls] + ' ' + LABEL[cls] + '</span></td>' +
+      '<td class="l">' + (r.gc ? '<span style="color:var(--muted)">in GC</span>'
+                               : '<span class="badge" style="color:var(--ink)">☠ Missed CP1</span>') + '</td></tr>';
   }).join('');
 }
 function esc(t) { return t.replace(/&/g, '&amp;').replace(/</g, '&lt;'); }
@@ -849,8 +924,10 @@ function highlight(idx, cx, cy) {
   g.innerHTML =
     '<line x1="' + X(r.elapsed).toFixed(1) + '" y1="' + Y(r.km).toFixed(1) + '" x2="' + X(h.end).toFixed(1) +
     '" y2="' + Y(r.kmd * h.end).toFixed(1) + '" stroke="var(--' + h.cls + ')" stroke-width="2.5"/>' +
-    '<circle cx="' + X(r.elapsed).toFixed(1) + '" cy="' + Y(r.km).toFixed(1) + '" r="5.5" fill="var(--' + h.cls +
-    ')" stroke="var(--surface)" stroke-width="2"/>';
+    (r.gc
+      ? '<circle cx="' + X(r.elapsed).toFixed(1) + '" cy="' + Y(r.km).toFixed(1) + '" r="5.5" fill="var(--' + h.cls +
+        ')" stroke="var(--surface)" stroke-width="2"/>'
+      : skull(X(r.elapsed), Y(r.km), 20, h.cls));
   const req = state.total / LIMIT_D, m = (r.kmd / req - 1) * 100, pf = state.total / r.kmd;
   tip.innerHTML = '<div class="n">' + esc(r.name) + '</div><dl>' +
     '<dt>Category</dt><dd>' + CATNAME[r.cat] + ' · ' + r.pos + '</dd>' +
@@ -860,7 +937,8 @@ function highlight(idx, cx, cy) {
     '<dt>Stopped</dt><dd>' + r.idle + '%</dd>' +
     '<dt>Est. finish</dt><dd>' + fmtDate(pf) + '</dd></dl>' +
     '<div class="st" style="color:var(--' + h.cls + ')">' + GLYPH[h.cls] + ' ' + LABEL[h.cls] +
-    (pf > LIMIT_D ? ' · ' + (pf - LIMIT_D).toFixed(1) + ' days late' : '') + '</div>';
+    (pf > LIMIT_D ? ' · ' + (pf - LIMIT_D).toFixed(1) + ' days late' : '') + '</div>' +
+    (r.gc ? '' : '<div class="st" style="color:var(--ink-2)">☠ Missed CP1 · out of GC</div>');
   const b = svg.getBoundingClientRect();
   const px = b.left + (cx / VW) * b.width, py = b.top + (cy / VH) * b.height;
   tip.classList.add('on');
