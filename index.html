@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>TCRNo12 — Race Against the Cut-Off</title>
-<meta name="description" content="Interactive time-distance chart of all 376 Transcontinental Race No12 riders against the 8 August cut-off.">
+<title>The Last Dot — TCRNo12 Race Against the Cut-Off</title>
+<meta name="description" content="The Last Dot — an interactive time-distance chart of all 376 Transcontinental Race No12 riders against the 8 August cut-off. An independent dot-watcher project, not affiliated with Lost Dot.">
 <meta name="robots" content="index, follow">
-<meta property="og:title" content="TCRNo12 — Race Against the Cut-Off">
-<meta property="og:description" content="Every rider is a line. Above the black diagonal is inside the time limit; below it is not.">
+<meta property="og:title" content="The Last Dot — Race against the cut-off">
+<meta property="og:description" content="Every rider is a line. Above the black diagonal is inside the time limit; below it is not. TCRNo12, day 4.">
 <meta property="og:type" content="website">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ctext y=%22.9em%22 font-size=%2290%22%3E%F0%9F%9A%B4%3C/text%3E%3C/svg%3E">
 <style>*,*::before,*::after{box-sizing:border-box}html{-webkit-text-size-adjust:100%}body{margin:0}img,svg{max-width:100%}button,input{font:inherit;color:inherit}</style>
@@ -86,8 +86,10 @@
   .mast .kicker { font-size: 11px; letter-spacing: .2em; opacity: .72; }
   h1 { font-family: var(--display); font-weight: 600; font-stretch: 87.5%;
        text-transform: uppercase; letter-spacing: .015em; line-height: .96;
-       font-size: clamp(38px, 7.2vw, 78px); margin: 10px 0 0; text-wrap: balance; }
-  .lede { max-width: 64ch; margin: 16px 0 0; font-size: 15px; opacity: .88; }
+       font-size: clamp(44px, 9vw, 96px); margin: 8px 0 0; text-wrap: balance; }
+  .deck { font-size: clamp(14px, 2.1vw, 21px); font-weight: 500; letter-spacing: .17em;
+          margin: 12px 0 0; opacity: .74; }
+  .lede { max-width: 64ch; margin: 20px 0 0; font-size: 15px; opacity: .88; }
   .lede b { font-weight: 600; opacity: 1; }
 
   .wrap { max-width: 1180px; margin: 0 auto; padding: 0 22px 72px;
@@ -177,6 +179,10 @@
 
   footer { color: var(--ink-2); font-size: 12.5px; padding: 22px 2px 0; }
   footer p { margin: 0 0 9px; max-width: 82ch; }
+  .disclaimer { border: 1px solid var(--rule); border-left: 4px solid var(--ink);
+                padding: 12px 15px; margin-top: 14px !important; font-size: 13px;
+                background: var(--panel); color: var(--ink); }
+  .disclaimer b { display: inline; }
   footer b { font-family: var(--display); font-stretch: 87.5%; text-transform: uppercase;
              letter-spacing: .07em; font-weight: 600; color: var(--ink); }
   a { color: inherit; }
@@ -187,7 +193,8 @@
 <header class="mast">
   <div class="mast-in">
     <div class="kicker lbl">Transcontinental Race No12 · Trondheim → Kalamata</div>
-    <h1>Race against<br>the cut-off</h1>
+    <h1>The Last Dot</h1>
+    <p class="deck lbl">Race against the cut-off</p>
     <p class="lede">Every rider is a line — their average kilometres per day since the start.
       The <b>black diagonal</b> is the minimum pace needed to stamp in at Kalamata before the cut-off on
       <b>8 August, 23:59 CEST</b>. Above the line is inside the limit. Below it is not.
@@ -272,8 +279,12 @@
       rider plots their own line, so the slider exists to show how much the threshold depends on that guess. Current
       averages are depressed by the Norwegian opening and the westward detour to CP1 Flåm, so the group just below the
       line is less compromised than it looks. The four riders outside the General Classification are excluded.</p>
-    <p>Rider data: FollowMyChallenge live leaderboard, TCRNo12. This is an independent dot-watcher's analysis — not
-      affiliated with, nor endorsed by, Lost Dot or the Transcontinental Race.</p>
+    <p>Rider data: FollowMyChallenge live leaderboard, TCRNo12.</p>
+    <p class="disclaimer"><b>Not an official page.</b> <em>The Last Dot</em> is an independent dot-watcher's
+      analysis, made by a spectator. It is not affiliated with, endorsed by, or connected to
+      <strong>Lost Dot</strong> or the Transcontinental Race, and the name is a nod to dot-watching, not a
+      claim of association. For official information, results and race reports, go to
+      <a href="https://www.lostdot.cc" rel="noopener nofollow">lostdot.cc</a>.</p>
   </footer>
 </div>
 
