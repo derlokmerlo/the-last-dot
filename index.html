@@ -124,6 +124,8 @@
   .tile:first-child { border-left: none; }
   .tile .v { font-family: var(--display); font-stretch: 87.5%; font-size: 40px; font-weight: 600;
              line-height: 1; letter-spacing: -.005em; }
+  .tile .v .vu { font-size: 15px; font-weight: 500; color: var(--ink-2); margin-left: 5px;
+                 letter-spacing: .02em; }
   .tile .k { font-size: 12.5px; color: var(--ink-2); }
   .tile .u { font-size: 11px; color: var(--muted); }
   .tile.c-ahead .v { color: var(--ahead); }
@@ -869,7 +871,8 @@ function render() {
   const all = RIDERS.filter(function (r) { return state.cat === 'ALL' || r.cat === state.cat; });
   const n = { ahead: 0, edge: 0, behind: 0 };
   all.forEach(function (r) { n[classify(r)]++; });
-  document.getElementById('s-req').textContent = Math.round(hardest.pace) || '—';
+  document.getElementById('s-req').innerHTML = hardest.pace
+    ? Math.round(hardest.pace) + '<small class="vu">km/day</small>' : '—';
   document.getElementById('s-ahead').textContent = n.ahead;
   document.getElementById('s-edge').textContent = n.edge;
   document.getElementById('s-behind').textContent = n.behind;
