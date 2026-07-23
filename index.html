@@ -135,6 +135,7 @@
   .tile.c-ahead .v { color: var(--ahead); }
   .tile.c-edge  .v { color: var(--edge); }
   .tile.c-behind .v { color: var(--behind); }
+  .tile.c-dnf .v { color: var(--ink-2); }
 
   /* chart */
   .chartcard { padding: 16px 18px 10px; }
@@ -316,6 +317,7 @@
     <div class="tile c-ahead"><span class="v" id="s-ahead">—</span><span class="k">Inside, with margin</span><span class="u">at least 10% over the minimum</span></div>
     <div class="tile c-edge"><span class="v" id="s-edge">—</span><span class="k">On the edge</span><span class="u">−5% to +10%</span></div>
     <div class="tile c-behind"><span class="v" id="s-behind">—</span><span class="k">Off the pace</span><span class="u">more than 5% below</span></div>
+    <div class="tile c-dnf"><span class="v" id="s-dnf">—</span><span class="k">Scratched</span><span class="u">☠ official DNF</span></div>
   </section>
 
   <section class="block chartcard" id="chartview">
@@ -831,6 +833,7 @@ const SUPA_URL = 'https://ilslkaslmqcylmqhksol.supabase.co';
 const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlsc2xrYXNsbXFjeWxtcWhrc29sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ3OTY4NzQsImV4cCI6MjEwMDM3Mjg3NH0.o441SkmcKpRrq6rouBpFLpaymbnYlfJFYxQhRe34QKE';
 const HANDLES = {"Robin Gemperle":"robingemperle","Max Agut":"le_max__","Nicolas Chatelet":"nicolas.chatelet","Christoph Strasser":"straps_377","Robert Müller":"radbert_m","Martin Moritz":"_martin.mo","Jonas Verest":"jonas_vst","Jakub Tomasik":"jakub_tomasik_ultracycling","Wojciech Wronka":"wotowro","Pawel Pulawski":"pikopulawski","Omar Di Felice":"omardifelice","Riccardo Mosconi":"mosconi_riccardo","Manuel Rudaz":"manurudaz","Nils Oyen":"nils.1616","Laurens Van Gucht":"laurensvangucht","Guillaume Poinsot":"guillaume.poinsot","Lucas Strittmatter":"lucas_strittmatter","Riccardo Kuhar":"rikicro","Jos Koop":"koopjos","Nico Schleippmann":"Curbelix","Josh Ibbett":"joshibbett","Sebi Lehmann":"sebi_lehm","George Hodgkinson":"25hodgkinson","Markus Zimmermann":"m4rku5.z1mm3rm4nn","Ulf Bannick":"ulf.ba","Manuel Feldbaumer":"manifeldbaumer","Oliver Glen":"o.llie.ollie","Camille Albisser":"camillealbi","Sarah Bosslet":"sarahbosslet","Hannah Hiecke":"hannah_hiecke","Jakub Micorek":"jakub.micorek","Hélène Fromenty":"hfrome","Anna Carlqvist":"anna_carlqvist","Viggo Vea":"viggovea","Arthur Jan":"arthurjan.jpg","Elise Sauvinet":"elisecabergnon","Kristian Buljan":"krishatbockaufrad","Henri Do":"henki","Francesco Vettore":"francescovett","Nicole van Batenburg":"NicolevanBatenburg","Valentin Cuenot":"Cuenot_valentin","Rodrigue Lombard":"rodrigue__lombard","Daniel Molino":"instamolino","Markus Carlos hein":"markus.zhongguo","Luís Manuel Silva Carvalho":"lmsc.82","Maximilian Siering":"max.o.menos","Marten Sprecher":"marsprech","Joep van Luijt":"joepvanl","Maxime Prieur":"maxime_prieur_","Larissa Unsinn":"Larissa_martha_","Adrian Vogel":"adi_on_bike","Harald Rinner":"h.rinner","Gergely Bartalos":"ultrabartalos","Pierre-Yves Robert":"pierreyves.robert","Dragomir Titei":"dragomir_titei","Andreas Herrig":"flightaddict_ah","Adrien Charlot":"A_Charlot","Hsi Chun Tsai":"Zigzizagza","Aleksei Konev":"alekkonev","Matthew Spooner":"matt_still_tri_ing","Lukas Müller":"lukmueller","Peter Kronberger":"peter_kronberger","Daniel Schulze Waltrup":"daniel_shwa","Dan Sharp":"rukrymi","Anja Longyka":"longyka_nja","Simon Van Teutem":"simonvanteutem","Christoph Zabel":"zabelisator","Jannis Rieb":"cyciope","Mark Turnbull":"markjude.turnbull.cyclingcoach","Maciej Baranowski":"baran.of.ski","Martin Zettel":"martin.zettel","Oona Baumann":"uuna_uuna","Gabriel Delattre":"Del__gab","Noah Schmid":"schmoahnid","Julian Manrique":"Julianmanrique","Robin Skoge":"robin_sprenger","Christian Chesta":"2ch_Adventure","Sarah Cinquini":"sarah.cinquini","Bernhard Kämmerer":"bernimuc","Christian Pany":"christianpany","Jack Wright":"jackussamuele","Clayton Anderson":"hughyboy","Emiliano Baravalle":"emiliano.baravalle","Alexander Eder":"ultra.eda","Lisa Schrader":"lisa_schr","Alexander Stramma":"strmmbrsch","Matthew Falconer":"b1rdmn","Bart Pombreu":"bartpombreu","Michael Ærenlund Buch":"MiDaBu","Philip Renders":"gravel75trail","Byron Buck":"byron_buck","Nicolas Müller":"nicolascmueller","Marcin Zielkowski":"ultrazielik","Sam Wilson":"samzw_","Katharina Wirth":"kathi.wrt","Kim Heikkinen":"kim_1","Florent De Boisvilliers":"achilletendon33","Alexander Stojkovic":"stojksen","Malte Hager":"malte.cc","Pauline Neuber":"pauli._ne","Henry Jacobson":"henry_.jacobson","Michal Kramář":"reporter_in_shape","Robbie Jebb":"Robbie","Alberto Vaghi":"albe712","Walter Reiterer":"lederhosenracer","Jean-François Badias":"jbadias","Pierre Beck":"pierrepoulpe2","Nora Battermann":"fortunata_outdoors","Lukas Stiller":"lukas_k_stiller","Mohamed Jawhara":"mohamed_jha11","Chun man Lau":"Punkgarfield","Aneta Lamik":"roweroterapia","Floris Bakker":"floris_23","Falk Döring":"falk.doering.randonneur","Gerald Rumpf":"lebendigbleiben","Tomáš Žižlavský":"zizlavsky.t","Robert Tremblay":"robert.tremblay","John Read":"Johnny_e_read","Niko Dangel":"niko.dangel","Filip Bullens":"cojak","Tom Dockal":"thomd_89","Mathilde Germanier":"twentysevenspokes","Dan Jones":"danwildshepherd","Bambang Anggoro Jati":"bembenx_","Till Moosberger":"_oo_studio__","Luca Bessems":"lucabessems","Isaac Kuehnle-Nelson":"ikethepike","Cody Hughes":"cody_hughes91","Christo Dingozov":"dingo_mainata","Jean-paul Sachet":"jpaul_sac","Valerio Cecchini":"sgravell0","Carys Brimble":"carys_brimble","Darron Burns":"darron_burns","Emily Maille":"canadianrouleur","Maximilian Droste":"doktoroste","Sebastian Kerschbaumer":"i__am_sebastian","Alexander Latham-boal":"LATHAMBOAL","Kenneth Lamont":"Kennethlnomat","Nod Nelson":"nod.369","Tom Bryan":"tombryanyeah","Samuel Hussain":"sam_huss23","Cesare Pedrini":"cesare.pedrini","Maksym Matvieiev":"Maxveloalp","Nicole Farrier":"nicole.g.farrier","Erhard Wälchli":"erhardwalchl","Paul Rollings":"paulrollings","Jesko von Werthern":"jesko_werthern","Tobias Geißler":"tobi_the_cyclist","Stephen Dummett":"rising_tide_coaching","Lili Delannoy":"Lili","Erik Olsson":"theprimalswede","Jakob Wall":"_jakobwall_","Boris Krutov":"boris_krutov","Thomas Chateau":"rogerchuchard","Alain Rodriguez":"Alain_rdrgz","Ramona Troxler":"ramona.troxler","Hanif Meeran":"Hanif","Hauke Kottek":"hauke_kt","Max Kraus":"vignavecchia","Rene Wach":"reneneew","Frédéric Rudant":"fredrudan","Sofia Passaretti":"sofiapassarettti","Dennis Wolckenhauer":"searching.sasquatch","Artem Soldatkin":"_leipreachan","Patrick O'connor":"padupnorth","Sönke Kreft":"soekreft","Fritjof Schirmer":"Fite_on_Tour","Gabi Winck":"lumaca.gabi","Tim Lamb":"timbolamb","Ian Budden":"ian_adventuring","Karl Björklund":"khaleb2","Peter Corkill":"petercorkill","Zuzanna Bogucka":"zuzka__kluska_","Andrew Speers":"Andrewgspeers","Greg Fong":"greg.fong","Sebastian Van den bergen":"seb.vandenbergen","Hans Markus Broja":"hmb_quilent","Christian Trenkle":"cycling.blue","Lissa Breugelmans":"caughtinthevoid","Jürgen Ress":"Juergenress","Olli Büttel":"Ironmaennchen","Ro Alegre":"roalegreg","Sarah Steels":"legs_of_steels","Thibault Sabatier":"thibault_sabatier","Andreas Wittkemper":"andreas_wittkemper","Peter Magill":"peter_magill_1964","Grinshina Kartik":"grinshina","Rumen Vachev":"rumen_vachev","Poh Huat Tan":"p.h_tan","Dirk Hermans":"Dirk","Karin Eder":"dieradlfee","George Surjopurnomo":"g.surjopurnomo","Mike Passmann":"mikepassmann","Erekle Bagashvili":"ekkk4","Ronja Derr":"rroxy___","Lionel Bobb":"tabletable1","Luis Cardoso":"fuzzroyale","Maris Brugis":"marisbrugis","Rafael Martinez Gonzalez":"rafaubio","Satomi Yamada":"satomiyamada","Ben Strause":"benjaminstrause","Mex Wieshofer":"mexwieshofer","Bryn Thomas":"wombatting96","Benno Raj":"Benno","Ian Mitchinson":"ian_mitchinson","Thomas Martraire":"thomas._.mar","Lander Wantens":"Wantenslander","Joachim Pittraye":"cyclamen_joachim.pittraye","Ezekiel Amos":"zekesdexd","Mohamed Almarar":"international69","Daniel Huxley":"dhux2509","Romeo Garessus":"Romeo_v_ga","Sebastien Nolens":"sebicicleta","Marco Eberle":"marcoshappyworld","Jefferson Adams":"jeffersonhodgesadams","Stefan Lindkvist":"coachlindkvist777","Lennart Gensch":"mountainride","Sylwia Kuropatwa":"sylwia.qropatwa","Adrien Mabileau":"apy_ultracycling","Christian Dupraz":"veloele","Martin Reichert":"teammuellerreichert","Melanie Müller-reichert":"melaniemueller81","Damian Ludlow":"damianludlow","Paul Jennings":"saddlesore_jenko","Stéphane David":"picardbrothers_bikepacking","Andreas Steinke":"Cycling_for_Mutoto","Christel Vieth":"christelvieth","Bastien Sentubery":"baestiti","Mylene Vicente":"bike_and_ravee","Małgorzata Gryszczuk":"Histeria_jedzie","Kinga Perzyńska":"greymouseland","Michael Hunziker":"migreau","Björn Frey":"bartholin_cyclingandclown","Luisa Nichelson":"f.luis.ter","Andrea Nichelson":"andreanichelson"};
 const DATA_MS = Date.UTC(2026, 6, 23, 9, 8);    // when the rider positions were read
+const DATA_D = (DATA_MS - START_MS) / 864e5;    // race-days elapsed at the snapshot
 const CATNAME = { S: 'Solo', F: 'FLINTA', P: 'Pair' };
 const GLYPH = { ahead: '🚴', edge: '😬', behind: '😭' };
 const LABEL = { ahead: 'Inside', edge: 'On the edge', behind: 'Off the pace' };
@@ -850,7 +853,10 @@ const RIDERS = RAW.trim().split('\n').map(function (l) {
   // status field: '1' in classification, '0' out of GC (missed a control, still
   // riding), 'D' official DNF (scratched).
   return { name: p[0], pos: p[1], km: km, kmd: kmd, cat: p[4], idle: +p[5],
-           gc: p[6] === '1', dnf: p[6] === 'D', elapsed: km / kmd };
+           gc: p[6] === '1', dnf: p[6] === 'D',
+           // Active riders sit at the snapshot time (their true position now); a
+           // scratched rider sits where they stopped (distance ÷ average pace).
+           elapsed: p[6] === 'D' ? km / kmd : DATA_D };
 });
 
 // Control point closing times, from the organiser's own configuration in the
@@ -1017,6 +1023,9 @@ function render() {
   document.getElementById('s-ahead').textContent = n.ahead;
   document.getElementById('s-edge').textContent = n.edge;
   document.getElementById('s-behind').textContent = n.behind;
+  document.getElementById('s-dnf').textContent = RIDERS.filter(function (r) {
+    return r.dnf && (state.cat === 'ALL' || r.cat === state.cat);
+  }).length;
   const reqSub = document.getElementById('s-req-sub');
   if (reqSub && nextCp) reqSub.textContent = 'steepest leg · reach ' + nextCp.place + ' by ' + fmtAbs(nextCp.ms);
   document.getElementById('totv').textContent = kfmt(state.total) + ' km';
@@ -1081,16 +1090,17 @@ function render() {
     s += '<text class="marklab" x="' + (ML + 8) + '" y="' + (Y(state.total) + 15).toFixed(1) + '" fill="var(--ink-2)">Kalamata · ' + kfmt(state.total) + ' km</text>';
   }
 
-  // Each rider's line is y = kmd · x, so it leaves the frame at whichever comes
-  // first: the finish, the right edge, or the top edge. A scratched rider stopped,
-  // so draws no projection — just a marker at the point they abandoned.
+  // Each rider's line runs from where they are now, y = km + kmd·(x − elapsed),
+  // leaving the frame at whichever comes first: the finish, the right edge, or the
+  // top edge. A scratched rider stopped, so draws no projection — just a marker at
+  // the point they abandoned.
   hitList = [];
   rows.forEach(function (r, i) {
     const cls = r.dnf ? 'dnf' : classify(r);
     if (r.dnf) { hitList.push({ r: r, cls: cls, end: r.elapsed }); return; }
-    const end = Math.min(state.total / r.kmd, XMAX, YMAX / r.kmd);
+    const end = Math.min(r.elapsed + (state.total - r.km) / r.kmd, XMAX, r.elapsed + (YMAX - r.km) / r.kmd);
     s += '<line x1="' + X(r.elapsed).toFixed(1) + '" y1="' + Y(r.km).toFixed(1) + '" x2="' + X(end).toFixed(1) +
-         '" y2="' + Y(r.kmd * end).toFixed(1) + '" stroke="var(--' + cls +
+         '" y2="' + Y(r.km + r.kmd * (end - r.elapsed)).toFixed(1) + '" stroke="var(--' + cls +
          ')" stroke-width="' + (zoomed ? 1.2 : 1) + '" opacity="' + (zoomed ? .34 : .28) + '" data-i="' + i + '"/>';
     hitList.push({ r: r, cls: cls, end: end });
   });
@@ -1162,7 +1172,7 @@ function render() {
     return '<tr>' + nm +
       '<td class="num" style="color:var(--' + cls + ');font-weight:600">' + (m >= 0 ? '+' : '') + m.toFixed(0) + '%</td>' +
       '<td class="num">' + (rp.cp ? rp.cp.name : 'finish') + '</td>' +
-      '<td class="num">' + fmtDate(state.total / r.kmd) + '</td>' +
+      '<td class="num">' + fmtDate(r.elapsed + (state.total - r.km) / r.kmd) + '</td>' +
       '<td class="num">' + r.idle + '%</td>' +
       '<td class="l"><span class="badge" style="color:var(--' + cls + ')">' + GLYPH[cls] + ' ' + LABEL[cls] + '</span></td>' +
       '<td class="l">' + (r.gc ? '<span style="color:var(--muted)">in GC</span>'
@@ -1191,11 +1201,11 @@ function highlight(idx, cx, cy) {
   } else {
     g.innerHTML =
       '<line x1="' + mx.toFixed(1) + '" y1="' + my.toFixed(1) + '" x2="' + X(h.end).toFixed(1) +
-      '" y2="' + Y(r.kmd * h.end).toFixed(1) + '" stroke="var(--' + h.cls + ')" stroke-width="2.5"/>' +
+      '" y2="' + Y(r.km + r.kmd * (h.end - r.elapsed)).toFixed(1) + '" stroke="var(--' + h.cls + ')" stroke-width="2.5"/>' +
       (r.gc ? halo + emojiMark(mx, my, 24, GLYPH[h.cls], h.cls === 'ahead')
             : halo + skull(mx, my, 24, 'ink-2'));
     const rp = requiredPace(r, state.total), req = rp.pace;
-    const m = req > 0 ? (r.kmd / req - 1) * 100 : 100, pf = state.total / r.kmd;
+    const m = req > 0 ? (r.kmd / req - 1) * 100 : 100, pf = r.elapsed + (state.total - r.km) / r.kmd;
     const bindLabel = rp.cp ? rp.cp.name + ' ' + rp.cp.place : 'the finish';
     tip.innerHTML = '<div class="n">' + esc(r.name) + '</div><dl>' +
       '<dt>Category</dt><dd>' + CATNAME[r.cat] + ' · ' + r.pos + '</dd>' +
@@ -1226,7 +1236,7 @@ svg.addEventListener('pointermove', function (e) {
   let best = -1, bd = 1e9, bx = 0, by = 0;
   hitList.forEach(function (h, i) {
     const d = Math.max(h.r.elapsed, Math.min(dx, h.end));
-    const yk = h.r.kmd * d;
+    const yk = h.r.km + h.r.kmd * (d - h.r.elapsed);
     const py = MT + (1 - yk / YMAX) * PH, px = ML + (d - XMIN) / (XMAX - XMIN) * PW;
     const dist = Math.hypot(px - vx, py - vy);
     if (dist < bd) { bd = dist; best = i; bx = px; by = py; }
