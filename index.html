@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>The Last Dot — TCRNo12 Race Against the Cut-Off</title>
-<meta name="description" content="The Last Dot - interactive time-distance chart of all 376 Transcontinental Race No12 riders against the checkpoint and finish cut-offs. An independent dot-watcher project, not affiliated with Lost Dot.">
+<meta name="description" content="The Last Dot - interactive time-distance chart of every Transcontinental Race No12 rider against the checkpoint and finish cut-offs. An independent dot-watcher project, not affiliated with Lost Dot.">
 <meta name="robots" content="index, follow">
 <meta property="og:title" content="The Last Dot - Race against the cut-off">
-<meta property="og:description" content="Every rider is a line. Above the black diagonal is inside the time limit; below it is not. CP1 closed on 22 July and 48 riders missed it.">
+<meta property="og:description" content="Every rider is a line. Above the black diagonal is inside the time limit; below it is not.">
 <meta property="og:type" content="website">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ctext y=%22.9em%22 font-size=%2290%22%3E%F0%9F%9A%B4%3C/text%3E%3C/svg%3E">
 <style>*,*::before,*::after{box-sizing:border-box}html{-webkit-text-size-adjust:100%}body{margin:0}img,svg{max-width:100%}button,input{font:inherit;color:inherit}</style>
@@ -199,9 +199,9 @@
       The <b>black diagonal</b> is the minimum pace needed to stamp in at Kalamata before the cut-off on
       <b>8 August, 23:59 CEST</b>. Above the line is inside the limit. Below it is not. Each control point
       closes on its own deadline too — miss one and you keep riding, but you drop out of the General
-      Classification. <b>CP1 Flåm closed at 11:00 on 22 July, and 48 riders did not make it.</b></p>
+      Classification. <b id="cpline"></b></p>
     <p class="lede" style="opacity:.6;font-size:13px">Rider positions read
-      <span id="freshness">22 July 2026, 21:00 CEST</span>. Deadlines update live.</p>
+      <span id="freshness"></span>. Deadlines update live.</p>
   </div>
 </header>
 
@@ -766,6 +766,10 @@ function fmtDate(days) {
   return t.getUTCDate() + ' ' + MONTH[t.getUTCMonth()] + ' ' + p(t.getUTCHours()) + ':' + p(t.getUTCMinutes());
 }
 function kfmt(n) { return n.toLocaleString('en-GB'); }
+function fmtAbs(ms) {
+  const t = new Date(ms + 2 * 36e5), p = function (n) { return String(n).padStart(2, '0'); };
+  return t.getUTCDate() + ' ' + MONTH[t.getUTCMonth()] + ' ' + p(t.getUTCHours()) + ':' + p(t.getUTCMinutes());
+}
 // Race day -> wall-clock label. Sub-day steps read as times, with the date
 // carried by the midnight tick; day-scale steps read as dates.
 function axisLabel(days, step) {
@@ -977,6 +981,19 @@ svg.addEventListener('keydown', function (e) {
 document.getElementById('q').addEventListener('input', function (e) { state.q = e.target.value; state.sel = -1; render(); });
 document.getElementById('tot').addEventListener('input', function (e) { state.total = +e.target.value; state.sel = -1; render(); });
 document.getElementById('risk').addEventListener('change', function (e) { state.riskOnly = e.target.checked; state.sel = -1; render(); });
+// Headline and freshness are derived from the data, so an automated refresh
+// only ever has to swap the RAW block and DATA_MS.
+(function () {
+  const out = RIDERS.filter(function (r) { return !r.gc; }).length;
+  const passed = CHECKPOINTS.filter(function (c) { return c.ms <= NOW_MS; });
+  const last = passed[passed.length - 1];
+  document.getElementById('cpline').textContent = last
+    ? last.name + ' ' + last.place + ' closed on ' + fmtAbs(last.ms) + ', and ' + out +
+      (out === 1 ? ' rider has' : ' riders have') + ' since lost their classification.'
+    : 'The first control closes on ' + fmtAbs(CHECKPOINTS[0].ms) + '.';
+  document.getElementById('freshness').textContent = fmtAbs(DATA_MS) + ' CEST';
+})();
+
 const zn = document.getElementById('z-now'), zf = document.getElementById('z-full');
 function setZoom(z) {
   state.zoom = z; state.sel = -1;
