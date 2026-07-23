@@ -9,7 +9,7 @@
 <meta property="og:title" content="The Last Dot - Following the tail of the field">
 <meta property="og:description" content="The riders at the back, racing the cut-off to the finish. Current edition: Transcontinental Race No12.">
 <meta property="og:type" content="website">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ctext y=%22.9em%22 font-size=%2290%22%3E%F0%9F%9A%B4%3C/text%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%20100%20100'%3E%3Ccircle%20cx%3D'50'%20cy%3D'50'%20r%3D'44'%20fill%3D'%23fbfbf9'%20stroke%3D'%230b0c0c'%20stroke-width%3D'6'%2F%3E%3Ccircle%20cx%3D'33'%20cy%3D'67'%20r%3D'13'%20fill%3D'%230b0c0c'%2F%3E%3C%2Fsvg%3E">
 <style>*,*::before,*::after{box-sizing:border-box}html{-webkit-text-size-adjust:100%}body{margin:0}img,svg{max-width:100%}button,input{font:inherit;color:inherit}</style>
 </head>
 <body>
@@ -33,6 +33,8 @@
     --field:   #ffffff;
     --display: "Oswald", "Roboto Condensed", "Arial Narrow", "Helvetica Neue", system-ui, sans-serif;
     --sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, sans-serif;
+    --mark-fill: #fbfbf9;   /* the logo is a fixed white-disc-with-black-dot in both themes */
+    --mark-ink: #0b0c0c;
   }
   @media (prefers-color-scheme: dark) {
     :root:where(:not([data-theme="light"])) {
@@ -84,9 +86,11 @@
   .mast { background: var(--mast-bg); color: var(--mast-fg); }
   .mast-in { max-width: 1180px; margin: 0 auto; padding: 26px 22px 30px; }
   .mast .kicker { font-size: 11px; letter-spacing: .2em; opacity: .72; }
+  .wordmark { display: flex; align-items: center; gap: clamp(14px, 2.4vw, 26px); margin: 8px 0 0; }
+  .mark { width: clamp(46px, 8.5vw, 88px); height: auto; flex: none; display: block; }
   h1 { font-family: var(--display); font-weight: 600; font-stretch: 87.5%;
        text-transform: uppercase; letter-spacing: .015em; line-height: .96;
-       font-size: clamp(44px, 9vw, 96px); margin: 8px 0 0; text-wrap: balance; }
+       font-size: clamp(44px, 9vw, 96px); margin: 0; text-wrap: balance; }
   .deck { font-size: clamp(14px, 2.1vw, 21px); font-weight: 500; letter-spacing: .17em;
           margin: 12px 0 0; opacity: .74; }
   .lede { max-width: 64ch; margin: 20px 0 0; font-size: 15px; opacity: .88; }
@@ -142,6 +146,7 @@
   .lg { display: flex; align-items: center; gap: 7px; font-size: 12px; color: var(--ink-2); }
   .sw { width: 10px; height: 10px; flex: none; }
   .sw.line { width: 17px; height: 0; border-top: 2px solid var(--ink); }
+  .em { font-size: 15px; line-height: 1; }
   svg { display: block; width: 100%; height: auto; }
   text { font-family: var(--sans); fill: var(--muted); font-size: 11px; font-variant-numeric: tabular-nums; }
   .axname { font-family: var(--display); font-stretch: 87.5%; text-transform: uppercase;
@@ -195,7 +200,13 @@
 <header class="mast">
   <div class="mast-in">
     <div class="kicker lbl">Transcontinental Race No12 · Trondheim → Kalamata</div>
-    <h1>The Last Dot</h1>
+    <div class="wordmark">
+      <svg class="mark" viewBox="0 0 100 100" role="img" aria-label="The Last Dot logo: a circle with a dot in its lower-left, the last rider on the map">
+        <circle cx="50" cy="50" r="44" fill="var(--mark-fill)" stroke="var(--mark-ink)" stroke-width="5"/>
+        <circle cx="33" cy="67" r="12" fill="var(--mark-ink)"/>
+      </svg>
+      <h1>The Last Dot</h1>
+    </div>
     <p class="deck lbl">Follow the tail of the field, racing the cut-off to the finish</p>
     <p class="lede">Every rider is a line — their average kilometres per day since the start.
       The <b>black line</b> is the pace that keeps you inside the time limit — and it is not one straight run
@@ -257,11 +268,11 @@
     <div class="chart-head">
       <span class="chart-title">Distance covered against the cut-off</span>
       <div class="legend">
-        <span class="lg"><span class="sw" style="background:var(--ahead)"></span>Inside</span>
-        <span class="lg"><span class="sw" style="background:var(--edge)"></span>On the edge</span>
-        <span class="lg"><span class="sw" style="background:var(--behind)"></span>Off the pace</span>
+        <span class="lg"><span class="em">🚴</span>Inside</span>
+        <span class="lg"><span class="em">😬</span>On the edge</span>
+        <span class="lg"><span class="em">😭</span>Off the pace</span>
+        <span class="lg"><span class="em">☠️</span>Out of GC · missed a control</span>
         <span class="lg"><span class="sw line"></span>Cut-off pace (per leg)</span>
-        <span class="lg"><span style="font-size:14px;line-height:1">☠</span>Missed CP1 · out of GC</span>
       </div>
     </div>
     <svg id="plot" viewBox="0 0 1000 566" role="img" tabindex="0"
@@ -703,8 +714,14 @@ const NOW_MS = Date.now();                       // live clock, for deadline sta
 function NOW_D() { return (NOW_MS - START_MS) / 864e5; }
 const DATA_MS = Date.UTC(2026, 6, 22, 19, 0);    // when the rider positions were read
 const CATNAME = { S: 'Solo', F: 'FLINTA', P: 'Pair' };
-const GLYPH = { ahead: '▲', edge: '●', behind: '▼' };
+const GLYPH = { ahead: '🚴', edge: '😬', behind: '😭' };
 const LABEL = { ahead: 'Inside', edge: 'On the edge', behind: 'Off the pace' };
+// Emoji marks: a cyclist riding clear, gritted teeth on the edge, tears off the
+// pace. Riders out of the classification keep the calavera.
+function emojiMark(cx, cy, size, emoji) {
+  return '<text x="' + cx.toFixed(1) + '" y="' + cy.toFixed(1) + '" font-size="' + size +
+    '" text-anchor="middle" dominant-baseline="central">' + emoji + '</text>';
+}
 const MONTH = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
 const RIDERS = RAW.trim().split('\n').map(function (l) {
@@ -988,11 +1005,9 @@ function render() {
   rows.forEach(function (r, i) {
     const cx = X(r.elapsed), cy = Y(r.km);
     if (!r.gc) {
-      s += skull(cx, cy, zoomed ? 13 : 10, hitList[i].cls);
+      s += skull(cx, cy, zoomed ? 14 : 11, hitList[i].cls);
     } else {
-      s += '<circle cx="' + cx.toFixed(1) + '" cy="' + cy.toFixed(1) + '" r="' + (zoomed ? 3.4 : 2.6) +
-           '" fill="var(--' + hitList[i].cls + ')" opacity="' + (zoomed ? .9 : .82) + '"' +
-           (zoomed ? ' stroke="var(--surface)" stroke-width="1"' : '') + '/>';
+      s += emojiMark(cx, cy, zoomed ? 15 : 12, GLYPH[hitList[i].cls]);
     }
   });
 
@@ -1030,9 +1045,9 @@ function highlight(idx, cx, cy) {
     '<line x1="' + X(r.elapsed).toFixed(1) + '" y1="' + Y(r.km).toFixed(1) + '" x2="' + X(h.end).toFixed(1) +
     '" y2="' + Y(r.kmd * h.end).toFixed(1) + '" stroke="var(--' + h.cls + ')" stroke-width="2.5"/>' +
     (r.gc
-      ? '<circle cx="' + X(r.elapsed).toFixed(1) + '" cy="' + Y(r.km).toFixed(1) + '" r="5.5" fill="var(--' + h.cls +
-        ')" stroke="var(--surface)" stroke-width="2"/>'
-      : skull(X(r.elapsed), Y(r.km), 20, h.cls));
+      ? '<circle cx="' + X(r.elapsed).toFixed(1) + '" cy="' + Y(r.km).toFixed(1) + '" r="15" fill="var(--surface)" opacity=".85"/>' +
+        emojiMark(X(r.elapsed), Y(r.km), 24, GLYPH[h.cls])
+      : skull(X(r.elapsed), Y(r.km), 24, h.cls));
   const rp = requiredPace(r, state.total), req = rp.pace;
   const m = req > 0 ? (r.kmd / req - 1) * 100 : 100, pf = state.total / r.kmd;
   const bindLabel = rp.cp ? rp.cp.name + ' ' + rp.cp.place : 'the finish';
