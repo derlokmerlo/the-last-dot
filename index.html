@@ -7,7 +7,7 @@
 <meta name="description" content="The Last Dot - interactive time-distance chart of every Transcontinental Race No12 rider against the checkpoint and finish cut-offs. An independent dot-watcher project, not affiliated with Lost Dot.">
 <meta name="robots" content="index, follow">
 <meta property="og:title" content="The Last Dot - Race against the cut-off">
-<meta property="og:description" content="Every rider is a line. Above the black diagonal is inside the time limit; below it is not.">
+<meta property="og:description" content="Every rider is a line. The black line bends at each control point deadline - its steepest leg is the pace that actually binds.">
 <meta property="og:type" content="website">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ctext y=%22.9em%22 font-size=%2290%22%3E%F0%9F%9A%B4%3C/text%3E%3C/svg%3E">
 <style>*,*::before,*::after{box-sizing:border-box}html{-webkit-text-size-adjust:100%}body{margin:0}img,svg{max-width:100%}button,input{font:inherit;color:inherit}</style>
@@ -196,10 +196,10 @@
     <h1>The Last Dot</h1>
     <p class="deck lbl">Race against the cut-off</p>
     <p class="lede">Every rider is a line — their average kilometres per day since the start.
-      The <b>black diagonal</b> is the minimum pace needed to stamp in at Kalamata before the cut-off on
-      <b>8 August, 23:59 CEST</b>. Above the line is inside the limit. Below it is not. Each control point
-      closes on its own deadline too — miss one and you keep riding, but you drop out of the General
-      Classification. <b id="cpline"></b></p>
+      The <b>black line</b> is the pace that keeps you inside the time limit — and it is not one straight run
+      to Kalamata. Every control point closes on its own deadline, so the line bends at each one: the
+      <b>CP1→CP2 leg demands the steepest pace of the whole race</b>. Stay above the line and you make the next
+      cut-off; drop below and you keep riding, but out of the General Classification. <b id="cpline"></b></p>
     <p class="lede" style="opacity:.6;font-size:13px">Rider positions read
       <span id="freshness"></span>. Deadlines update live.</p>
   </div>
@@ -245,7 +245,7 @@
   </section>
 
   <section class="block tiles" aria-label="Summary">
-    <div class="tile"><span class="v" id="s-req">—</span><span class="k">Minimum pace required</span><span class="u">kilometres per day</span></div>
+    <div class="tile"><span class="v" id="s-req">—</span><span class="k">Pace for the next cut-off</span><span class="u" id="s-req-sub">km per day, steepest leg</span></div>
     <div class="tile c-ahead"><span class="v" id="s-ahead">—</span><span class="k">Inside, with margin</span><span class="u">at least 10% over the minimum</span></div>
     <div class="tile c-edge"><span class="v" id="s-edge">—</span><span class="k">On the edge</span><span class="u">−5% to +10%</span></div>
     <div class="tile c-behind"><span class="v" id="s-behind">—</span><span class="k">Off the pace</span><span class="u">more than 5% below</span></div>
@@ -258,15 +258,15 @@
         <span class="lg"><span class="sw" style="background:var(--ahead)"></span>Inside</span>
         <span class="lg"><span class="sw" style="background:var(--edge)"></span>On the edge</span>
         <span class="lg"><span class="sw" style="background:var(--behind)"></span>Off the pace</span>
-        <span class="lg"><span class="sw line"></span>Minimum pace</span>
+        <span class="lg"><span class="sw line"></span>Cut-off pace (per leg)</span>
         <span class="lg"><span style="font-size:14px;line-height:1">☠</span>Missed CP1 · out of GC</span>
       </div>
     </div>
     <svg id="plot" viewBox="0 0 1000 566" role="img" tabindex="0"
          aria-label="Time-distance diagram: each rider is a projection line compared against the cut-off diagonal. The table view below carries the same data."></svg>
     <p class="hint"><b>Now</b> frames the field as it stands today, so individual riders separate;
-      <b>Whole race</b> opens the scale out to the cut-off and the finish line. The black diagonal is the
-      same line in both. Hover to identify a rider — or focus the diagram and use the ← → keys.</p>
+      <b>Whole race</b> opens the scale out to the cut-off and the finish line, where the black line's bends
+      at each control point become visible. Hover to identify a rider — or focus the diagram and use the ← → keys.</p>
   </section>
 
   <section class="block" id="tableview" hidden>
@@ -275,7 +275,7 @@
       <table>
         <thead><tr>
           <th class="l">Rider</th><th class="l">Cat.</th><th>Pos.</th><th>km</th><th>km/day</th>
-          <th>Margin</th><th>Est. finish</th><th>Stopped</th><th class="l">Status</th><th class="l">Classification</th>
+          <th>Margin</th><th>Binds at</th><th>Est. finish</th><th>Stopped</th><th class="l">Status</th><th class="l">Classification</th>
         </tr></thead>
         <tbody id="tbody"></tbody>
       </table>
@@ -283,23 +283,28 @@
   </section>
 
   <footer>
-    <p><b>How to read this.</b> Each rider's line is kilometres ÷ days elapsed, projected to the finish on the
-      assumption they hold that same average. It is a linear projection, not a forecast: nobody holds one pace for
-      twenty days. It answers who has margin right now — not who will arrive.</p>
+    <p><b>How to read this.</b> Each rider's line is kilometres ÷ days elapsed, projected forward at that same
+      average. The black line is the deadline envelope: the distance you must have covered at each control's
+      closing time, joined into one path. A rider is <b>inside</b> if their average still clears every remaining
+      deadline — the binding one is whichever demands the most, shown in the tooltip. It is a linear projection,
+      not a forecast: nobody holds one pace for twenty days. It answers who has margin right now, against the
+      deadline that actually bites, not who will arrive.</p>
     <p><b>The assumptions.</b> Start 19 July 2026 at 20:00 CEST, cut-off 8 August at 23:59 CEST — 20 days and 4 hours
       (source: Lost Dot, who mark these details as provisional). The nominal route is roughly 4,800–5,000 km, but every
       rider plots their own line, so the slider exists to show how much the threshold depends on that guess. Current
       averages are depressed by the Norwegian opening and the westward detour to CP1 Flåm, so the group just below the
       line is less compromised than it looks.</p>
-    <p><b>The control points.</b> Each has its own closing time, taken from the organiser's configuration in the
-      live tracker: CP1 Flåm 22 July 11:00, CP2 Tatra 30 July 11:00, CP3 Sarajevo 2 August 23:59, CP4 Leskovik
-      5 August 23:59, all CEST. Under the Lost Dot rules, qualifying for the General Classification requires
-      validating at every control within its window. Riders who miss one are not thrown out — they can carry on
-      to Kalamata — but they forfeit their classification, and no official race time is awarded. They are drawn
-      here as a calavera rather than a dot: still riding, no longer classified. Colour keeps its meaning for
-      them, because reaching Kalamata at all still depends on pace. The next deadline that binds is CP2, on
-      30 July. The four riders the organiser listed as outside the General Classification from the start are
-      excluded entirely.</p>
+    <p><b>The control points.</b> Each closing time is taken from the organiser's configuration in the live
+      tracker: CP1 Flåm 22 July 11:00, CP2 Tatra 30 July 11:00, CP3 Sarajevo 2 August 23:59, CP4 Leskovik
+      5 August 23:59, all CEST. Their distances along the route are estimated — CP1 anchored to the shortest
+      distance any rider had covered when validating it (≈685 km), CP2–CP4 placed between that and the finish
+      in proportion to the great-circle legs between the checkpoints. So the exact bends are approximate, but
+      the shape is real: the CP1→CP2 leg is by far the steepest, needing about 280 km/day, well above the
+      race-long average of 245. Under the Lost Dot rules, qualifying for the General Classification requires
+      validating at every control within its window; miss one and you forfeit classification and your official
+      race time, though you may ride on. Those riders are drawn as a calavera rather than a dot — still riding,
+      no longer classified — and for them the line only tracks reaching Kalamata by 8 August. The four riders
+      the organiser listed as outside the classification from the start are excluded entirely.</p>
     <p>Rider data: FollowMyChallenge live leaderboard, TCRNo12.</p>
     <p class="disclaimer"><b>Not an official page.</b> <em>The Last Dot</em> is an independent dot-watcher's
       analysis, made by a spectator. It is not affiliated with, endorsed by, or connected to
@@ -693,6 +698,7 @@ const START_MS = Date.UTC(2026, 6, 19, 18, 0);   // 19 Jul 2026, 20:00 CEST
 const CUTOFF_MS = Date.UTC(2026, 7, 8, 21, 59);  //  8 Aug 2026, 23:59 CEST
 const LIMIT_D = (CUTOFF_MS - START_MS) / 864e5;  // 20.166 days
 const NOW_MS = Date.now();                       // live clock, for deadline state
+function NOW_D() { return (NOW_MS - START_MS) / 864e5; }
 const DATA_MS = Date.UTC(2026, 6, 22, 19, 0);    // when the rider positions were read
 const CATNAME = { S: 'Solo', F: 'FLINTA', P: 'Pair' };
 const GLYPH = { ahead: '▲', edge: '●', behind: '▼' };
@@ -715,6 +721,44 @@ const CHECKPOINTS = [
   { name: 'CP3', place: 'Sarajevo',    ms: Date.UTC(2026, 7,  2, 21, 59) },
   { name: 'CP4', place: 'Leskovik',    ms: Date.UTC(2026, 7,  5, 21, 59) }
 ].map(function (c) { c.day = (c.ms - START_MS) / 864e5; return c; });
+
+// Cumulative route distance to each control. CP1 is anchored to real data — the
+// shortest distance covered by any rider who validated it (≈685 km). CP2–CP4 are
+// placed between that anchor and the finish in proportion to the great-circle
+// legs between the checkpoints' own coordinates, so they track the total-distance
+// slider. This is what turns the deadlines into a required-pace line: not one
+// straight run to Kalamata, but a leg-by-leg envelope whose steepest section
+// (CP1→CP2) is the real constraint right now.
+const CP1_KM = 685;
+const GC_FRAC = [0, 0.5244, 0.7218, 0.8735, 1];   // cumulative CP1→CPn / CP1→finish
+function cpDist(total) {
+  return CHECKPOINTS.map(function (c, i) { return CP1_KM + (total - CP1_KM) * GC_FRAC[i]; });
+}
+// The deadline envelope as [day, km] points: origin, each control, the finish.
+function envelope(total) {
+  var pts = [[0, 0]];
+  var d = cpDist(total);
+  CHECKPOINTS.forEach(function (c, i) { pts.push([c.day, d[i]]); });
+  pts.push([LIMIT_D, total]);
+  return pts;
+}
+// The pace a rider must now hold to still clear every deadline that binds them.
+// In the classification, that means every remaining control; once out of it,
+// only reaching Kalamata by the finish. The binding deadline is whichever
+// demands the most — max over the future points.
+function requiredPace(r, total) {
+  var d = cpDist(total);
+  var pts = r.gc
+    ? CHECKPOINTS.map(function (c, i) { return [c.day, d[i]]; }).concat([[LIMIT_D, total]])
+    : [[LIMIT_D, total]];
+  var req = 0, cp = null;
+  pts.forEach(function (p, i) {
+    if (p[0] <= r.elapsed) return;                 // deadline already in the past
+    var need = (p[1] - r.km) / (p[0] - r.elapsed); // km/day from here to make it
+    if (need > req) { req = need; cp = r.gc ? (i < CHECKPOINTS.length ? CHECKPOINTS[i] : null) : null; }
+  });
+  return { pace: Math.max(0, req), cp: cp };
+}
 
 // A calavera rather than a plain dot: these riders are out of the classification
 // but still on the road. Drawn as a 20x20 glyph, scaled and centred on the point.
@@ -746,16 +790,16 @@ CATS.forEach(function (c) {
   catBox.appendChild(b);
 });
 
-function classify(r, req) {
-  const m = r.kmd / req - 1;
+function classify(r) {
+  const req = requiredPace(r, state.total).pace;
+  const m = req > 0 ? r.kmd / req - 1 : 1;
   return m >= 0.10 ? 'ahead' : (m >= -0.05 ? 'edge' : 'behind');
 }
 function visible() {
   const q = state.q.trim().toLowerCase();
-  const req = state.total / LIMIT_D;
   return RIDERS.filter(function (r) {
     if (state.cat !== 'ALL' && r.cat !== state.cat) return false;
-    if (state.riskOnly && classify(r, req) === 'ahead') return false;
+    if (state.riskOnly && classify(r) === 'ahead') return false;
     if (q && r.name.toLowerCase().indexOf(q) === -1) return false;
     return true;
   });
@@ -804,20 +848,33 @@ function bounds() {
 }
 
 function render() {
-  const req = state.total / LIMIT_D;
   CUR = bounds();
   const XMIN = CUR.xmin, XMAX = CUR.xmax, YMAX = CUR.ymax, zoomed = state.zoom === 'now';
   const X = function (d) { return ML + (d - XMIN) / (XMAX - XMIN) * PW; };
   const Y = function (k) { return MT + (1 - k / YMAX) * PH; };
   const rows = visible();
 
+  // Headline pace = the steepest leg of the deadline envelope that is still
+  // ahead of the field's leader — the toughest average any rider must average
+  // over a whole segment. Right now that is CP1→CP2.
+  const env = envelope(state.total);
+  let hardest = { pace: 0, cp: null };
+  for (let i = 1; i < env.length; i++) {
+    if (env[i][0] <= NOW_D()) continue;
+    const pace = (env[i][1] - env[i - 1][1]) / (env[i][0] - env[i - 1][0]);
+    if (pace > hardest.pace) { hardest = { pace: pace, cp: CHECKPOINTS[i - 1] || null, seg: i }; }
+  }
+  const nextCp = CHECKPOINTS.filter(function (c) { return c.ms > NOW_MS; })[0];
+
   const all = RIDERS.filter(function (r) { return state.cat === 'ALL' || r.cat === state.cat; });
   const n = { ahead: 0, edge: 0, behind: 0 };
-  all.forEach(function (r) { n[classify(r, req)]++; });
-  document.getElementById('s-req').textContent = Math.round(req);
+  all.forEach(function (r) { n[classify(r)]++; });
+  document.getElementById('s-req').textContent = Math.round(hardest.pace) || '—';
   document.getElementById('s-ahead').textContent = n.ahead;
   document.getElementById('s-edge').textContent = n.edge;
   document.getElementById('s-behind').textContent = n.behind;
+  const reqSub = document.getElementById('s-req-sub');
+  if (reqSub && nextCp) reqSub.textContent = 'steepest leg · reach ' + nextCp.place + ' by ' + fmtAbs(nextCp.ms);
   document.getElementById('totv').textContent = kfmt(state.total) + ' km';
 
   let s = '';
@@ -844,12 +901,14 @@ function render() {
        (zoomed ? 'date and time · CEST' : 'date · CEST') + '</text>';
 
   // Control point closings — the deadlines that actually bind before the finish.
-  CHECKPOINTS.forEach(function (c) {
+  // Stagger adjacent labels so the close-together CP3/CP4 pair never overlaps.
+  CHECKPOINTS.forEach(function (c, ci) {
     if (c.day < XMIN || c.day > XMAX) return;
     const gone = c.ms <= NOW_MS;
+    const ly = MT + PH - (ci % 2 ? 22 : 8);
     s += '<line x1="' + X(c.day).toFixed(1) + '" y1="' + MT + '" x2="' + X(c.day).toFixed(1) + '" y2="' + (MT + PH) +
          '" stroke="var(--rule)" stroke-width="1.5"/>';
-    s += '<text class="marklab" x="' + (X(c.day) + 7).toFixed(1) + '" y="' + (MT + PH - 8) +
+    s += '<text class="marklab" x="' + (X(c.day) + 7).toFixed(1) + '" y="' + ly +
          '" fill="var(--ink-2)">' + c.name + ' ' + c.place + (gone ? ' · closed' : ' · closes') + '</text>';
   });
   s += '<text class="axname" x="' + (ML - 46) + '" y="' + (MT + PH / 2) + '" text-anchor="middle" ' +
@@ -872,19 +931,45 @@ function render() {
   hitList = [];
   rows.forEach(function (r, i) {
     const end = Math.min(state.total / r.kmd, XMAX, YMAX / r.kmd);
-    const cls = classify(r, req);
+    const cls = classify(r);
     s += '<line x1="' + X(r.elapsed).toFixed(1) + '" y1="' + Y(r.km).toFixed(1) + '" x2="' + X(end).toFixed(1) +
          '" y2="' + Y(r.kmd * end).toFixed(1) + '" stroke="var(--' + cls +
          ')" stroke-width="' + (zoomed ? 1.2 : 1) + '" opacity="' + (zoomed ? .34 : .28) + '" data-i="' + i + '"/>';
     hitList.push({ r: r, cls: cls, end: end });
   });
 
-  const paceEnd = Math.min(LIMIT_D, XMAX, YMAX / req);
-  s += '<line x1="' + X(XMIN).toFixed(1) + '" y1="' + Y(req * XMIN).toFixed(1) + '" x2="' + X(paceEnd).toFixed(1) +
-       '" y2="' + Y(req * paceEnd).toFixed(1) + '" stroke="var(--ink)" stroke-width="2"/>';
-  // Keep the label clear of the dot column, which sits at the riders' shared elapsed time.
-  const labX = zoomed ? XMIN + (XMAX - XMIN) * 0.13 : paceEnd * 0.66;
-  s += '<text class="marklab" x="' + X(labX).toFixed(1) + '" y="' + (Y(req * labX) + 21).toFixed(1) + '" fill="var(--ink)">minimum pace · ' + Math.round(req) + ' km/day</text>';
+  // The deadline envelope, drawn as one polyline through origin → each control
+  // → the finish. Its steepest leg — not the overall average — is the pace that
+  // actually binds. Evaluate km at any day by walking the segments.
+  const envKm = function (day) {
+    for (let i = 1; i < env.length; i++) {
+      if (day <= env[i][0]) {
+        const a = env[i - 1], b = env[i], t = (day - a[0]) / (b[0] - a[0]);
+        return a[1] + t * (b[1] - a[1]);
+      }
+    }
+    return env[env.length - 1][1];
+  };
+  // Vertices inside the viewport, plus the clipped entry/exit x, in order.
+  const xs = [XMIN].concat(env.map(function (p) { return p[0]; }).filter(function (x) { return x > XMIN && x < XMAX; })).concat([XMAX]);
+  let poly = '';
+  xs.forEach(function (x) {
+    const ky = envKm(x);
+    if (ky > YMAX + 1) return;
+    poly += (poly ? ' L' : 'M') + X(x).toFixed(1) + ' ' + Y(Math.min(ky, YMAX)).toFixed(1);
+  });
+  s += '<path d="' + poly + '" fill="none" stroke="var(--ink)" stroke-width="2" stroke-linejoin="round"/>';
+  // Label the steepest still-future leg where it sits, clear of the dot column.
+  if (hardest.seg) {
+    const a = env[hardest.seg - 1], b = env[hardest.seg];
+    const mid = 0.5;
+    const lx = a[0] + (b[0] - a[0]) * mid, ly = a[1] + (b[1] - a[1]) * mid;
+    if (lx >= XMIN && lx <= XMAX && ly <= YMAX) {
+      s += '<text class="marklab" x="' + X(lx).toFixed(1) + '" y="' + (Y(ly) + 22).toFixed(1) +
+           '" fill="var(--ink)">' + Math.round(hardest.pace) + ' km/day to ' +
+           (hardest.cp ? hardest.cp.place : 'the finish') + '</text>';
+    }
+  }
 
   rows.forEach(function (r, i) {
     const cx = X(r.elapsed), cy = Y(r.km);
@@ -903,11 +988,13 @@ function render() {
   const sorted = rows.slice().sort(function (a, b) { return a.kmd - b.kmd; });
   document.getElementById('tcount').textContent = sorted.length + ' riders in the current selection.';
   document.getElementById('tbody').innerHTML = sorted.map(function (r) {
-    const cls = classify(r, req), m = (r.kmd / req - 1) * 100;
+    const rp = requiredPace(r, state.total), req = rp.pace;
+    const cls = classify(r), m = req > 0 ? (r.kmd / req - 1) * 100 : 100;
     return '<tr><td class="l">' + esc(r.name) + '</td><td class="l">' + CATNAME[r.cat] + '</td>' +
       '<td class="num">' + r.pos + '</td><td class="num">' + kfmt(Math.round(r.km)) + '</td>' +
       '<td class="num">' + r.kmd.toFixed(0) + '</td>' +
       '<td class="num" style="color:var(--' + cls + ');font-weight:600">' + (m >= 0 ? '+' : '') + m.toFixed(0) + '%</td>' +
+      '<td class="num">' + (rp.cp ? rp.cp.name : 'finish') + '</td>' +
       '<td class="num">' + fmtDate(state.total / r.kmd) + '</td>' +
       '<td class="num">' + r.idle + '%</td>' +
       '<td class="l"><span class="badge" style="color:var(--' + cls + ')">' + GLYPH[cls] + ' ' + LABEL[cls] + '</span></td>' +
@@ -932,11 +1019,15 @@ function highlight(idx, cx, cy) {
       ? '<circle cx="' + X(r.elapsed).toFixed(1) + '" cy="' + Y(r.km).toFixed(1) + '" r="5.5" fill="var(--' + h.cls +
         ')" stroke="var(--surface)" stroke-width="2"/>'
       : skull(X(r.elapsed), Y(r.km), 20, h.cls));
-  const req = state.total / LIMIT_D, m = (r.kmd / req - 1) * 100, pf = state.total / r.kmd;
+  const rp = requiredPace(r, state.total), req = rp.pace;
+  const m = req > 0 ? (r.kmd / req - 1) * 100 : 100, pf = state.total / r.kmd;
+  const bindLabel = rp.cp ? rp.cp.name + ' ' + rp.cp.place : 'the finish';
   tip.innerHTML = '<div class="n">' + esc(r.name) + '</div><dl>' +
     '<dt>Category</dt><dd>' + CATNAME[r.cat] + ' · ' + r.pos + '</dd>' +
     '<dt>Covered</dt><dd>' + kfmt(Math.round(r.km)) + ' km</dd>' +
     '<dt>Average</dt><dd>' + r.kmd.toFixed(0) + ' km/day</dd>' +
+    '<dt>Needs</dt><dd>' + Math.round(req) + ' km/day</dd>' +
+    '<dt>Next binds at</dt><dd>' + bindLabel + '</dd>' +
     '<dt>Margin</dt><dd>' + (m >= 0 ? '+' : '') + m.toFixed(0) + '%</dd>' +
     '<dt>Stopped</dt><dd>' + r.idle + '%</dd>' +
     '<dt>Est. finish</dt><dd>' + fmtDate(pf) + '</dd></dl>' +
