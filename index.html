@@ -900,30 +900,32 @@ function render() {
   s += '<text class="axname" x="' + (ML + PW / 2) + '" y="' + (MT + PH + 40) + '" text-anchor="middle">' +
        (zoomed ? 'date and time · CEST' : 'date · CEST') + '</text>';
 
-  // Control point closings — the deadlines that actually bind before the finish.
-  // Stagger adjacent labels so the close-together CP3/CP4 pair never overlaps.
-  CHECKPOINTS.forEach(function (c, ci) {
+  // Deadline ribbon along the top: every control point closing plus the finish,
+  // as a vertical rule with a label at the top edge. Adjacent labels stagger
+  // across two rows; those near the right edge anchor left so they never overflow.
+  const DEADLINES = CHECKPOINTS.map(function (c) {
+    return { day: c.day, ms: c.ms, tag: c.name, place: c.place };
+  }).concat([{ day: LIMIT_D, ms: CUTOFF_MS, tag: 'Finish', place: 'Kalamata' }]);
+  DEADLINES.forEach(function (c, ci) {
     if (c.day < XMIN || c.day > XMAX) return;
-    const gone = c.ms <= NOW_MS;
-    const ly = MT + PH - (ci % 2 ? 22 : 8);
-    s += '<line x1="' + X(c.day).toFixed(1) + '" y1="' + MT + '" x2="' + X(c.day).toFixed(1) + '" y2="' + (MT + PH) +
+    const gone = c.ms <= NOW_MS, x = X(c.day), rightSide = x > ML + PW * 0.72;
+    const ly = MT + 11 + (ci % 2 ? 15 : 0);
+    const label = c.tag + ' ' + (gone ? '· closed' : fmtAbs(c.ms));
+    s += '<line x1="' + x.toFixed(1) + '" y1="' + MT + '" x2="' + x.toFixed(1) + '" y2="' + (MT + PH) +
          '" stroke="var(--rule)" stroke-width="1.5"/>';
-    s += '<text class="marklab" x="' + (X(c.day) + 7).toFixed(1) + '" y="' + ly +
-         '" fill="var(--ink-2)">' + c.name + ' ' + c.place + (gone ? ' · closed' : ' · closes') + '</text>';
+    s += '<text class="marklab" x="' + (x + (rightSide ? -7 : 7)).toFixed(1) + '" y="' + ly +
+         '" text-anchor="' + (rightSide ? 'end' : 'start') + '" fill="var(--ink-2)">' + label + '</text>';
   });
   s += '<text class="axname" x="' + (ML - 46) + '" y="' + (MT + PH / 2) + '" text-anchor="middle" ' +
        'transform="rotate(-90 ' + (ML - 46) + ' ' + (MT + PH / 2) + ')">kilometres covered</text>';
   s += '<line x1="' + ML + '" y1="' + (MT + PH) + '" x2="' + (ML + PW) + '" y2="' + (MT + PH) + '" stroke="var(--rule)" stroke-width="1"/>';
 
+  // The finish distance as a horizontal reference; label at the left, below the
+  // line, clear of the top deadline ribbon.
   if (state.total <= YMAX) {
     s += '<line x1="' + ML + '" y1="' + Y(state.total).toFixed(1) + '" x2="' + (ML + PW) + '" y2="' + Y(state.total).toFixed(1) +
          '" stroke="var(--rule)" stroke-width="1.5"/>';
-    s += '<text class="marklab" x="' + (ML + 8) + '" y="' + (Y(state.total) - 8).toFixed(1) + '" fill="var(--ink-2)">Kalamata · ' + kfmt(state.total) + ' km</text>';
-  }
-  if (LIMIT_D <= XMAX) {
-    s += '<line x1="' + X(LIMIT_D).toFixed(1) + '" y1="' + MT + '" x2="' + X(LIMIT_D).toFixed(1) + '" y2="' + (MT + PH) +
-         '" stroke="var(--rule)" stroke-width="1.5"/>';
-    s += '<text class="marklab" x="' + (X(LIMIT_D) - 9).toFixed(1) + '" y="' + (MT + 16) + '" text-anchor="end" fill="var(--ink-2)">8 Aug 23:59 · cut-off</text>';
+    s += '<text class="marklab" x="' + (ML + 8) + '" y="' + (Y(state.total) + 15).toFixed(1) + '" fill="var(--ink-2)">Kalamata · ' + kfmt(state.total) + ' km</text>';
   }
 
   // Each rider's line is y = kmd · x, so it leaves the frame at whichever comes
