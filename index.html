@@ -4,13 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>The Last Dot — Following the tail of the field · TCRNo12</title>
-<meta name="description" content="The Last Dot follows the tail of the field in ultra-distance bike races - the riders racing the cut-off to the finish. Current edition: Transcontinental Race No12. An independent dot-watcher project, not affiliated with the organisers.">
+<meta name="description" content="The Last Dot follows the tail of the field in ultra-distance bike races and lets fans send support to the riders racing the cut-off. Current edition: Transcontinental Race No12. Independent dot-watcher project, not affiliated with the organisers.">
 <meta name="robots" content="index, follow">
 <meta property="og:title" content="The Last Dot - Following the tail of the field">
-<meta property="og:description" content="The riders at the back, racing the cut-off to the finish. Current edition: Transcontinental Race No12.">
+<meta property="og:description" content="The riders at the back, racing the cut-off. Send them a line on the Wall of Support. Current edition: Transcontinental Race No12.">
 <meta property="og:type" content="website">
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%20100%20100'%3E%3Ccircle%20cx%3D'50'%20cy%3D'50'%20r%3D'44'%20fill%3D'%23fbfbf9'%20stroke%3D'%230b0c0c'%20stroke-width%3D'6'%2F%3E%3Ccircle%20cx%3D'33'%20cy%3D'67'%20r%3D'13'%20fill%3D'%230b0c0c'%2F%3E%3C%2Fsvg%3E">
-<style>*,*::before,*::after{box-sizing:border-box}html{-webkit-text-size-adjust:100%}body{margin:0}img,svg{max-width:100%}button,input{font:inherit;color:inherit}</style>
+<style>*,*::before,*::after{box-sizing:border-box}html{-webkit-text-size-adjust:100%}body{margin:0}img,svg{max-width:100%}button,input,textarea{font:inherit;color:inherit}</style>
 </head>
 <body>
 <style>
@@ -186,6 +186,58 @@
            font-size: 12px; font-weight: 600; }
   .tblcap { padding: 14px 18px 2px; font-size: 12.5px; color: var(--muted); }
 
+  /* wall of support */
+  .wall-head { padding: 16px 18px 6px; }
+  .wall-intro { font-size: 13.5px; color: var(--ink-2); max-width: 74ch; margin: 8px 0 0; }
+  .wall-intro b { color: var(--ink); font-weight: 620; }
+  .wall-grid { display: grid; grid-template-columns: 1fr 1fr; }
+  @media (max-width: 720px) { .wall-grid { grid-template-columns: 1fr; } }
+  .wall-pick, .wall-board { padding: 14px 18px 18px; border-top: 1px solid var(--hair); }
+  .wall-board { border-left: 1px solid var(--hair); }
+  @media (max-width: 720px) { .wall-board { border-left: none; } }
+  .wall-pick .lbl, .wall-board .lbl { display: block; font-size: 10.5px; color: var(--muted); margin-bottom: 9px; }
+  #wall-q { font: 400 13px var(--sans); padding: 9px 11px; width: 100%; margin-bottom: 10px;
+            border: 1px solid var(--rule); background: var(--field); color: var(--ink); }
+  #wall-list { max-height: 340px; overflow-y: auto; display: flex; flex-direction: column; }
+  .wr { display: flex; align-items: center; gap: 10px; padding: 9px 4px; border-bottom: 1px solid var(--grid);
+        cursor: pointer; text-align: left; background: none; border-left: none; border-right: none; border-top: none;
+        width: 100%; color: var(--ink); }
+  .wr:hover { background: var(--chip); }
+  .wr .wr-dot { width: 9px; height: 9px; flex: none; }
+  .wr .wr-name { flex: 1 1 auto; font-size: 13.5px; font-weight: 560; }
+  .wr .wr-ig { font-family: var(--mono); font-size: 11.5px; color: var(--muted); }
+  .wr .wr-cta { font-family: var(--display); font-stretch: 87.5%; text-transform: uppercase; letter-spacing: .06em;
+                font-size: 11px; font-weight: 600; color: var(--ahead); }
+  #wall-feed { max-height: 380px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
+  .wm { border-left: 3px solid var(--edge); padding: 8px 12px; background: var(--panel); }
+  .wm.edge { border-left-color: var(--edge); }
+  .wm.behind { border-left-color: var(--behind); }
+  .wm-to { font-size: 11.5px; color: var(--ink-2); margin-bottom: 3px; }
+  .wm-to a { font-family: var(--mono); color: var(--ahead); text-decoration: none; }
+  .wm-msg { font-size: 14px; color: var(--ink); }
+  .wall-empty { font-size: 13px; color: var(--muted); padding: 8px 2px; }
+
+  /* compose overlay */
+  .compose { position: fixed; inset: 0; z-index: 20; background: rgba(11,12,12,.55);
+             display: flex; align-items: center; justify-content: center; padding: 20px; }
+  .compose-card { background: var(--panel); border: 1px solid var(--ink); width: 100%; max-width: 440px; padding: 18px 20px 20px; }
+  .compose-top { display: flex; justify-content: space-between; align-items: center; }
+  .compose-x { background: none; border: none; font-size: 16px; color: var(--ink-2); cursor: pointer; padding: 2px 4px; }
+  .compose-name { font-family: var(--display); font-stretch: 87.5%; text-transform: uppercase; letter-spacing: .03em;
+                  font-size: 22px; font-weight: 600; margin: 2px 0 2px; }
+  .compose-ig { font-family: var(--mono); font-size: 12.5px; color: var(--ahead); text-decoration: none; }
+  #compose-text { width: 100%; margin: 12px 0 0; font: 400 15px var(--sans); padding: 10px 12px;
+                  border: 1px solid var(--rule); background: var(--field); color: var(--ink); resize: none; }
+  .compose-foot { display: flex; align-items: center; justify-content: space-between; margin-top: 10px; }
+  .compose-count { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+  .pill.send { background: var(--ink); color: var(--paper); border-color: var(--ink); cursor: pointer; }
+  .pill.send:disabled { opacity: .4; cursor: default; }
+  .compose-note { font-size: 11.5px; color: var(--muted); margin: 12px 0 0; }
+  .toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%) translateY(20px);
+           background: var(--ink); color: var(--paper); font-size: 13px; padding: 11px 16px; z-index: 30;
+           opacity: 0; transition: opacity .18s, transform .18s; pointer-events: none; max-width: 90vw; }
+  .toast.on { opacity: 1; transform: translateX(-50%) translateY(0); }
+
   footer { color: var(--ink-2); font-size: 12.5px; padding: 22px 2px 0; }
   footer p { margin: 0 0 9px; max-width: 82ch; }
   .disclaimer { border: 1px solid var(--rule); border-left: 4px solid var(--ink);
@@ -297,6 +349,46 @@
       </table>
     </div>
   </section>
+
+  <section class="block wall" id="wall" aria-label="Wall of Support">
+    <div class="wall-head">
+      <span class="chart-title">The Wall of Support</span>
+      <p class="wall-intro">These riders are <b>on the edge</b> or <b>off the pace</b> — still turning the pedals
+        against the clock. Send one a line of up to 100 characters: it goes on the wall, and opens their
+        Instagram so you can send it to them yourself.</p>
+    </div>
+    <div class="wall-grid">
+      <div class="wall-pick">
+        <span class="lbl">Pick a rider to cheer</span>
+        <input type="search" id="wall-q" placeholder="Search the strugglers…" autocomplete="off">
+        <div id="wall-list" role="list"></div>
+      </div>
+      <div class="wall-board">
+        <span class="lbl">Messages sent</span>
+        <div id="wall-feed"><p class="wall-empty">Loading the wall…</p></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="compose" id="compose" hidden>
+    <div class="compose-card" role="dialog" aria-modal="true" aria-labelledby="compose-name">
+      <div class="compose-top">
+        <span class="lbl">Send support to</span>
+        <button class="compose-x" id="compose-x" aria-label="Close">✕</button>
+      </div>
+      <div class="compose-name" id="compose-name"></div>
+      <a class="compose-ig" id="compose-ig" target="_blank" rel="noopener nofollow"></a>
+      <textarea id="compose-text" maxlength="100" rows="3" placeholder="A line of encouragement…"></textarea>
+      <div class="compose-foot">
+        <span class="compose-count" id="compose-count">100</span>
+        <button class="pill send" id="compose-send">Send &amp; open Instagram</button>
+      </div>
+      <p class="compose-note">Your message posts to the wall after a quick check, and is copied so you can paste
+        it into a DM on their Instagram. No account needed.</p>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <footer>
     <p><b>How to read this.</b> Each rider's line is kilometres ÷ days elapsed, projected forward at that same
@@ -731,6 +823,13 @@ const CUTOFF_MS = Date.UTC(2026, 7, 8, 21, 59);  //  8 Aug 2026, 23:59 CEST
 const LIMIT_D = (CUTOFF_MS - START_MS) / 864e5;  // 20.166 days
 const NOW_MS = Date.now();                       // live clock, for deadline state
 function NOW_D() { return (NOW_MS - START_MS) / 864e5; }
+
+// Wall of Support: fans send a line to struggling riders. Messages persist in a
+// dedicated Supabase project; a database trigger auto-approves clean ones and
+// holds anything with a link or slur for review, so the anon key is safe to ship.
+const SUPA_URL = 'https://ilslkaslmqcylmqhksol.supabase.co';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlsc2xrYXNsbXFjeWxtcWhrc29sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ3OTY4NzQsImV4cCI6MjEwMDM3Mjg3NH0.o441SkmcKpRrq6rouBpFLpaymbnYlfJFYxQhRe34QKE';
+const HANDLES = {"Robin Gemperle":"robingemperle","Max Agut":"le_max__","Nicolas Chatelet":"nicolas.chatelet","Christoph Strasser":"straps_377","Robert Müller":"radbert_m","Martin Moritz":"_martin.mo","Jonas Verest":"jonas_vst","Jakub Tomasik":"jakub_tomasik_ultracycling","Wojciech Wronka":"wotowro","Pawel Pulawski":"pikopulawski","Omar Di Felice":"omardifelice","Riccardo Mosconi":"mosconi_riccardo","Manuel Rudaz":"manurudaz","Nils Oyen":"nils.1616","Laurens Van Gucht":"laurensvangucht","Guillaume Poinsot":"guillaume.poinsot","Lucas Strittmatter":"lucas_strittmatter","Riccardo Kuhar":"rikicro","Jos Koop":"koopjos","Nico Schleippmann":"Curbelix","Josh Ibbett":"joshibbett","Sebi Lehmann":"sebi_lehm","George Hodgkinson":"25hodgkinson","Markus Zimmermann":"m4rku5.z1mm3rm4nn","Ulf Bannick":"ulf.ba","Manuel Feldbaumer":"manifeldbaumer","Oliver Glen":"o.llie.ollie","Camille Albisser":"camillealbi","Sarah Bosslet":"sarahbosslet","Hannah Hiecke":"hannah_hiecke","Jakub Micorek":"jakub.micorek","Hélène Fromenty":"hfrome","Anna Carlqvist":"anna_carlqvist","Viggo Vea":"viggovea","Arthur Jan":"arthurjan.jpg","Elise Sauvinet":"elisecabergnon","Kristian Buljan":"krishatbockaufrad","Henri Do":"henki","Francesco Vettore":"francescovett","Nicole van Batenburg":"NicolevanBatenburg","Valentin Cuenot":"Cuenot_valentin","Rodrigue Lombard":"rodrigue__lombard","Daniel Molino":"instamolino","Markus Carlos hein":"markus.zhongguo","Luís Manuel Silva Carvalho":"lmsc.82","Maximilian Siering":"max.o.menos","Marten Sprecher":"marsprech","Joep van Luijt":"joepvanl","Maxime Prieur":"maxime_prieur_","Larissa Unsinn":"Larissa_martha_","Adrian Vogel":"adi_on_bike","Harald Rinner":"h.rinner","Gergely Bartalos":"ultrabartalos","Pierre-Yves Robert":"pierreyves.robert","Dragomir Titei":"dragomir_titei","Andreas Herrig":"flightaddict_ah","Adrien Charlot":"A_Charlot","Hsi Chun Tsai":"Zigzizagza","Aleksei Konev":"alekkonev","Matthew Spooner":"matt_still_tri_ing","Lukas Müller":"lukmueller","Peter Kronberger":"peter_kronberger","Daniel Schulze Waltrup":"daniel_shwa","Dan Sharp":"rukrymi","Anja Longyka":"longyka_nja","Simon Van Teutem":"simonvanteutem","Christoph Zabel":"zabelisator","Jannis Rieb":"cyciope","Mark Turnbull":"markjude.turnbull.cyclingcoach","Maciej Baranowski":"baran.of.ski","Martin Zettel":"martin.zettel","Oona Baumann":"uuna_uuna","Gabriel Delattre":"Del__gab","Noah Schmid":"schmoahnid","Julian Manrique":"Julianmanrique","Robin Skoge":"robin_sprenger","Christian Chesta":"2ch_Adventure","Sarah Cinquini":"sarah.cinquini","Bernhard Kämmerer":"bernimuc","Christian Pany":"christianpany","Jack Wright":"jackussamuele","Clayton Anderson":"hughyboy","Emiliano Baravalle":"emiliano.baravalle","Alexander Eder":"ultra.eda","Lisa Schrader":"lisa_schr","Alexander Stramma":"strmmbrsch","Matthew Falconer":"b1rdmn","Bart Pombreu":"bartpombreu","Michael Ærenlund Buch":"MiDaBu","Philip Renders":"gravel75trail","Byron Buck":"byron_buck","Nicolas Müller":"nicolascmueller","Marcin Zielkowski":"ultrazielik","Sam Wilson":"samzw_","Katharina Wirth":"kathi.wrt","Kim Heikkinen":"kim_1","Florent De Boisvilliers":"achilletendon33","Alexander Stojkovic":"stojksen","Malte Hager":"malte.cc","Pauline Neuber":"pauli._ne","Henry Jacobson":"henry_.jacobson","Michal Kramář":"reporter_in_shape","Robbie Jebb":"Robbie","Alberto Vaghi":"albe712","Walter Reiterer":"lederhosenracer","Jean-François Badias":"jbadias","Pierre Beck":"pierrepoulpe2","Nora Battermann":"fortunata_outdoors","Lukas Stiller":"lukas_k_stiller","Mohamed Jawhara":"mohamed_jha11","Chun man Lau":"Punkgarfield","Aneta Lamik":"roweroterapia","Floris Bakker":"floris_23","Falk Döring":"falk.doering.randonneur","Gerald Rumpf":"lebendigbleiben","Tomáš Žižlavský":"zizlavsky.t","Robert Tremblay":"robert.tremblay","John Read":"Johnny_e_read","Niko Dangel":"niko.dangel","Filip Bullens":"cojak","Tom Dockal":"thomd_89","Mathilde Germanier":"twentysevenspokes","Dan Jones":"danwildshepherd","Bambang Anggoro Jati":"bembenx_","Till Moosberger":"_oo_studio__","Luca Bessems":"lucabessems","Isaac Kuehnle-Nelson":"ikethepike","Cody Hughes":"cody_hughes91","Christo Dingozov":"dingo_mainata","Jean-paul Sachet":"jpaul_sac","Valerio Cecchini":"sgravell0","Carys Brimble":"carys_brimble","Darron Burns":"darron_burns","Emily Maille":"canadianrouleur","Maximilian Droste":"doktoroste","Sebastian Kerschbaumer":"i__am_sebastian","Alexander Latham-boal":"LATHAMBOAL","Kenneth Lamont":"Kennethlnomat","Nod Nelson":"nod.369","Tom Bryan":"tombryanyeah","Samuel Hussain":"sam_huss23","Cesare Pedrini":"cesare.pedrini","Maksym Matvieiev":"Maxveloalp","Nicole Farrier":"nicole.g.farrier","Erhard Wälchli":"erhardwalchl","Paul Rollings":"paulrollings","Jesko von Werthern":"jesko_werthern","Tobias Geißler":"tobi_the_cyclist","Stephen Dummett":"rising_tide_coaching","Lili Delannoy":"Lili","Erik Olsson":"theprimalswede","Jakob Wall":"_jakobwall_","Boris Krutov":"boris_krutov","Thomas Chateau":"rogerchuchard","Alain Rodriguez":"Alain_rdrgz","Ramona Troxler":"ramona.troxler","Hanif Meeran":"Hanif","Hauke Kottek":"hauke_kt","Max Kraus":"vignavecchia","Rene Wach":"reneneew","Frédéric Rudant":"fredrudan","Sofia Passaretti":"sofiapassarettti","Dennis Wolckenhauer":"searching.sasquatch","Artem Soldatkin":"_leipreachan","Patrick O'connor":"padupnorth","Sönke Kreft":"soekreft","Fritjof Schirmer":"Fite_on_Tour","Gabi Winck":"lumaca.gabi","Tim Lamb":"timbolamb","Ian Budden":"ian_adventuring","Karl Björklund":"khaleb2","Peter Corkill":"petercorkill","Zuzanna Bogucka":"zuzka__kluska_","Andrew Speers":"Andrewgspeers","Greg Fong":"greg.fong","Sebastian Van den bergen":"seb.vandenbergen","Hans Markus Broja":"hmb_quilent","Christian Trenkle":"cycling.blue","Lissa Breugelmans":"caughtinthevoid","Jürgen Ress":"Juergenress","Olli Büttel":"Ironmaennchen","Ro Alegre":"roalegreg","Sarah Steels":"legs_of_steels","Thibault Sabatier":"thibault_sabatier","Andreas Wittkemper":"andreas_wittkemper","Peter Magill":"peter_magill_1964","Grinshina Kartik":"grinshina","Rumen Vachev":"rumen_vachev","Poh Huat Tan":"p.h_tan","Dirk Hermans":"Dirk","Karin Eder":"dieradlfee","George Surjopurnomo":"g.surjopurnomo","Mike Passmann":"mikepassmann","Erekle Bagashvili":"ekkk4","Ronja Derr":"rroxy___","Lionel Bobb":"tabletable1","Luis Cardoso":"fuzzroyale","Maris Brugis":"marisbrugis","Rafael Martinez Gonzalez":"rafaubio","Satomi Yamada":"satomiyamada","Ben Strause":"benjaminstrause","Mex Wieshofer":"mexwieshofer","Bryn Thomas":"wombatting96","Benno Raj":"Benno","Ian Mitchinson":"ian_mitchinson","Thomas Martraire":"thomas._.mar","Lander Wantens":"Wantenslander","Joachim Pittraye":"cyclamen_joachim.pittraye","Ezekiel Amos":"zekesdexd","Mohamed Almarar":"international69","Daniel Huxley":"dhux2509","Romeo Garessus":"Romeo_v_ga","Sebastien Nolens":"sebicicleta","Marco Eberle":"marcoshappyworld","Jefferson Adams":"jeffersonhodgesadams","Stefan Lindkvist":"coachlindkvist777","Lennart Gensch":"mountainride","Sylwia Kuropatwa":"sylwia.qropatwa","Adrien Mabileau":"apy_ultracycling","Christian Dupraz":"veloele","Martin Reichert":"teammuellerreichert","Melanie Müller-reichert":"melaniemueller81","Damian Ludlow":"damianludlow","Paul Jennings":"saddlesore_jenko","Stéphane David":"picardbrothers_bikepacking","Andreas Steinke":"Cycling_for_Mutoto","Christel Vieth":"christelvieth","Bastien Sentubery":"baestiti","Mylene Vicente":"bike_and_ravee","Małgorzata Gryszczuk":"Histeria_jedzie","Kinga Perzyńska":"greymouseland","Michael Hunziker":"migreau","Björn Frey":"bartholin_cyclingandclown","Luisa Nichelson":"f.luis.ter","Andrea Nichelson":"andreanichelson"};
 const DATA_MS = Date.UTC(2026, 6, 23, 9, 8);    // when the rider positions were read
 const CATNAME = { S: 'Solo', F: 'FLINTA', P: 'Pair' };
 const GLYPH = { ahead: '🚴', edge: '😬', behind: '😭' };
@@ -1181,6 +1280,127 @@ vt.onclick = function () { vt.setAttribute('aria-pressed', 'true'); vc.setAttrib
   document.getElementById('tableview').hidden = false; document.getElementById('chartview').hidden = true; };
 
 render();
+
+/* ---------------- Wall of Support ---------------- */
+(function () {
+  const listEl = document.getElementById('wall-list');
+  const feedEl = document.getElementById('wall-feed');
+  const qEl = document.getElementById('wall-q');
+  const comp = document.getElementById('compose');
+  const compName = document.getElementById('compose-name');
+  const compIg = document.getElementById('compose-ig');
+  const compText = document.getElementById('compose-text');
+  const compCount = document.getElementById('compose-count');
+  const compSend = document.getElementById('compose-send');
+  const toastEl = document.getElementById('toast');
+  let current = null;
+
+  // The strugglers: still riding (not scratched), on the edge or off the pace.
+  // Off-the-pace first, then by how far under their required pace they sit.
+  function strugglers() {
+    return RIDERS.filter(function (r) {
+      if (r.dnf) return false;
+      const c = classify(r);
+      return c === 'edge' || c === 'behind';
+    }).map(function (r) {
+      const req = requiredPace(r, state.total).pace;
+      return { r: r, cls: classify(r), handle: HANDLES[r.name] || null, def: req > 0 ? r.kmd / req - 1 : 0 };
+    }).sort(function (a, b) {
+      if (a.cls !== b.cls) return a.cls === 'behind' ? -1 : 1;
+      return a.def - b.def;
+    });
+  }
+
+  function toast(msg) {
+    toastEl.textContent = msg; toastEl.classList.add('on');
+    clearTimeout(toast._t); toast._t = setTimeout(function () { toastEl.classList.remove('on'); }, 3400);
+  }
+
+  function renderList() {
+    const q = qEl.value.trim().toLowerCase();
+    const rows = strugglers().filter(function (s) { return !q || s.r.name.toLowerCase().indexOf(q) !== -1; });
+    listEl.innerHTML = rows.length ? rows.map(function (s, i) {
+      return '<button class="wr" data-i="' + i + '">' +
+        '<span class="wr-dot" style="background:var(--' + s.cls + ')"></span>' +
+        '<span class="wr-name">' + esc(s.r.name) + '</span>' +
+        (s.handle ? '<span class="wr-ig">@' + esc(s.handle) + '</span>' : '') +
+        '<span class="wr-cta">Cheer</span></button>';
+    }).join('') : '<p class="wall-empty">No matches.</p>';
+    listEl._rows = rows;
+  }
+  listEl.addEventListener('click', function (e) {
+    const b = e.target.closest('.wr'); if (!b) return;
+    openCompose(listEl._rows[+b.getAttribute('data-i')]);
+  });
+  qEl.addEventListener('input', renderList);
+
+  function openCompose(s) {
+    current = s;
+    compName.textContent = s.r.name;
+    if (s.handle) {
+      compIg.textContent = '@' + s.handle + ' · opens on send';
+      compIg.href = 'https://www.instagram.com/' + s.handle + '/';
+      compIg.style.display = '';
+    } else {
+      compIg.textContent = 'No Instagram found — your message still goes on the wall';
+      compIg.removeAttribute('href'); compIg.style.display = '';
+    }
+    compText.value = ''; compCount.textContent = '100'; compSend.disabled = false;
+    comp.hidden = false; compText.focus();
+  }
+  function closeCompose() { comp.hidden = true; current = null; }
+  document.getElementById('compose-x').onclick = closeCompose;
+  comp.addEventListener('click', function (e) { if (e.target === comp) closeCompose(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !comp.hidden) closeCompose(); });
+  compText.addEventListener('input', function () { compCount.textContent = 100 - compText.value.length; });
+
+  compSend.onclick = function () {
+    if (!current) return;
+    const msg = compText.value.trim();
+    if (!msg) { compText.focus(); return; }
+    compSend.disabled = true;
+    const body = { rider_name: current.r.name, rider_handle: current.handle, cat: current.cls, message: msg };
+    fetch(SUPA_URL + '/rest/v1/support_messages', {
+      method: 'POST',
+      headers: { apikey: SUPA_KEY, Authorization: 'Bearer ' + SUPA_KEY, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
+      body: JSON.stringify(body)
+    }).then(function (res) {
+      if (!res.ok) throw new Error('post failed ' + res.status);
+      // Copy for the personal DM, then open their Instagram.
+      if (navigator.clipboard) navigator.clipboard.writeText(msg).catch(function () {});
+      if (current.handle) window.open('https://www.instagram.com/' + current.handle + '/', '_blank', 'noopener');
+      closeCompose();
+      toast(current.handle ? 'On the wall. Message copied — paste it into their Instagram DM.' : 'Posted to the wall of support.');
+      setTimeout(loadFeed, 600);
+    }).catch(function () {
+      compSend.disabled = false;
+      toast('Could not send just now — please try again in a moment.');
+    });
+  };
+
+  function loadFeed() {
+    fetch(SUPA_URL + '/rest/v1/support_messages?status=eq.approved&select=rider_name,rider_handle,cat,message,created_at&order=created_at.desc&limit=80',
+      { headers: { apikey: SUPA_KEY, Authorization: 'Bearer ' + SUPA_KEY } })
+      .then(function (res) { if (!res.ok) throw new Error(res.status); return res.json(); })
+      .then(function (rows) {
+        if (!rows.length) { feedEl.innerHTML = '<p class="wall-empty">No messages yet — be the first to send one.</p>'; return; }
+        feedEl.innerHTML = rows.map(function (m) {
+          const ig = m.rider_handle
+            ? '<a href="https://www.instagram.com/' + esc(m.rider_handle) + '/" target="_blank" rel="noopener nofollow">@' + esc(m.rider_handle) + '</a>'
+            : '';
+          return '<div class="wm ' + (m.cat === 'behind' ? 'behind' : 'edge') + '">' +
+            '<div class="wm-to">To <b>' + esc(m.rider_name) + '</b> ' + ig + '</div>' +
+            '<div class="wm-msg">' + esc(m.message) + '</div></div>';
+        }).join('');
+      })
+      .catch(function () {
+        feedEl.innerHTML = '<p class="wall-empty">The live wall needs the published site — open it at the-last-dot.vercel.app.</p>';
+      });
+  }
+
+  renderList();
+  loadFeed();
+})();
 </script>
 
 </body>
