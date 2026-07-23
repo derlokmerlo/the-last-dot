@@ -903,21 +903,30 @@ function render() {
   s += '<text class="axname" x="' + (ML + PW / 2) + '" y="' + (MT + PH + 40) + '" text-anchor="middle">' +
        (zoomed ? 'date and time · CEST' : 'date · CEST') + '</text>';
 
-  // Deadline ribbon along the top: every control point closing plus the finish,
-  // as a vertical rule with a label at the top edge. Adjacent labels stagger
-  // across two rows; those near the right edge anchor left so they never overflow.
+  // Deadline ribbon along the top: every control closing plus the finish, as a
+  // vertical rule with a top label. Labels are packed into rows greedily — each
+  // one drops to the first row where it doesn't overlap a label already placed —
+  // so however close the control lines fall, the text never collides. The finish
+  // is the hard limit, so it is set apart in bold red.
   const DEADLINES = CHECKPOINTS.map(function (c) {
-    return { day: c.day, ms: c.ms, tag: c.name, place: c.place };
-  }).concat([{ day: LIMIT_D, ms: CUTOFF_MS, tag: 'Finish', place: 'Kalamata' }]);
-  DEADLINES.forEach(function (c, ci) {
+    return { day: c.day, ms: c.ms, tag: c.name, place: c.place, finish: false };
+  }).concat([{ day: LIMIT_D, ms: CUTOFF_MS, tag: 'Finish', place: 'Kalamata', finish: true }]);
+  const rowRight = [];                         // rightmost x used, per label row
+  DEADLINES.forEach(function (c) {
     if (c.day < XMIN || c.day > XMAX) return;
-    const gone = c.ms <= NOW_MS, x = X(c.day), rightSide = x > ML + PW * 0.72;
-    const ly = MT + 11 + (ci % 2 ? 15 : 0);
-    const label = c.tag + ' ' + (gone ? '· closed' : fmtAbs(c.ms));
+    const gone = c.ms <= NOW_MS, x = X(c.day), rightSide = x > ML + PW * 0.78;
+    const label = (c.finish ? 'Finish' : c.tag + ' ' + c.place) + ' · ' + (gone ? 'closed' : fmtAbs(c.ms));
+    const w = label.length * 6.3 + 8;
+    const x0 = rightSide ? x - w : x, x1 = rightSide ? x : x + w;
+    let row = 0;
+    while (rowRight[row] !== undefined && rowRight[row] > x0 - 5) row++;
+    rowRight[row] = x1;
+    const ly = MT + 12 + row * 14;
     s += '<line x1="' + x.toFixed(1) + '" y1="' + MT + '" x2="' + x.toFixed(1) + '" y2="' + (MT + PH) +
-         '" stroke="var(--rule)" stroke-width="1.5"/>';
+         '" stroke="var(--rule)" stroke-width="' + (c.finish ? 2 : 1.5) + '"/>';
     s += '<text class="marklab" x="' + (x + (rightSide ? -7 : 7)).toFixed(1) + '" y="' + ly +
-         '" text-anchor="' + (rightSide ? 'end' : 'start') + '" fill="var(--ink-2)">' + label + '</text>';
+         '" text-anchor="' + (rightSide ? 'end' : 'start') + '" fill="var(--' + (c.finish ? 'behind' : 'ink-2') +
+         ')"' + (c.finish ? ' font-weight="700"' : '') + '>' + label + '</text>';
   });
   s += '<text class="axname" x="' + (ML - 46) + '" y="' + (MT + PH / 2) + '" text-anchor="middle" ' +
        'transform="rotate(-90 ' + (ML - 46) + ' ' + (MT + PH / 2) + ')">kilometres covered</text>';
