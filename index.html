@@ -9,6 +9,9 @@
 <meta property="og:title" content="The Last Dot - Following the tail of the field">
 <meta property="og:description" content="The riders at the back, racing the cut-off. Send them a line on the Wall of Support. Current edition: Transcontinental Race No12.">
 <meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600&display=swap" rel="stylesheet">
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%20100%20100'%3E%3Ccircle%20cx%3D'50'%20cy%3D'50'%20r%3D'44'%20fill%3D'%23fbfbf9'%20stroke%3D'%230b0c0c'%20stroke-width%3D'6'%2F%3E%3Ccircle%20cx%3D'33'%20cy%3D'67'%20r%3D'13'%20fill%3D'%230b0c0c'%2F%3E%3C%2Fsvg%3E">
 <style>*,*::before,*::after{box-sizing:border-box}html{-webkit-text-size-adjust:100%}body{margin:0}img,svg{max-width:100%}button,input,textarea{font:inherit;color:inherit}</style>
 </head>
@@ -28,11 +31,13 @@
     --mast-bg: #0b0c0c;
     --mast-fg: #f4f4f1;
     --ahead:   #00719e;
-    --edge:    #8a8a82;
+    --edge:    #9a7b10;
     --behind:  #c8352b;
     --field:   #ffffff;
+    --under:   rgba(200,53,43,.05);
     --display: "Oswald", "Roboto Condensed", "Arial Narrow", "Helvetica Neue", system-ui, sans-serif;
     --sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, sans-serif;
+    --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
     --mark-fill: #fbfbf9;   /* the logo is a fixed white-disc-with-black-dot in both themes */
     --mark-ink: #0b0c0c;
   }
@@ -51,9 +56,10 @@
       --mast-bg: #17181a;
       --mast-fg: #fefefe;
       --ahead:   #1f93c4;
-      --edge:    #a8a8a0;
+      --edge:    #c9a227;
       --behind:  #e05a51;
       --field:   #0f1011;
+      --under:   rgba(224,90,81,.07);
     }
   }
   :root[data-theme="dark"] {
@@ -70,9 +76,10 @@
     --mast-bg: #17181a;
     --mast-fg: #fefefe;
     --ahead:   #1f93c4;
-    --edge:    #a8a8a0;
+    --edge:    #c9a227;
     --behind:  #e05a51;
     --field:   #0f1011;
+      --under:   rgba(224,90,81,.07);
   }
 
   body { background: var(--paper); color: var(--ink); font-family: var(--sans);
@@ -93,6 +100,8 @@
        font-size: clamp(44px, 9vw, 96px); margin: 0; text-wrap: balance; }
   .deck { font-size: clamp(14px, 2.1vw, 21px); font-weight: 500; letter-spacing: .17em;
           margin: 12px 0 0; opacity: .74; }
+  .motto { display: inline-block; margin: 18px 0 0; padding: 8px 13px 7px; border: 2px solid var(--mast-fg);
+           font-size: 12.5px; letter-spacing: .22em; opacity: .92; }
   .lede { max-width: 64ch; margin: 20px 0 0; font-size: 15px; opacity: .88; }
   .lede b { font-weight: 600; opacity: 1; }
 
@@ -143,19 +152,19 @@
                 justify-content: space-between; margin-bottom: 10px; }
   .chart-title { font-family: var(--display); font-stretch: 87.5%; text-transform: uppercase;
                  letter-spacing: .08em; font-size: 14px; font-weight: 600; }
-  .legend { display: flex; flex-wrap: wrap; gap: 16px; }
-  .lg { display: flex; align-items: center; gap: 7px; font-size: 12px; color: var(--ink-2); }
+  .legend { display: flex; flex-wrap: wrap; gap: 10px 18px; }
+  .lg { display: flex; align-items: center; gap: 7px; font-size: 12.5px; color: var(--ink); }
   .sw { width: 10px; height: 10px; flex: none; }
   .sw.line { width: 17px; height: 0; border-top: 2px solid var(--ink); }
   .em { font-size: 15px; line-height: 1; }
   .em.flip { display: inline-block; transform: scaleX(-1); }
   .skull { font-size: 16px; line-height: 1; }
-  svg { display: block; width: 100%; height: auto; }
-  text { font-family: var(--sans); fill: var(--muted); font-size: 11px; font-variant-numeric: tabular-nums; }
+  #plot { display: block; width: 100%; height: auto; }
+  text { font-family: var(--sans); fill: var(--ink-2); font-size: 11.5px; font-variant-numeric: tabular-nums; }
   .axname { font-family: var(--display); font-stretch: 87.5%; text-transform: uppercase;
-            letter-spacing: .12em; fill: var(--muted); font-size: 10.5px; }
+            letter-spacing: .12em; fill: var(--muted); font-size: 11px; }
   .marklab { font-family: var(--display); font-stretch: 87.5%; text-transform: uppercase;
-             letter-spacing: .07em; font-size: 11.5px; font-weight: 600;
+             letter-spacing: .07em; font-size: 12px; font-weight: 600;
              stroke: var(--surface); stroke-width: 3.5px; paint-order: stroke fill; }
   .hint { font-size: 12.5px; color: var(--muted); padding: 4px 2px 8px; }
 
@@ -247,8 +256,34 @@
   .disclaimer b { display: inline; }
   footer b { font-family: var(--display); font-stretch: 87.5%; text-transform: uppercase;
              letter-spacing: .07em; font-weight: 600; color: var(--ink); }
-  a { color: inherit; }
+  a { color: inherit; } a:hover { color: var(--ahead); }
   [hidden] { display: none !important; }
+  details.fx { border-top: 1px solid var(--grid); }
+  details.fx:first-of-type { border-top: none; }
+  details.fx summary { cursor: pointer; padding: 11px 2px; font-family: var(--display); font-stretch: 87.5%;
+    text-transform: uppercase; letter-spacing: .09em; font-size: 12px; font-weight: 600; color: var(--ink); list-style: none; }
+  details.fx summary::-webkit-details-marker { display: none; }
+  details.fx summary::before { content: '+  '; color: var(--muted); }
+  details.fx[open] summary::before { content: '\2212  '; }
+  details.fx p { margin: 2px 0 14px; }
+  .chartwrap { overflow-x: auto; }
+  @media (max-width: 720px) {
+    .mast-in { padding: 22px 16px 26px; }
+    .wrap { padding: 0 12px 56px; }
+    .params { gap: 16px; padding: 14px; }
+    .field { flex: 1 1 44%; min-width: 0; }
+    .field > div { width: 100%; }
+    input[type="search"] { width: 100%; }
+    input[type="range"] { width: 100%; }
+    .pills { width: 100%; }
+    .pill { padding: 12px 15px; flex: 1 1 auto; text-align: center; }
+    .tiles { grid-template-columns: 1fr 1fr; }
+    .tile { border-left: none; border-top: 1px solid var(--hair); }
+    .tile:first-child { border-top: none; grid-column: 1 / -1; }
+    .tile .v { font-size: 34px; }
+    .chartwrap svg { min-width: 680px; }
+    th, td { padding: 8px 10px; }
+  }
   @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
 
@@ -263,6 +298,7 @@
       <h1>The Last Dot</h1>
     </div>
     <p class="deck lbl">Follow the tail of the field, racing the cut-off to the finish</p>
+    <p class="motto lbl">Be finisher — or be squared</p>
     <p class="lede">Every rider is a line — their average kilometres per day since the start.
       The <b>black line</b> is the pace that keeps you inside the time limit — and it is not one straight run
       to Kalamata. Every control point closes on its own deadline, so the line bends at each one: the
@@ -314,26 +350,26 @@
 
   <section class="block tiles" aria-label="Summary">
     <div class="tile"><span class="v" id="s-req">—</span><span class="k">Pace for the next cut-off</span><span class="u" id="s-req-sub">km per day, steepest leg</span></div>
-    <div class="tile c-ahead"><span class="v" id="s-ahead">—</span><span class="k">Inside, with margin</span><span class="u">at least 10% over the minimum</span></div>
-    <div class="tile c-edge"><span class="v" id="s-edge">—</span><span class="k">On the edge</span><span class="u">−5% to +10%</span></div>
-    <div class="tile c-behind"><span class="v" id="s-behind">—</span><span class="k">Off the pace</span><span class="u">more than 5% below</span></div>
-    <div class="tile c-dnf"><span class="v" id="s-dnf">—</span><span class="k">Scratched</span><span class="u">☠ official DNF</span></div>
+    <div class="tile c-ahead"><span class="v" id="s-ahead">—</span><span class="k"><svg viewBox="0 0 20 20" width="12" height="12" style="vertical-align:-2px"><circle cx="10" cy="10" r="7" fill="var(--ahead)"/></svg> Inside, with margin</span><span class="u">at least 10% over the minimum</span></div>
+    <div class="tile c-edge"><span class="v" id="s-edge">—</span><span class="k"><svg viewBox="0 0 20 20" width="12" height="12" style="vertical-align:-2px"><circle cx="10" cy="10" r="6.6" fill="none" stroke="var(--edge)" stroke-width="2.4"/><path d="M10 3.4A6.6 6.6 0 0 0 10 16.6Z" fill="var(--edge)"/></svg> On the edge</span><span class="u">−5% to +10%</span></div>
+    <div class="tile c-behind"><span class="v" id="s-behind">—</span><span class="k"><svg viewBox="0 0 20 20" width="12" height="12" style="vertical-align:-2px"><rect x="3.6" y="3.6" width="12.8" height="12.8" fill="none" stroke="var(--behind)" stroke-width="2.4"/></svg> Off the pace</span><span class="u">more than 5% below</span></div>
+    <div class="tile c-dnf"><span class="v" id="s-dnf">—</span><span class="k"><svg viewBox="0 0 20 20" width="12" height="12" style="vertical-align:-2px"><path d="M10 0.8C4.4 0.8 1.4 4.5 1.4 9c0 2.7 1.1 4.5 2.7 5.4v2.2c0 1.6 1.3 2.9 2.9 2.9h6c1.6 0 2.9-1.3 2.9-2.9v-2.2c1.6-0.9 2.7-2.7 2.7-5.4C18.6 4.5 15.6 0.8 10 0.8Z" fill="var(--ink-2)"/><circle cx="6.5" cy="8.7" r="2.5" fill="var(--surface)"/><circle cx="13.5" cy="8.7" r="2.5" fill="var(--surface)"/><path d="M10 11.4l1.5 2.6h-3Z" fill="var(--surface)"/><rect x="7.4" y="16.1" width="1.5" height="3.5" fill="var(--surface)"/><rect x="11.1" y="16.1" width="1.5" height="3.5" fill="var(--surface)"/></svg> Scratched</span><span class="u">official DNF</span></div>
   </section>
 
   <section class="block chartcard" id="chartview">
     <div class="chart-head">
       <span class="chart-title">Distance covered against the cut-off</span>
       <div class="legend">
-        <span class="lg"><span class="em flip">🚴</span>Inside</span>
-        <span class="lg"><span class="em">😬</span>On the edge</span>
-        <span class="lg"><span class="em">😭</span>Off the pace</span>
-        <span class="lg"><span class="skull" style="color:var(--ink-2)">☠</span>Out of GC · missed a control</span>
-        <span class="lg"><span class="skull" style="color:var(--behind)">☠</span>Official DNF · scratched</span>
+        <span class="lg"><svg viewBox="0 0 20 20" width="14" height="14"><circle cx="10" cy="10" r="7" fill="var(--ahead)"/></svg>Inside</span>
+        <span class="lg"><svg viewBox="0 0 20 20" width="14" height="14"><circle cx="10" cy="10" r="6.6" fill="none" stroke="var(--edge)" stroke-width="2.4"/><path d="M10 3.4A6.6 6.6 0 0 0 10 16.6Z" fill="var(--edge)"/></svg>On the edge</span>
+        <span class="lg"><svg viewBox="0 0 20 20" width="14" height="14"><rect x="3.6" y="3.6" width="12.8" height="12.8" fill="none" stroke="var(--behind)" stroke-width="2.4"/></svg>Off the pace · squared</span>
+        <span class="lg"><svg viewBox="0 0 20 20" width="15" height="15"><path d="M10 0.8C4.4 0.8 1.4 4.5 1.4 9c0 2.7 1.1 4.5 2.7 5.4v2.2c0 1.6 1.3 2.9 2.9 2.9h6c1.6 0 2.9-1.3 2.9-2.9v-2.2c1.6-0.9 2.7-2.7 2.7-5.4C18.6 4.5 15.6 0.8 10 0.8Z" fill="var(--ink-2)"/><circle cx="6.5" cy="8.7" r="2.5" fill="var(--surface)"/><circle cx="13.5" cy="8.7" r="2.5" fill="var(--surface)"/><path d="M10 11.4l1.5 2.6h-3Z" fill="var(--surface)"/><rect x="7.4" y="16.1" width="1.5" height="3.5" fill="var(--surface)"/><rect x="11.1" y="16.1" width="1.5" height="3.5" fill="var(--surface)"/></svg>Out of GC · missed a control</span>
+        <span class="lg"><svg viewBox="0 0 20 20" width="15" height="15"><path d="M10 0.8C4.4 0.8 1.4 4.5 1.4 9c0 2.7 1.1 4.5 2.7 5.4v2.2c0 1.6 1.3 2.9 2.9 2.9h6c1.6 0 2.9-1.3 2.9-2.9v-2.2c1.6-0.9 2.7-2.7 2.7-5.4C18.6 4.5 15.6 0.8 10 0.8Z" fill="var(--behind)"/><circle cx="6.5" cy="8.7" r="2.5" fill="var(--surface)"/><circle cx="13.5" cy="8.7" r="2.5" fill="var(--surface)"/><path d="M10 11.4l1.5 2.6h-3Z" fill="var(--surface)"/><rect x="7.4" y="16.1" width="1.5" height="3.5" fill="var(--surface)"/><rect x="11.1" y="16.1" width="1.5" height="3.5" fill="var(--surface)"/></svg>Official DNF · scratched</span>
         <span class="lg"><span class="sw line"></span>Cut-off pace (per leg)</span>
       </div>
     </div>
-    <svg id="plot" viewBox="0 0 1000 566" role="img" tabindex="0"
-         aria-label="Time-distance diagram: each rider is a projection line compared against the cut-off diagonal. The table view below carries the same data."></svg>
+    <div class="chartwrap"><svg id="plot" viewBox="0 0 1000 566" role="img" tabindex="0"
+         aria-label="Time-distance diagram: each rider is a projection line compared against the cut-off diagonal. The table view below carries the same data."></svg></div>
     <p class="hint"><b>Now</b> frames the field as it stands today, so individual riders separate;
       <b>Whole race</b> opens the scale out to the cut-off and the finish line, where the black line's bends
       at each control point become visible. Hover to identify a rider — or focus the diagram and use the ← → keys.</p>
@@ -393,18 +429,18 @@
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <footer>
-    <p><b>How to read this.</b> Each rider's line is kilometres ÷ days elapsed, projected forward at that same
+    <details class="fx" open><summary>How to read this</summary><p> Each rider's line is kilometres ÷ days elapsed, projected forward at that same
       average. The black line is the deadline envelope: the distance you must have covered at each control's
       closing time, joined into one path. A rider is <b>inside</b> if their average still clears every remaining
       deadline — the binding one is whichever demands the most, shown in the tooltip. It is a linear projection,
       not a forecast: nobody holds one pace for twenty days. It answers who has margin right now, against the
-      deadline that actually bites, not who will arrive.</p>
-    <p><b>The assumptions.</b> Start 19 July 2026 at 20:00 CEST, cut-off 8 August at 23:59 CEST — 20 days and 4 hours
+      deadline that actually bites, not who will arrive.</p></details>
+    <details class="fx"><summary>The assumptions</summary><p> Start 19 July 2026 at 20:00 CEST, cut-off 8 August at 23:59 CEST — 20 days and 4 hours
       (source: Lost Dot, who mark these details as provisional). The nominal route is roughly 4,800–5,000 km, but every
       rider plots their own line, so the slider exists to show how much the threshold depends on that guess. Current
       averages are depressed by the Norwegian opening and the westward detour to CP1 Flåm, so the group just below the
-      line is less compromised than it looks.</p>
-    <p><b>The control points.</b> Each closing time is taken from the organiser's configuration in the live
+      line is less compromised than it looks.</p></details>
+    <details class="fx"><summary>The control points</summary><p> Each closing time is taken from the organiser's configuration in the live
       tracker: CP1 Flåm 22 July 11:00, CP2 Tatra 30 July 11:00, CP3 Sarajevo 2 August 23:59, CP4 Leskovik
       5 August 23:59, all CEST. Their distances along the route are estimated — CP1 anchored to the shortest
       distance any rider had covered when validating it (≈685 km), CP2–CP4 placed between that and the finish
@@ -414,7 +450,7 @@
       validating at every control within its window; miss one and you forfeit classification and your official
       race time, though you may ride on. Those riders are drawn as a calavera rather than a dot — still riding,
       no longer classified — and for them the line only tracks reaching Kalamata by 8 August. The four riders
-      the organiser listed as outside the classification from the start are excluded entirely.</p>
+      the organiser listed as outside the classification from the start are excluded entirely.</p></details>
     <p>Rider data: FollowMyChallenge live leaderboard, TCRNo12.</p>
     <p class="disclaimer"><b>Not an official page.</b> <em>The Last Dot</em> is an independent dot-watcher's
       analysis, made by a spectator. It is not affiliated with, endorsed by, or connected to
@@ -835,16 +871,21 @@ const HANDLES = {"Robin Gemperle":"robingemperle","Max Agut":"le_max__","Nicolas
 const DATA_MS = Date.UTC(2026, 6, 23, 9, 8);    // when the rider positions were read
 const DATA_D = (DATA_MS - START_MS) / 864e5;    // race-days elapsed at the snapshot
 const CATNAME = { S: 'Solo', F: 'FLINTA', P: 'Pair' };
-const GLYPH = { ahead: '🚴', edge: '😬', behind: '😭' };
 const LABEL = { ahead: 'Inside', edge: 'On the edge', behind: 'Off the pace' };
-// Emoji marks: a cyclist riding clear, gritted teeth on the edge, tears off the
-// pace. Riders out of the classification keep the calavera.
-function emojiMark(cx, cy, size, emoji, flip) {
-  const t = '<text x="' + cx.toFixed(1) + '" y="' + cy.toFixed(1) + '" font-size="' + size +
-    '" text-anchor="middle" dominant-baseline="central">' + emoji + '</text>';
-  // The cyclist emoji faces left; mirror it so it rides toward the finish (right).
-  return flip ? '<g transform="translate(' + (2 * cx).toFixed(1) + ',0) scale(-1,1)">' + t + '</g>' : t;
+// Pictograms in the language of the wordmark: a full dot rides inside the limit,
+// a half dot is on the edge — and off the pace you are, literally, squared.
+function pictoInner(cls) {
+  if (cls === 'ahead') return '<circle cx="10" cy="10" r="7" fill="var(--ahead)"/>';
+  if (cls === 'edge') return '<circle cx="10" cy="10" r="6.6" fill="none" stroke="var(--edge)" stroke-width="2.4"/>' +
+    '<path d="M10 3.4A6.6 6.6 0 0 0 10 16.6Z" fill="var(--edge)"/>';
+  return '<rect x="3.6" y="3.6" width="12.8" height="12.8" fill="none" stroke="var(--behind)" stroke-width="2.4"/>';
 }
+function pictoMark(cx, cy, size, cls) {
+  const k = size / 20, x = cx - size / 2, y = cy - size / 2;
+  return '<g transform="translate(' + x.toFixed(1) + ',' + y.toFixed(1) + ') scale(' + k.toFixed(3) + ')">' + pictoInner(cls) + '</g>';
+}
+function pictoHTML(cls) { return '<svg viewBox="0 0 20 20" width="13" height="13" style="flex:none;vertical-align:-2px">' + pictoInner(cls) + '</svg>'; }
+function skullHTML(colorVar) { return '<svg viewBox="0 0 20 20" width="14" height="14" style="flex:none;vertical-align:-2px">' + skullInner(colorVar) + '</svg>'; }
 const MONTH = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
 const RIDERS = RAW.trim().split('\n').map(function (l) {
@@ -909,16 +950,17 @@ function requiredPace(r, total) {
 
 // A calavera rather than a plain dot: these riders are out of the classification
 // but still on the road. Drawn as a 20x20 glyph, scaled and centred on the point.
-function skull(cx, cy, size, colorVar) {
-  const k = size / 20, x = cx - size / 2, y = cy - size / 2;
-  return '<g transform="translate(' + x.toFixed(1) + ',' + y.toFixed(1) + ') scale(' + k.toFixed(3) + ')">' +
-    '<path d="M10 0.8C4.4 0.8 1.4 4.5 1.4 9c0 2.7 1.1 4.5 2.7 5.4v2.2c0 1.6 1.3 2.9 2.9 2.9h6c1.6 0 2.9-1.3 2.9-2.9v-2.2c1.6-0.9 2.7-2.7 2.7-5.4C18.6 4.5 15.6 0.8 10 0.8Z" fill="var(--' + colorVar + ')"/>' +
+function skullInner(colorVar) {
+  return '<path d="M10 0.8C4.4 0.8 1.4 4.5 1.4 9c0 2.7 1.1 4.5 2.7 5.4v2.2c0 1.6 1.3 2.9 2.9 2.9h6c1.6 0 2.9-1.3 2.9-2.9v-2.2c1.6-0.9 2.7-2.7 2.7-5.4C18.6 4.5 15.6 0.8 10 0.8Z" fill="var(--' + colorVar + ')"/>' +
     '<circle cx="6.5" cy="8.7" r="2.5" fill="var(--surface)"/>' +
     '<circle cx="13.5" cy="8.7" r="2.5" fill="var(--surface)"/>' +
     '<path d="M10 11.4l1.5 2.6h-3Z" fill="var(--surface)"/>' +
     '<rect x="7.4" y="16.1" width="1.5" height="3.5" fill="var(--surface)"/>' +
-    '<rect x="11.1" y="16.1" width="1.5" height="3.5" fill="var(--surface)"/>' +
-    '</g>';
+    '<rect x="11.1" y="16.1" width="1.5" height="3.5" fill="var(--surface)"/>';
+}
+function skull(cx, cy, size, colorVar) {
+  const k = size / 20, x = cx - size / 2, y = cy - size / 2;
+  return '<g transform="translate(' + x.toFixed(1) + ',' + y.toFixed(1) + ') scale(' + k.toFixed(3) + ')">' + skullInner(colorVar) + '</g>';
 }
 
 let state = { cat: 'ALL', q: '', total: 4950, riskOnly: false, sel: -1, zoom: 'now' };
@@ -1101,7 +1143,7 @@ function render() {
     const end = Math.min(r.elapsed + (state.total - r.km) / r.kmd, XMAX, r.elapsed + (YMAX - r.km) / r.kmd);
     s += '<line x1="' + X(r.elapsed).toFixed(1) + '" y1="' + Y(r.km).toFixed(1) + '" x2="' + X(end).toFixed(1) +
          '" y2="' + Y(r.km + r.kmd * (end - r.elapsed)).toFixed(1) + '" stroke="var(--' + cls +
-         ')" stroke-width="' + (zoomed ? 1.2 : 1) + '" opacity="' + (zoomed ? .34 : .28) + '" data-i="' + i + '"/>';
+         ')" stroke-width="' + (zoomed ? 1.4 : 1.1) + '" opacity="' + (zoomed ? .42 : .34) + '" data-i="' + i + '"/>';
     hitList.push({ r: r, cls: cls, end: end });
   });
 
@@ -1119,13 +1161,21 @@ function render() {
   };
   // Vertices inside the viewport, plus the clipped entry/exit x, in order.
   const xs = [XMIN].concat(env.map(function (p) { return p[0]; }).filter(function (x) { return x > XMIN && x < XMAX; })).concat([XMAX]);
-  let poly = '';
+  let poly = '', pxFirst = null, pxLast = null;
   xs.forEach(function (x) {
     const ky = envKm(x);
     if (ky > YMAX + 1) return;
-    poly += (poly ? ' L' : 'M') + X(x).toFixed(1) + ' ' + Y(Math.min(ky, YMAX)).toFixed(1);
+    const px = X(x);
+    if (pxFirst === null) pxFirst = px;
+    pxLast = px;
+    poly += (poly ? ' L' : 'M') + px.toFixed(1) + ' ' + Y(Math.min(ky, YMAX)).toFixed(1);
   });
-  s += '<path d="' + poly + '" fill="none" stroke="var(--ink)" stroke-width="2" stroke-linejoin="round"/>';
+  // Everything under the envelope is outside the classification: a faint wash
+  // makes the danger zone readable at a glance without shouting.
+  if (poly && pxLast > pxFirst) {
+    s += '<path d="' + poly + ' L' + pxLast.toFixed(1) + ' ' + (MT + PH) + ' L' + pxFirst.toFixed(1) + ' ' + (MT + PH) + ' Z" fill="var(--under)"/>';
+  }
+  s += '<path d="' + poly + '" fill="none" stroke="var(--ink)" stroke-width="2.5" stroke-linejoin="round"/>';
   // Label the steepest still-future leg where it sits, clear of the dot column.
   if (hardest.seg) {
     const a = env[hardest.seg - 1], b = env[hardest.seg];
@@ -1148,7 +1198,7 @@ function render() {
     } else if (!r.gc) {
       s += skull(cx, cy, zoomed ? 14 : 11, 'ink-2');
     } else {
-      s += emojiMark(cx, cy, zoomed ? 15 : 12, GLYPH[hitList[i].cls], hitList[i].cls === 'ahead');
+      s += pictoMark(cx, cy, zoomed ? 15 : 12, hitList[i].cls);
     }
   });
 
@@ -1164,7 +1214,7 @@ function render() {
     if (r.dnf) {
       return '<tr>' + nm + '<td class="num">—</td><td class="num">—</td>' +
         '<td class="num">' + fmtDate(r.elapsed) + '</td><td class="num">—</td>' +
-        '<td class="l"><span class="badge" style="color:var(--behind)">☠ Scratched</span></td>' +
+        '<td class="l"><span class="badge" style="color:var(--behind)">' + skullHTML('behind') + 'Scratched</span></td>' +
         '<td class="l"><span class="badge" style="color:var(--behind)">Official DNF</span></td></tr>';
     }
     const rp = requiredPace(r, state.total), req = rp.pace;
@@ -1174,9 +1224,9 @@ function render() {
       '<td class="num">' + (rp.cp ? rp.cp.name : 'finish') + '</td>' +
       '<td class="num">' + fmtDate(r.elapsed + (state.total - r.km) / r.kmd) + '</td>' +
       '<td class="num">' + r.idle + '%</td>' +
-      '<td class="l"><span class="badge" style="color:var(--' + cls + ')">' + GLYPH[cls] + ' ' + LABEL[cls] + '</span></td>' +
+      '<td class="l"><span class="badge" style="color:var(--' + cls + ')">' + pictoHTML(cls) + LABEL[cls] + '</span></td>' +
       '<td class="l">' + (r.gc ? '<span style="color:var(--muted)">in GC</span>'
-                               : '<span class="badge" style="color:var(--ink)">☠ Missed control</span>') + '</td></tr>';
+                               : '<span class="badge" style="color:var(--ink)">' + skullHTML('ink-2') + 'Missed control</span>') + '</td></tr>';
   }).join('');
 }
 function esc(t) { return t.replace(/&/g, '&amp;').replace(/</g, '&lt;'); }
@@ -1197,12 +1247,12 @@ function highlight(idx, cx, cy) {
       '<dt>Category</dt><dd>' + CATNAME[r.cat] + ' · ' + r.pos + '</dd>' +
       '<dt>Reached</dt><dd>' + kfmt(Math.round(r.km)) + ' km</dd>' +
       '<dt>Scratched</dt><dd>' + fmtDate(r.elapsed) + '</dd></dl>' +
-      '<div class="st" style="color:var(--behind)">☠ Official DNF · abandoned</div>';
+      '<div class="st" style="color:var(--behind)">' + skullHTML('behind') + 'Official DNF · abandoned</div>';
   } else {
     g.innerHTML =
       '<line x1="' + mx.toFixed(1) + '" y1="' + my.toFixed(1) + '" x2="' + X(h.end).toFixed(1) +
       '" y2="' + Y(r.km + r.kmd * (h.end - r.elapsed)).toFixed(1) + '" stroke="var(--' + h.cls + ')" stroke-width="2.5"/>' +
-      (r.gc ? halo + emojiMark(mx, my, 24, GLYPH[h.cls], h.cls === 'ahead')
+      (r.gc ? halo + pictoMark(mx, my, 22, h.cls)
             : halo + skull(mx, my, 24, 'ink-2'));
     const rp = requiredPace(r, state.total), req = rp.pace;
     const m = req > 0 ? (r.kmd / req - 1) * 100 : 100, pf = r.elapsed + (state.total - r.km) / r.kmd;
@@ -1216,9 +1266,9 @@ function highlight(idx, cx, cy) {
       '<dt>Margin</dt><dd>' + (m >= 0 ? '+' : '') + m.toFixed(0) + '%</dd>' +
       '<dt>Stopped</dt><dd>' + r.idle + '%</dd>' +
       '<dt>Est. finish</dt><dd>' + fmtDate(pf) + '</dd></dl>' +
-      '<div class="st" style="color:var(--' + h.cls + ')">' + GLYPH[h.cls] + ' ' + LABEL[h.cls] +
+      '<div class="st" style="color:var(--' + h.cls + ')">' + pictoHTML(h.cls) + LABEL[h.cls] +
       (pf > LIMIT_D ? ' · ' + (pf - LIMIT_D).toFixed(1) + ' days late' : '') + '</div>' +
-      (r.gc ? '' : '<div class="st" style="color:var(--ink-2)">☠ Missed a control · out of GC</div>');
+      (r.gc ? '' : '<div class="st" style="color:var(--ink-2)">' + skullHTML('ink-2') + 'Missed a control · out of GC</div>');
   }
   const b = svg.getBoundingClientRect();
   const px = b.left + (cx / VW) * b.width, py = b.top + (cy / VH) * b.height;
@@ -1331,7 +1381,7 @@ render();
     const rows = strugglers().filter(function (s) { return !q || s.r.name.toLowerCase().indexOf(q) !== -1; });
     listEl.innerHTML = rows.length ? rows.map(function (s, i) {
       return '<button class="wr" data-i="' + i + '">' +
-        '<span class="wr-dot" style="background:var(--' + s.cls + ')"></span>' +
+        pictoHTML(s.cls) +
         '<span class="wr-name">' + esc(s.r.name) + '</span>' +
         (s.handle ? '<span class="wr-ig">@' + esc(s.handle) + '</span>' : '') +
         '<span class="wr-cta">Cheer</span></button>';
