@@ -165,7 +165,7 @@
             letter-spacing: .12em; fill: var(--muted); font-size: 11px; }
   .marklab { font-family: var(--display); font-stretch: 87.5%; text-transform: uppercase;
              letter-spacing: .07em; font-size: 12px; font-weight: 600;
-             stroke: var(--surface); stroke-width: 3.5px; paint-order: stroke fill; }
+             stroke: var(--surface); stroke-width: 4.5px; paint-order: stroke fill; }
   .hint { font-size: 12.5px; color: var(--muted); padding: 4px 2px 8px; }
 
   /* tooltip */
@@ -1025,22 +1025,43 @@ let CUR = { xmax: 24, ymax: 5000, ystep: 1000, xstep: 2 };
 
 function bounds() {
   if (state.zoom === 'full') {
-    return { xmin: 0, xmax: 24, ymax: state.total * 1.07, ystep: 1000, xstep: 2 };
+    return { xmin: 0, xmax: 24, ymin: 0, ymax: state.total * 1.07, ystep: 1000, xstep: 2 };
   }
-  // A three-day window ending well past the field, so the dots sit mid-plot and
-  // the projections still have room to fan out to the right.
-  let maxKm = 0, maxEl = 0;
-  RIDERS.forEach(function (r) { if (r.km > maxKm) maxKm = r.km; if (r.elapsed > maxEl) maxEl = r.elapsed; });
-  const ymax = Math.min(state.total * 1.07, Math.ceil(maxKm * 1.12 / 500) * 500);
+  // A three-day window ending past the field horizontally; vertically a 700 km
+  // band anchored to the bottom of the still-racing field, so the strugglers — the
+  // tail this whole page is about — spread out and read individually. The leaders
+  // sit above the window (clipped); Whole race shows everyone.
+  let maxEl = 0, loKm = Infinity;
+  RIDERS.forEach(function (r) {
+    if (r.elapsed > maxEl) maxEl = r.elapsed;
+    if (!r.dnf && r.km < loKm) loKm = r.km;
+  });
+  const ymin = Math.max(0, Math.floor((loKm - 40) / 50) * 50);
+  const ymax = Math.min(state.total * 1.07, ymin + 700);
   const xmin = Math.max(0, Math.floor((maxEl - 1.3) * 2) / 2);
-  return { xmin: xmin, xmax: xmin + 3, ymax: ymax, ystep: 500, xstep: 0.5 };
+  return { xmin: xmin, xmax: xmin + 3, ymin: ymin, ymax: ymax, ystep: 200, xstep: 0.5 };
+}
+
+// Measure the rendered deadline labels and drop overlapping ones onto lower rows —
+// pixel-accurate packing that holds whatever the font metrics are.
+function layoutDeadlines() {
+  const labels = [].slice.call(svg.querySelectorAll('text.dl'));
+  const rowRight = [], TOP = MT + 12, ROW_H = 15, GAP = 9;
+  labels.forEach(function (el) {
+    let bb; try { bb = el.getBBox(); } catch (e) { return; }
+    const x0 = bb.x, x1 = bb.x + bb.width;
+    let row = 0;
+    while (rowRight[row] !== undefined && rowRight[row] > x0 - GAP) row++;
+    rowRight[row] = x1;
+    el.setAttribute('y', TOP + row * ROW_H);
+  });
 }
 
 function render() {
   CUR = bounds();
-  const XMIN = CUR.xmin, XMAX = CUR.xmax, YMAX = CUR.ymax, zoomed = state.zoom === 'now';
+  const XMIN = CUR.xmin, XMAX = CUR.xmax, YMIN = CUR.ymin, YMAX = CUR.ymax, zoomed = state.zoom === 'now';
   const X = function (d) { return ML + (d - XMIN) / (XMAX - XMIN) * PW; };
-  const Y = function (k) { return MT + (1 - k / YMAX) * PH; };
+  const Y = function (k) { return MT + (1 - (k - YMIN) / (YMAX - YMIN)) * PH; };
   const rows = visible();
 
   // Headline pace = the steepest leg of the deadline envelope that is still
@@ -1076,7 +1097,7 @@ function render() {
   s += '<rect x="0" y="0" width="' + VW + '" height="' + VH + '" fill="var(--surface)"/>';
 
   const gridTop = state.zoom === 'full' ? state.total - 150 : YMAX;
-  for (let k = CUR.ystep; k < gridTop; k += CUR.ystep) {
+  for (let k = Math.ceil((YMIN + 1) / CUR.ystep) * CUR.ystep; k < gridTop; k += CUR.ystep) {
     s += '<line x1="' + ML + '" y1="' + Y(k).toFixed(1) + '" x2="' + (ML + PW) + '" y2="' + Y(k).toFixed(1) +
          '" stroke="var(--grid)" stroke-width="1"/>';
     s += '<text x="' + (ML - 10) + '" y="' + (Y(k) + 4).toFixed(1) + '" text-anchor="end">' + kfmt(k) + '</text>';
@@ -1103,20 +1124,16 @@ function render() {
   const DEADLINES = CHECKPOINTS.map(function (c) {
     return { day: c.day, ms: c.ms, tag: c.name, place: c.place, finish: false };
   }).concat([{ day: LIMIT_D, ms: CUTOFF_MS, tag: 'Finish', place: 'Kalamata', finish: true }]);
-  const rowRight = [];                         // rightmost x used, per label row
+  // Render each label at row 0; a post-render pass (layoutDeadlines) measures the
+  // real text widths and drops overlapping ones onto lower rows, so the packing is
+  // pixel-accurate whatever the font does.
   DEADLINES.forEach(function (c) {
     if (c.day < XMIN || c.day > XMAX) return;
-    const gone = c.ms <= NOW_MS, x = X(c.day), rightSide = x > ML + PW * 0.78;
+    const gone = c.ms <= NOW_MS, x = X(c.day), rightSide = x > ML + PW * 0.68;
     const label = (c.finish ? 'Finish' : c.tag + ' ' + c.place) + ' · ' + (gone ? 'closed' : fmtAbs(c.ms));
-    const w = label.length * 6.3 + 8;
-    const x0 = rightSide ? x - w : x, x1 = rightSide ? x : x + w;
-    let row = 0;
-    while (rowRight[row] !== undefined && rowRight[row] > x0 - 5) row++;
-    rowRight[row] = x1;
-    const ly = MT + 12 + row * 14;
     s += '<line x1="' + x.toFixed(1) + '" y1="' + MT + '" x2="' + x.toFixed(1) + '" y2="' + (MT + PH) +
          '" stroke="var(--rule)" stroke-width="' + (c.finish ? 2 : 1.5) + '"/>';
-    s += '<text class="marklab" x="' + (x + (rightSide ? -7 : 7)).toFixed(1) + '" y="' + ly +
+    s += '<text class="marklab dl" x="' + (x + (rightSide ? -7 : 7)).toFixed(1) + '" y="' + (MT + 12) +
          '" text-anchor="' + (rightSide ? 'end' : 'start') + '" fill="var(--' + (c.finish ? 'behind' : 'ink-2') +
          ')"' + (c.finish ? ' font-weight="700"' : '') + '>' + label + '</text>';
   });
@@ -1131,6 +1148,11 @@ function render() {
          '" stroke="var(--rule)" stroke-width="1.5"/>';
     s += '<text class="marklab" x="' + (ML + 8) + '" y="' + (Y(state.total) + 15).toFixed(1) + '" fill="var(--ink-2)">Kalamata · ' + kfmt(state.total) + ' km</text>';
   }
+
+  // Everything below is clipped to the plot rectangle, so leaders whose marks sit
+  // above the zoomed window don't spill into the ribbon.
+  s += '<clipPath id="pc"><rect x="' + ML + '" y="' + MT + '" width="' + PW + '" height="' + PH + '"/></clipPath>';
+  s += '<g clip-path="url(#pc)">';
 
   // Each rider's line runs from where they are now, y = km + kmd·(x − elapsed),
   // leaving the frame at whichever comes first: the finish, the right edge, or the
@@ -1202,8 +1224,10 @@ function render() {
     }
   });
 
-  s += '<g id="hi"></g>';
+  s += '</g>';                       // close plot clip group
+  s += '<g id="hi" clip-path="url(#pc)"></g>';
   svg.innerHTML = s;
+  layoutDeadlines();
 
   const sorted = rows.slice().sort(function (a, b) { return a.kmd - b.kmd; });
   document.getElementById('tcount').textContent = sorted.length + ' riders in the current selection.';
@@ -1236,9 +1260,9 @@ function highlight(idx, cx, cy) {
   if (!g) return;
   if (idx < 0) { g.innerHTML = ''; tip.classList.remove('on'); return; }
   const h = hitList[idx], r = h.r;
-  const XMIN = CUR.xmin, XMAX = CUR.xmax, YMAX = CUR.ymax;
+  const XMIN = CUR.xmin, XMAX = CUR.xmax, YMIN = CUR.ymin, YMAX = CUR.ymax;
   const X = function (d) { return ML + (d - XMIN) / (XMAX - XMIN) * PW; };
-  const Y = function (k) { return MT + (1 - k / YMAX) * PH; };
+  const Y = function (k) { return MT + (1 - (k - YMIN) / (YMAX - YMIN)) * PH; };
   const mx = X(r.elapsed), my = Y(r.km);
   const halo = '<circle cx="' + mx.toFixed(1) + '" cy="' + my.toFixed(1) + '" r="15" fill="var(--surface)" opacity=".85"/>';
   if (r.dnf) {
@@ -1281,13 +1305,13 @@ function highlight(idx, cx, cy) {
 svg.addEventListener('pointermove', function (e) {
   const b = svg.getBoundingClientRect();
   const vx = (e.clientX - b.left) / b.width * VW, vy = (e.clientY - b.top) / b.height * VH;
-  const XMIN = CUR.xmin, XMAX = CUR.xmax, YMAX = CUR.ymax;
+  const XMIN = CUR.xmin, XMAX = CUR.xmax, YMIN = CUR.ymin, YMAX = CUR.ymax;
   const dx = XMIN + (vx - ML) / PW * (XMAX - XMIN);
   let best = -1, bd = 1e9, bx = 0, by = 0;
   hitList.forEach(function (h, i) {
     const d = Math.max(h.r.elapsed, Math.min(dx, h.end));
     const yk = h.r.km + h.r.kmd * (d - h.r.elapsed);
-    const py = MT + (1 - yk / YMAX) * PH, px = ML + (d - XMIN) / (XMAX - XMIN) * PW;
+    const py = MT + (1 - (yk - YMIN) / (YMAX - YMIN)) * PH, px = ML + (d - XMIN) / (XMAX - XMIN) * PW;
     const dist = Math.hypot(px - vx, py - vy);
     if (dist < bd) { bd = dist; best = i; bx = px; by = py; }
   });
@@ -1302,7 +1326,7 @@ svg.addEventListener('keydown', function (e) {
   if (!hitList.length) return;
   state.sel = (state.sel + (e.key === 'ArrowRight' ? 1 : -1) + hitList.length) % hitList.length;
   const h = hitList[state.sel];
-  highlight(state.sel, ML + (h.r.elapsed - CUR.xmin) / (CUR.xmax - CUR.xmin) * PW, MT + (1 - h.r.km / CUR.ymax) * PH);
+  highlight(state.sel, ML + (h.r.elapsed - CUR.xmin) / (CUR.xmax - CUR.xmin) * PW, MT + (1 - (h.r.km - CUR.ymin) / (CUR.ymax - CUR.ymin)) * PH);
 });
 
 document.getElementById('q').addEventListener('input', function (e) { state.q = e.target.value; state.sel = -1; render(); });
