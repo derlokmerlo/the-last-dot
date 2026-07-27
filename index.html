@@ -490,329 +490,326 @@
 <div class="tip" id="tip" role="status" aria-live="polite"></div>
 
 <script>
-const RAW = `Robin Gemperle;1st;3259.4;488.0;S;22;1
-Max Agut;2nd;3002.6;449.7;S;21;1
-Jonas Verest;3rd;3152.1;472.1;S;19;1
-Nicolas Chatelet;4th;3204.3;480.0;S;23;1
-Jos Koop;5th;3063.6;458.9;S;25;1
-Martin Moritz;6th;3008.1;450.5;S;24;1
-Manuel Rudaz;7th;3060.3;458.4;S;23;1
-Jakub Tomasik;8th;2975.2;445.6;S;24;1
-Robert Müller;9th;2915.0;436.5;S;22;1
-Thomas Boury;10th;2949.0;441.7;S;22;1
-Jocelyn Roth;11th;3024.0;452.8;S;23;1
-Tim De Witte;12th;2922.1;437.6;S;19;1
-Simon Flury;13th;2894.9;433.6;S;23;1
-Guillaume Poinsot;14th;2953.4;442.2;S;25;1
-Omar Di Felice;15th;2953.4;442.3;S;22;1
-Dieuwe Van Bergen en Henegouwen;16th;2890.7;432.9;S;17;1
-Nils Oyen;17th;2848.6;426.7;S;27;1
-Lucas Strittmatter;18th;2819.2;422.3;S;27;1
-Wojciech Wronka;19th;2883.9;431.9;S;20;1
-Pawel Pulawski;20th;2667.3;399.5;S;21;1
-Riccardo Kuhar;21st;2693.2;403.3;S;25;1
-Oliver Glen;22nd;2623.8;393.0;S;24;1
-Sarah Bosslet;23rd;2649.5;396.7;F;22;1
-Peter Kronberger;24th;2697.8;403.9;S;27;1
-Christoph Pernsteiner;25th;2607.6;390.5;S;34;1
-Camille Albisser;26th;2613.0;392.8;F;24;1
-Riccardo Mosconi;27th;2608.7;390.8;S;28;1
-Björn Wirsching;28th;2642.5;395.7;S;27;1
-Lea Hamberger;29th;2652.8;397.2;F;25;1
-Markus Zimmermann;30th;2539.7;380.3;S;28;1
-Mike Fawcett;34th;2560.9;383.5;S;28;1
-Nico Schleippmann;35th;2496.2;373.8;S;33;1
-Josh Ibbett;36th;2382.5;356.7;S;33;1
-Sebi Lehmann;37th;2554.3;382.5;S;29;1
-George Hodgkinson;38th;2502.5;375.5;S;30;1
-Ulf Bannick;39th;2508.9;375.8;S;33;1
-Manuel Feldbaumer;40th;2604.5;390.1;S;28;1
-Stephan Simmermacher;41st;2235.7;334.8;S;29;1
-Wojciech Nogalski;42nd;2491.8;373.1;S;33;1
-Hannah Hiecke;43rd;2092.3;313.3;F;37;1
-Jakub Micorek;44th;2538.5;380.1;S;24;1
-Axel Restrup;45th;2494.9;373.5;S;32;1
-Hélène Fromenty;46th;2413.5;361.4;F;25;1
+const RAW = `Robin Gemperle;1st;3282.5;488.7;S;22;1
+Max Agut;2nd;3026.6;450.8;S;21;1
+Jonas Verest;3rd;3177.2;473.2;S;19;1
+Nicolas Chatelet;4th;3218.6;479.2;S;23;1
+Jos Koop;5th;3090.3;460.3;S;25;1
+Martin Moritz;6th;3033.1;451.6;S;24;1
+Manuel Rudaz;7th;3083.9;459.3;S;23;1
+Jakub Tomasik;8th;2997.3;446.3;S;24;1
+Robert Müller;9th;2938.1;437.5;S;22;1
+Thomas Boury;10th;2965.4;441.6;S;21;1
+Jocelyn Roth;11th;3047.5;453.8;S;23;1
+Tim De Witte;12th;2939.5;437.7;S;19;1
+Simon Flury;13th;2907.6;433.0;S;23;1
+Guillaume Poinsot;14th;2976.2;443.1;S;24;1
+Omar Di Felice;15th;2973.4;442.8;S;22;1
+Dieuwe Van Bergen en Henegouwen;16th;2913.4;433.8;S;17;1
+Nils Oyen;17th;2870.3;427.5;S;27;1
+Lucas Strittmatter;18th;2843.3;423.3;S;27;1
+Wojciech Wronka;19th;2904.8;432.6;S;20;1
+Pawel Pulawski;20th;2688.5;400.3;S;21;1
+Riccardo Kuhar;21st;2710.0;403.4;S;24;1
+Oliver Glen;22nd;2633.6;392.2;S;24;1
+Sarah Bosslet;23rd;2670.1;397.5;F;22;1
+Peter Kronberger;24th;2723.8;405.5;S;27;1
+Christoph Pernsteiner;25th;2631.3;391.8;S;33;1
+Camille Albisser;26th;2639.2;393.0;F;24;1
+Riccardo Mosconi;27th;2612.5;390.8;S;28;1
+Björn Wirsching;28th;2657.9;395.8;S;27;1
+Lea Hamberger;29th;2677.3;398.6;F;25;1
+Markus Zimmermann;30th;2558.4;380.9;S;27;1
+Mike Fawcett;34th;2568.1;382.4;S;28;1
+Nico Schleippmann;35th;2518.7;375.1;S;32;1
+Josh Ibbett;36th;2396.2;356.9;S;33;1
+Sebi Lehmann;37th;2569.3;382.6;S;29;1
+George Hodgkinson;38th;2522.2;375.5;S;30;1
+Ulf Bannick;39th;2508.9;375.6;S;33;1
+Manuel Feldbaumer;40th;2614.5;389.4;S;28;1
+Stephan Simmermacher;41st;2244.0;334.1;S;29;1
+Wojciech Nogalski;42nd;2501.8;372.4;S;33;1
+Hannah Hiecke;43rd;2113.5;314.6;F;37;1
+Jakub Micorek;44th;2545.9;379.1;S;24;1
+Axel Restrup;45th;2516.3;374.6;S;32;1
+Hélène Fromenty;46th;2429.3;361.7;F;24;1
 Anna Carlqvist;47th;2551.2;385.0;F;22;1
-Viggo Vea;48th;2282.1;341.8;S;32;1
-Arthur Jan;49th;2393.5;358.5;S;35;1
-Elise Sauvinet;50th;2290.3;343.0;F;27;1
-Michal Wolff;51st;2280.9;341.6;S;29;1
-Kristian Buljan;52nd;2229.3;333.9;S;35;1
-Henri Do;53rd;2170.5;325.0;S;37;1
-Francesco Vettore;54th;2106.0;315.4;S;44;1
-Aleksander Konieczny;56th;2488.6;372.7;S;27;1
-Joanna Ruminska-Pietrzyk;57th;2279.0;341.3;F;25;1
-Nicole van Batenburg;58th;2451.9;367.2;F;26;1
+Viggo Vea;48th;2287.2;340.6;S;32;1
+Arthur Jan;49th;2416.1;359.8;S;35;1
+Elise Sauvinet;50th;2314.0;344.6;F;27;1
+Michal Wolff;51st;2296.8;342.1;S;29;1
+Kristian Buljan;52nd;2252.9;335.5;S;35;1
+Henri Do;53rd;2173.3;323.7;S;38;1
+Francesco Vettore;54th;2127.8;316.9;S;44;1
+Aleksander Konieczny;56th;2507.3;373.4;S;27;1
+Joanna Ruminska-Pietrzyk;57th;2283.9;340.1;F;25;1
+Nicole van Batenburg;58th;2461.8;366.5;F;26;1
 Valentin Cuenot;59th;2313.9;367.1;S;27;1
-Brice Douet;60th;2596.7;388.8;S;28;1
-Roel Massink;61st;2537.7;380.0;S;25;1
-Rodrigue Lombard;62nd;2381.8;356.6;S;25;1
-Christian Höra;63rd;2342.1;350.7;S;35;1
-Daniel Molino;64th;2479.8;371.4;S;32;1
-Jonas Heyberger;66th;2522.0;377.7;S;28;1
-Mikke Luostarinen;67th;2285.7;342.4;S;28;1
-Juan Pedro Moreno;68th;2393.5;358.4;S;28;1
-Markus Carlos hein;70th;2354.1;352.5;S;26;1
-Luís Manuel Silva Carvalho;71st;2270.5;339.9;S;22;1
-Maximilian Siering;73rd;2595.4;388.6;S;24;1
-Marten Sprecher;74th;2398.1;359.0;S;28;1
-Joep van Luijt;75th;2180.8;326.7;S;40;1
-Maxime Prieur;76th;2534.0;379.4;S;28;1
-Larissa Unsinn;77th;2573.7;385.5;F;24;1
-Adrian Vogel;78th;2266.8;339.5;S;28;1
-Florian Thiessen;79th;2492.5;373.2;S;26;1
-Harald Rinner;80th;2156.7;323.0;S;31;1
-Gergely Bartalos;81st;2266.2;339.4;S;34;1
-Pierre-Yves Robert;82nd;2229.6;334.0;S;32;1
-Jim Visschers;83rd;2177.9;326.2;S;37;1
-Dragomir Titei;84th;2288.2;342.6;S;32;1
-Andreas Herrig;85th;2140.1;320.4;S;34;1
-Sebastian Ritter;86th;2213.5;331.4;S;36;1
-Adrien Charlot;87th;2311.5;346.1;S;34;1
-Hsi Chun Tsai;88th;2278.0;341.1;S;28;1
-Aleksei Konev;89th;2373.0;355.4;S;31;1
-Matthew Spooner;90th;2277.3;340.9;S;33;1
-Thomas Groenewegen;91st;2214.0;331.6;S;30;1
-Lukas Müller;92nd;2203.0;329.9;S;32;1
-Larissa Sauter;93rd;2415.9;361.8;F;22;1
-Carl von Walter;94th;2333.6;349.5;S;28;1
-Franz Nawrocki;95th;2368.4;354.6;S;34;1
-Daniel Schulze Waltrup;96th;2361.2;353.6;S;29;1
-Dan Sharp;97th;2360.4;353.4;S;29;1
-Anja Longyka;98th;1874.4;280.6;F;42;1
-Simon Van Teutem;99th;2147.3;321.6;S;38;1
-Christoph Zabel;100th;2267.5;339.6;S;36;1
-Martin Carlsson;101st;2286.9;342.5;S;32;1
-Jannis Rieb;102nd;2190.4;328.0;S;36;1
-Mark Turnbull;103rd;2121.7;317.7;S;38;1
-Maciej Baranowski;104th;2176.4;325.9;S;38;1
-Martin Zettel;105th;2138.2;320.3;S;32;1
-Fredi Maeder;106th;2256.2;337.9;S;28;1
-Oona Baumann;107th;2173.9;325.5;F;33;1
-Adrien Ponteville;108th;2122.0;317.8;S;35;1
-Gabriel Delattre;109th;2142.0;320.8;S;42;1
-Noah Schmid;110th;2189.2;327.9;S;37;1
-Severin Ehrengruber;111th;2133.5;319.4;S;37;1
-Julian Manrique;112th;2215.4;331.7;S;34;1
-Quirin Taubert;113th;2139.7;321.1;S;35;1
-Yiqun Fu;114th;2096.5;314.0;S;30;1
-Gerald Huber;115th;2172.3;325.7;S;35;1
-Alec Gates;116th;1941.8;290.7;S;44;1
-Roel Hamers;117th;1863.7;280.2;S;44;1
-Robin Skoge;118th;2170.2;325.0;S;34;1
-Bjørn Kåre Amdal;119th;2347.3;351.6;S;37;1
-Christian Chesta;120th;2141.2;320.7;S;38;1
-Sarah Cinquini;121st;2128.8;319.0;F;35;1
-Bernhard Kämmerer;122nd;2226.6;333.5;S;35;1
-Markus Taubner;123rd;2095.3;313.8;S;34;1
-Christian Pany;124th;2197.7;329.1;S;31;1
-Jack Wright;125th;2013.7;301.5;F;38;1
-Clayton Anderson;126th;2199.6;329.4;S;32;1
-Emiliano Baravalle;127th;2160.7;323.6;S;40;1
-Alexander Eder;128th;2221.5;332.7;S;34;1
-Lisa Schrader;129th;2198.5;329.3;F;33;1
-Alexander Stramma;130th;2217.1;332.0;S;31;1
-Valentin Reichelt;131st;2202.6;329.9;S;38;1
-Matthew Falconer;133rd;2163.8;324.1;S;38;1
-Bart Pombreu;134th;2083.4;311.9;S;40;1
+Brice Douet;60th;2617.8;389.8;S;28;1
+Roel Massink;61st;2556.6;380.6;S;25;1
+Rodrigue Lombard;62nd;2398.6;357.1;S;25;1
+Christian Höra;63rd;2363.0;351.8;S;34;1
+Daniel Molino;64th;2499.5;372.3;S;32;1
+Jonas Heyberger;66th;2543.0;378.7;S;28;1
+Mikke Luostarinen;67th;2297.0;342.1;S;28;1
+Juan Pedro Moreno;68th;2413.4;359.3;S;28;1
+Markus Carlos hein;70th;2375.3;353.6;S;26;1
+Luís Manuel Silva Carvalho;71st;2275.9;338.8;S;22;1
+Maximilian Siering;73rd;2611.1;388.8;S;24;1
+Marten Sprecher;74th;2421.7;360.5;S;28;1
+Joep van Luijt;75th;2196.2;327.0;S;39;1
+Maxime Prieur;76th;2552.0;379.9;S;28;1
+Larissa Unsinn;77th;2590.1;385.8;F;24;1
+Adrian Vogel;78th;2280.5;339.6;S;28;1
+Florian Thiessen;79th;2504.3;372.8;S;26;1
+Harald Rinner;80th;2173.9;323.7;S;31;1
+Gergely Bartalos;81st;2275.3;338.8;S;34;1
+Pierre-Yves Robert;82nd;2234.9;332.7;S;32;1
+Jim Visschers;83rd;2182.2;324.9;S;37;1
+Dragomir Titei;84th;2294.0;341.7;S;32;1
+Andreas Herrig;85th;2158.4;321.3;S;34;1
+Sebastian Ritter;86th;2234.1;332.6;S;36;1
+Adrien Charlot;87th;2323.6;346.5;S;34;1
+Hsi Chun Tsai;88th;2283.9;340.1;S;28;1
+Aleksei Konev;89th;2378.7;354.3;S;31;1
+Matthew Spooner;90th;2281.9;339.7;S;33;1
+Thomas Groenewegen;91st;2225.8;331.4;S;30;1
+Lukas Müller;92nd;2214.8;329.7;S;32;1
+Larissa Sauter;93rd;2429.3;361.8;F;22;1
+Carl von Walter;94th;2351.6;350.2;S;28;1
+Franz Nawrocki;95th;2378.3;354.1;S;34;1
+Daniel Schulze Waltrup;96th;2365.5;352.2;S;29;1
+Dan Sharp;97th;2365.7;352.4;S;29;1
+Anja Longyka;98th;1885.3;280.7;F;42;1
+Simon Van Teutem;99th;2167.0;322.7;S;38;1
+Christoph Zabel;100th;2279.5;339.5;S;36;1
+Martin Carlsson;101st;2291.9;341.5;S;32;1
+Jannis Rieb;102nd;2199.3;327.4;S;36;1
+Mark Turnbull;103rd;2144.8;319.3;S;37;1
+Maciej Baranowski;104th;2190.9;326.2;S;38;1
+Martin Zettel;105th;2161.1;321.9;S;32;1
+Fredi Maeder;106th;2262.6;337.0;S;28;1
+Oona Baumann;107th;2174.4;325.1;F;33;1
+Adrien Ponteville;108th;2138.5;318.4;S;35;1
+Gabriel Delattre;109th;2164.2;322.3;S;41;1
+Noah Schmid;110th;2207.5;328.7;S;37;1
+Severin Ehrengruber;111th;2155.7;320.9;S;37;1
+Julian Manrique;112th;2236.6;333.0;S;33;1
+Quirin Taubert;113th;2158.6;321.5;S;35;1
+Yiqun Fu;114th;2116.3;315.2;S;30;1
+Gerald Huber;115th;2185.9;325.4;S;35;1
+Alec Gates;116th;1966.9;292.8;S;44;1
+Roel Hamers;117th;1870.5;278.5;S;45;1
+Robin Skoge;118th;2188.9;326.0;S;34;1
+Bjørn Kåre Amdal;119th;2398.3;357.3;S;37;1
+Christian Chesta;120th;2161.3;321.7;S;38;1
+Sarah Cinquini;121st;2135.7;318.0;F;35;1
+Bernhard Kämmerer;122nd;2245.3;334.4;S;34;1
+Markus Taubner;123rd;2116.4;315.1;S;33;1
+Christian Pany;124th;2212.2;329.3;S;31;1
+Jack Wright;125th;2019.0;301.7;F;38;1
+Clayton Anderson;126th;2214.4;329.7;S;32;1
+Emiliano Baravalle;127th;2185.4;325.4;S;39;1
+Alexander Eder;128th;2231.5;332.3;S;34;1
+Lisa Schrader;129th;2215.8;330.0;F;33;1
+Alexander Stramma;130th;2226.7;331.6;S;31;1
+Valentin Reichelt;131st;2219.9;330.6;S;38;1
+Matthew Falconer;133rd;2184.0;325.3;S;37;1
+Bart Pombreu;134th;2105.1;313.4;S;39;1
 Michael Ærenlund Buch;135th;2137.8;326.2;S;38;1
-Maximilian Pahl;136th;2197.2;329.1;S;34;1
+Maximilian Pahl;136th;2208.9;328.8;S;33;1
 Philip Renders;137th;1751.7;263.5;S;44;1
-Niel Dunnage;138th;2020.1;302.5;S;40;1
-Byron Buck;139th;2179.0;326.3;S;37;1
-Nicolas Müller;140th;2135.9;319.9;S;36;1
-Tomasz Kuś;141st;2192.8;328.3;S;35;1
+Niel Dunnage;138th;2023.7;301.4;S;40;1
+Byron Buck;139th;2199.1;327.5;S;36;1
+Nicolas Müller;140th;2153.2;320.8;S;36;1
+Tomasz Kuś;141st;2210.3;329.1;S;34;1
 Sam Wilson;143rd;1663.6;257.7;S;45;1
-Katharina Wirth;144th;2226.6;333.4;F;29;1
-Lars Olausson;147th;1895.5;283.8;S;43;1
-Florent De Boisvilliers;148th;2218.1;332.2;S;33;1
-Alexander Stojkovic;149th;2147.7;321.6;S;35;1
-Malte Hager;150th;1870.3;280.1;S;42;1
-James Auburn;151st;2054.9;307.7;S;41;1
-Grzegorz Oszast;153rd;2235.7;334.8;S;31;1
-Alexander Kuehn;155th;2105.6;315.2;S;30;1
-Josh Roberts;156th;2053.8;307.6;S;37;1
-Adrian Lai;157th;1968.8;294.8;S;34;1
-Mikko Mäkipää;158th;2059.0;308.4;S;33;1
-Robbie Jebb;160th;2107.3;315.5;S;29;1
-Seth Kennard;161st;2125.7;318.3;S;32;1
-Peter Geldhof;163rd;2093.1;313.4;S;38;1
-Michael Cannon;165th;1789.0;267.9;S;40;1
-Jean-François Badias;166th;1968.1;294.8;S;32;1
-Pierre Beck;167th;2197.8;329.2;S;35;1
-Nora Battermann;168th;2023.8;303.0;F;36;1
-Roland Salowsky;169th;1801.5;269.8;S;40;1
-Arnold Graef;170th;1904.9;285.4;S;37;1
-Niklas Wich;171st;2271.6;340.2;S;35;1
-Jens Ritter;172nd;1935.8;289.8;S;38;1
-Mudit Kohli;174th;1971.5;295.3;S;33;1
+Katharina Wirth;144th;2235.7;333.0;F;29;1
+Lars Olausson;147th;1915.0;285.3;S;43;1
+Florent De Boisvilliers;148th;2241.1;333.8;S;33;1
+Alexander Stojkovic;149th;2171.8;323.4;S;35;1
+Malte Hager;150th;1893.3;281.9;S;42;1
+James Auburn;151st;2078.3;309.4;S;41;1
+Grzegorz Oszast;153rd;2246.4;334.4;S;31;1
+Alexander Kuehn;155th;2125.0;316.3;S;30;1
+Josh Roberts;156th;2073.5;308.8;S;37;1
+Adrian Lai;157th;1979.8;295.4;S;34;1
+Mikko Mäkipää;158th;2081.3;310.0;S;33;1
+Robbie Jebb;160th;2125.7;316.5;S;29;1
+Seth Kennard;161st;2146.4;319.6;S;32;1
+Peter Geldhof;163rd;2108.2;314.0;S;38;1
+Michael Cannon;165th;1807.3;269.1;S;39;1
+Jean-François Badias;166th;1985.6;295.7;S;31;1
+Pierre Beck;167th;2212.8;329.6;S;34;1
+Nora Battermann;168th;2036.8;303.2;F;36;1
+Roland Salowsky;169th;1826.4;271.9;S;40;1
+Arnold Graef;170th;1905.1;283.7;S;37;1
+Niklas Wich;171st;2290.3;341.1;S;35;1
+Jens Ritter;172nd;1947.2;290.4;S;38;1
+Mudit Kohli;174th;1994.9;297.1;S;33;1
 Pierre Picard;175th;1652.8;252.5;S;48;1
-Frank Gussenstätter;176th;1877.2;281.3;S;39;1
-Lukas Stiller;177th;1744.2;261.2;S;47;1
-Thomas Achtner;178th;1790.5;268.1;S;39;1
-Mohamed Jawhara;179th;1947.1;291.7;S;37;1
-Erick Saudubray;180th;1918.6;287.9;S;36;1
-Jorn Baan Hofman;181st;2085.6;312.4;S;36;1
-Oliver Neumann;182nd;1950.3;292.1;S;35;1
-Chun man Lau;183rd;2002.2;299.9;S;36;1
-Jacob Fahrenkrug;184th;1885.8;282.3;S;40;1
-Aneta Lamik;185th;1876.0;280.9;F;33;1
-Floris Bakker;186th;1721.7;257.9;S;48;1
-Falk Döring;187th;2039.0;305.3;S;39;1
-Gerald Rumpf;188th;2117.8;317.1;S;34;1
-Rainer Huelsse;189th;2046.5;306.4;S;39;1
-Nathan Offord;190th;1741.3;260.8;S;42;1
-Thilo Kutzer;191st;1920.9;287.7;S;38;1
-Tomáš Žižlavský;192nd;1919.2;287.4;S;37;1
-Noah Boe-Whitehorn;193rd;1813.5;271.6;S;44;1
-Robert Tremblay;194th;1884.1;282.1;S;46;1
-David Lacey;196th;1905.1;285.4;S;40;1
-Niko Dangel;197th;1970.7;295.1;S;35;1
-Maris Goldmanis;198th;1976.4;295.9;S;37;1
-Filip Bullens;199th;1803.8;270.1;S;40;1
-Tom Dockal;200th;1971.1;295.2;S;34;1
-Paul Williams;202nd;2117.2;317.1;S;35;1
-Dan Jones;203rd;1821.3;272.9;S;39;1
-Bambang Anggoro Jati;204th;1986.0;297.4;S;28;1
-Cornelis Nicolaas Leek;205th;1831.6;274.2;S;46;1
-Knut Kvaran;206th;1890.0;283.0;S;43;1
-Till Moosberger;207th;2087.0;314.7;S;36;1
-Luca Bessems;209th;1775.8;266.0;F;40;1
-Hugo Manson;210th;1805.4;270.4;S;43;1
-Bart Noëth;213th;1511.1;226.2;S;48;1
+Frank Gussenstätter;176th;1893.1;282.0;S;39;1
+Lukas Stiller;177th;1763.8;262.6;S;47;1
+Thomas Achtner;178th;1808.2;269.2;S;39;1
+Mohamed Jawhara;179th;1969.5;293.3;S;37;1
+Erick Saudubray;180th;1926.0;286.8;S;36;1
+Jorn Baan Hofman;181st;2107.2;313.8;S;36;1
+Oliver Neumann;182nd;1970.0;293.4;S;35;1
+Chun man Lau;183rd;2023.3;301.3;S;36;1
+Jacob Fahrenkrug;184th;1902.5;283.2;S;40;1
+Aneta Lamik;185th;1898.4;282.6;F;33;1
+Floris Bakker;186th;1746.2;260.0;S;47;1
+Falk Döring;187th;2054.4;306.2;S;39;1
+Gerald Rumpf;188th;2133.2;318.1;S;34;1
+Rainer Huelsse;189th;2072.0;308.5;S;38;1
+Nathan Offord;190th;1755.5;261.4;S;42;1
+Thilo Kutzer;191st;1924.5;286.6;S;38;1
+Tomáš Žižlavský;192nd;1937.1;288.4;S;37;1
+Noah Boe-Whitehorn;193rd;1829.4;272.5;S;44;1
+Robert Tremblay;194th;1891.8;281.7;S;46;1
+David Lacey;196th;1918.2;285.6;S;40;1
+Niko Dangel;197th;1987.4;295.9;S;35;1
+Maris Goldmanis;198th;1993.5;296.8;S;37;1
+Filip Bullens;199th;1819.0;270.9;S;40;1
+Tom Dockal;200th;1985.4;295.9;S;33;1
+Paul Williams;202nd;2132.5;317.6;S;35;1
+Dan Jones;203rd;1839.7;273.9;S;39;1
+Bambang Anggoro Jati;204th;2006.8;298.8;S;28;1
+Cornelis Nicolaas Leek;205th;1850.1;275.4;S;45;1
+Knut Kvaran;206th;1911.4;284.6;S;43;1
+Till Moosberger;207th;2090.1;311.3;S;36;1
+Luca Bessems;209th;1794.2;267.2;F;39;1
+Hugo Manson;210th;1819.9;270.9;S;43;1
+Bart Noëth;213th;1529.9;227.8;S;48;1
 James Soteriou;214th;1680.3;259.9;S;41;1
 Cody Hughes;215th;1705.9;264.0;S;41;1
-Christo Dingozov;216th;2136.5;319.9;S;32;1
-Jean-paul Sachet;217th;1869.5;279.9;S;36;1
-David Tribe;218th;1764.4;264.2;S;36;1
-Valerio Cecchini;219th;1896.7;284.1;S;31;1
+Christo Dingozov;216th;2153.2;320.6;S;32;1
+Jean-paul Sachet;217th;1891.3;281.6;S;36;1
+David Tribe;218th;1787.0;266.1;S;35;1
+Valerio Cecchini;219th;1911.0;284.6;S;31;1
 Darron Burns;221st;1377.8;232.1;S;42;1
-Gawan Berentelg;224th;1944.1;291.2;S;30;1
+Gawan Berentelg;224th;1961.9;292.2;S;30;1
 Koen Heselmans;225th;1688.7;293.2;S;29;1
-Daniel Tulla;226th;1742.5;269.7;S;33;1
-Emily Maille;227th;1866.7;279.5;F;32;1
-Lucio Buergisser;229th;1743.9;261.2;S;45;1
-Stuart Featherstone;230th;1899.8;284.4;S;36;1
-Simon Heppell;231st;1892.3;283.3;S;36;1
-Mike Watson;232nd;1757.2;263.2;S;35;1
-Sebastian Kerschbaumer;233rd;1769.8;265.1;S;38;1
+Emily Maille;227th;1889.2;281.3;F;32;1
+Lucio Buergisser;229th;1758.8;261.9;S;45;1
+Stuart Featherstone;230th;1908.8;284.2;S;36;1
+Simon Heppell;231st;1909.9;284.3;S;36;1
+Mike Watson;232nd;1772.0;263.9;S;35;1
+Sebastian Kerschbaumer;233rd;1789.5;266.5;S;38;1
 Alexander Latham-boal;234th;1721.1;266.4;S;40;1
 Christian Gfeller;235th;1668.4;258.3;S;34;1
-Kenneth Lamont;236th;1855.2;277.9;S;36;1
-Nod Nelson;237th;1976.4;296.4;S;34;1
-Xingjian (Tom) Zhai;238th;1523.9;228.2;S;48;1
-Tom Bryan;239th;1913.7;286.7;S;30;1
-Samuel Hussain;240th;1752.8;262.4;S;39;1
-Cesare Pedrini;241st;1866.6;279.6;S;28;1
-Eric Banh;242nd;1856.0;278.0;S;32;1
+Kenneth Lamont;236th;1868.6;278.2;S;36;1
+Nod Nelson;237th;1994.8;297.1;S;34;1
+Xingjian (Tom) Zhai;238th;1540.6;229.3;S;48;1
+Tom Bryan;239th;1924.7;286.7;S;31;1
+Samuel Hussain;240th;1773.3;264.0;S;38;1
+Cesare Pedrini;241st;1877.9;279.6;S;28;1
+Eric Banh;242nd;1874.9;279.2;S;32;1
 Michael Grobe;243rd;1671.2;252.8;S;38;1
 Maksym Matvieiev;244th;1708.7;261.6;S;33;1
-Nicole Farrier;245th;1737.8;260.2;F;35;1
+Nicole Farrier;245th;1746.8;260.1;F;35;1
 Martin Lau;246th;1629.6;252.1;S;34;1
-Erhard Wälchli;247th;1888.3;282.9;S;36;1
-Jesko von Werthern;249th;2074.1;310.5;S;34;1
-Tobias Geißler;250th;1765.2;264.3;S;41;1
+Erhard Wälchli;247th;1902.5;283.2;S;36;1
+Jesko von Werthern;249th;2082.3;310.0;S;34;1
+Tobias Geißler;250th;1784.3;265.7;S;41;1
 Stev Krembs;252nd;1743.0;268.3;S;33;1
-Stephen Dummett;253rd;1620.8;242.7;S;39;1
-Lili Delannoy;254th;1722.2;262.2;F;33;1
-Erik Olsson;255th;1451.7;217.4;S;36;1
-Boris Krutov;257th;1969.4;295.0;S;38;1
+Stephen Dummett;253rd;1624.0;242.3;S;39;1
+Lili Delannoy;254th;1725.5;257.1;F;34;1
+Erik Olsson;255th;1459.2;217.7;S;36;1
+Boris Krutov;257th;1975.7;294.1;S;38;1
 Thomas Chateau;258th;1702.6;263.5;S;30;1
-Alain Rodriguez;259th;1665.1;249.4;S;47;1
-Christian Romero;260th;1777.1;266.1;S;49;1
-Ramona Troxler;261st;1813.7;271.6;F;37;1
+Alain Rodriguez;259th;1666.4;248.1;S;47;1
+Christian Romero;260th;1799.7;268.0;S;49;1
+Ramona Troxler;261st;1828.4;272.2;F;37;1
 Hanif Meeran;262nd;1724.4;266.9;S;38;1
 Hauke Kottek;263rd;1848.9;287.8;S;41;1
 Frédéric Rudant;266th;1744.9;270.3;S;32;1
-Russell Cairns;267th;1591.1;238.3;S;35;1
-Sofia Passaretti;268th;1343.7;201.7;F;52;1
-Dennis Wolckenhauer;269th;1901.7;284.9;S;40;1
-Artem Soldatkin;270th;1730.9;259.2;S;33;1
+Russell Cairns;267th;1594.1;237.3;S;35;1
+Sofia Passaretti;268th;1348.7;201.0;F;52;1
+Dennis Wolckenhauer;269th;1925.1;286.7;S;40;1
+Artem Soldatkin;270th;1743.1;259.5;S;33;1
 Sarah Hübner;271st;1780.9;266.9;F;41;1
-Marc Förschler;272nd;1908.2;285.7;S;34;1
-Patrick O'connor;273rd;1504.2;225.3;S;41;1
-Sönke Kreft;274th;1813.0;271.4;S;33;1
-Manuel Kaufer;276th;1766.7;264.6;S;42;1
-Susi Pariasek;277th;1789.0;267.9;F;36;1
-Fabian Graber;278th;1419.4;212.6;S;48;1
-Fritjof Schirmer;279th;1835.1;274.9;S;37;1
-Gabi Winck;281st;1795.3;268.8;F;36;1
+Marc Förschler;272nd;1925.2;286.7;S;34;1
+Patrick O'connor;273rd;1517.5;226.0;S;40;1
+Sönke Kreft;274th;1829.5;272.4;S;33;1
+Manuel Kaufer;276th;1789.1;266.4;S;42;1
+Susi Pariasek;277th;1801.6;268.3;F;36;1
+Fabian Graber;278th;1443.4;214.9;S;48;1
+Fritjof Schirmer;279th;1853.5;276.0;S;37;1
+Gabi Winck;281st;1803.6;268.5;F;36;1
 Tim Lamb;282nd;1630.3;270.1;S;35;1
-Ian Budden;283rd;1309.9;222.5;S;48;1
-Peter Corkill;286th;1896.2;284.0;S;39;1
-Zuzanna Bogucka;287th;1508.3;225.9;F;43;1
-Andrew Speers;288th;1743.6;261.1;S;41;1
-Greg Fong;289th;1651.6;247.4;S;41;1
-Hans Markus Broja;291st;1463.6;219.2;S;40;1
-Tim Hunt;292nd;1825.1;273.3;S;37;1
+Peter Corkill;286th;1920.2;285.9;S;39;1
+Zuzanna Bogucka;287th;1528.4;227.6;F;43;1
+Andrew Speers;288th;1767.0;263.1;S;40;1
+Greg Fong;289th;1665.6;248.1;S;41;1
+Hans Markus Broja;291st;1475.1;219.6;S;40;1
+Tim Hunt;292nd;1843.3;274.4;S;37;1
 Kristin Lome;293rd;1618.0;247.5;F;43;1
 Harvey Bates;294th;1214.6;197.8;S;51;1
 Christoph Adrian Schneider;295th;1614.5;246.4;S;47;1
-Michael Welker;296th;1461.0;218.8;S;47;1
+Michael Welker;296th;1482.0;220.7;S;47;1
 Henry White;297th;1688.3;261.7;S;38;1
-Eric Lamboley;298th;1257.6;221.8;S;52;1
+Eric Lamboley;298th;1438.3;214.2;S;53;1
 Lissa Breugelmans;300th;1473.4;220.8;F;43;1
-Hank Beerstecher;301st;1394.6;208.9;S;50;1
-Philippe Villepontoux;302nd;1514.6;226.9;S;40;1
-Jürgen Ress;303rd;1067.1;159.8;S;56;0
-Olli Büttel;304th;1389.1;208.0;S;51;0
-Ro Alegre;305th;1508.4;225.9;S;40;0
+Hank Beerstecher;301st;1403.8;209.6;S;50;1
+Philippe Villepontoux;302nd;1524.7;227.0;S;40;1
+Jürgen Ress;303rd;1079.0;160.6;S;56;0
+Olli Büttel;304th;1409.7;209.9;S;51;0
+Ro Alegre;305th;1520.8;226.4;S;40;0
 Baptiste Estela;306th;1413.0;218.7;S;43;0
-Sarah Steels;307th;1482.4;222.0;F;45;0
-Thibault Sabatier;308th;1297.0;194.2;S;52;0
-Andreas Wittkemper;309th;1509.8;226.1;S;35;0
-Mateusz Andrulewicz;310th;1537.5;230.3;S;42;0
-Conor O'Sullivan;313th;1244.6;186.4;S;50;0
-Erik Arentz-Hansen;314th;1283.2;192.1;S;50;0
-Grinshina Kartik;315th;1204.2;180.4;F;42;0
-Rumen Vachev;316th;1278.6;191.5;S;47;0
-Dirk Hermans;318th;1208.0;181.8;S;58;0
-Robert Coy;320th;1401.4;209.8;S;48;0
-Thomas Weber;321st;1599.3;239.5;S;41;0
-Karin Eder;322nd;1329.2;199.1;F;44;0
-George Surjopurnomo;323rd;1311.4;196.4;S;38;0
-Mike Passmann;324th;1078.8;161.7;S;49;0
-Douglas Migden;325th;1194.7;179.3;S;44;0
-Erekle Bagashvili;326th;1129.0;169.0;S;54;0
-Mex Wieshofer;327th;1332.5;199.6;S;41;0
-Ronja Derr;328th;1155.0;173.1;F;62;0
-Aaron Poll;329th;1057.0;158.3;S;57;0
-Juliette Day;330th;1117.0;167.3;F;56;0
-Carsten Dreyer;331st;1192.5;178.5;S;60;0
-Bryn Thomas;332nd;877.5;131.4;F;60;0
-Luis Cardoso;333rd;996.8;149.3;S;55;0
-Ate van Steenbergen;334th;933.8;141.4;S;52;0
-Rafael Martinez Gonzalez;336th;937.6;140.4;S;55;0
-Jp De Groot;337th;980.3;147.3;S;65;0
+Sarah Steels;307th;1506.2;224.3;F;45;0
+Thibault Sabatier;308th;1297.4;193.3;S;53;0
+Andreas Wittkemper;309th;1517.5;226.5;S;35;0
+Mateusz Andrulewicz;310th;1541.7;230.4;S;42;0
+Conor O'Sullivan;313th;1262.8;188.1;S;50;0
+Erik Arentz-Hansen;314th;1300.8;193.7;S;50;0
+Grinshina Kartik;315th;1204.9;179.5;F;42;0
+Rumen Vachev;316th;1293.7;192.7;S;47;0
+Robert Coy;320th;1419.4;211.3;S;48;0
+Thomas Weber;321st;1617.5;240.9;S;41;0
+Karin Eder;322nd;1342.8;199.9;F;44;0
+George Surjopurnomo;323rd;1314.0;195.7;S;38;0
+Mike Passmann;324th;1092.9;162.8;S;48;0
+Douglas Migden;325th;1203.1;179.2;S;44;0
+Erekle Bagashvili;326th;1138.4;169.7;S;54;0
+Mex Wieshofer;327th;1345.3;200.5;S;41;0
+Ronja Derr;328th;1173.3;174.8;F;62;0
+Aaron Poll;329th;1076.9;160.4;S;56;0
+Juliette Day;330th;1125.1;167.8;F;56;0
+Carsten Dreyer;331st;1207.0;179.7;S;60;0
+Bryn Thomas;332nd;888.1;132.3;F;59;0
+Luis Cardoso;333rd;1013.6;150.9;S;55;0
+Ate van Steenbergen;334th;934.0;139.1;S;53;0
+Rafael Martinez Gonzalez;336th;954.3;142.1;S;55;0
+Jp De Groot;337th;990.3;147.5;S;65;0
 Mariusz Kolodziej;338th;1696.1;262.8;S;38;0
-Maris Brugis;339th;1772.7;265.4;S;39;0
-Satomi Yamada;340th;532.1;79.7;F;66;0
-Thomas Martraire;341st;1949.2;291.9;S;33;0
-Rémi Mejean;3rd;2472.1;370.3;P;34;1
-Marguerite Mulhaus;4th;2498.5;374.3;P;33;1
-Christian Dupraz;5th;2425.3;363.2;P;29;1
-Dina Byland;6th;2416.4;361.8;P;29;1
-Martin Reichert;7th;2225.8;333.4;P;36;1
-Melanie Müller-reichert;8th;2335.3;349.8;P;36;1
-Damian Ludlow;9th;2037.9;305.1;P;36;1
-Paul Jennings;10th;2031.4;304.2;P;36;1
-Bartek Was;11th;2090.2;313.0;P;33;1
-Wojtek Was;12th;2094.7;313.8;P;33;1
-Stéphane David;13th;1949.4;291.9;P;36;1
-Carl Carini;14th;1948.6;291.8;P;36;1
-Andreas Steinke;15th;1734.4;259.8;P;47;1
-Christel Vieth;16th;1717.7;257.3;P;42;1
-Bastien Sentubery;17th;1688.5;252.9;P;39;1
-Mylene Vicente;18th;1737.7;260.2;P;39;1
-Jan Bähler;21st;1778.4;266.3;P;37;1
-Mirjam Bonfadelli;22nd;1735.6;259.9;P;36;1
-Richard Parry;23rd;1768.0;264.8;P;40;1
-Sarah Burns;24th;1766.8;264.6;P;40;1
-Michael Hunziker;25th;1486.4;222.6;P;42;1
-Björn Frey;26th;1504.7;225.3;P;42;1
-Luisa Nichelson;27th;1249.3;187.1;P;57;0
-Andrea Nichelson;28th;1255.8;188.1;P;56;0
+Maris Brugis;339th;1795.3;267.3;S;39;0
+Satomi Yamada;340th;536.5;79.9;F;66;0
+Thomas Martraire;341st;1964.7;292.5;S;33;0
+Rémi Mejean;3rd;2488.6;370.6;P;34;1
+Marguerite Mulhaus;4th;2516.8;374.7;P;33;1
+Christian Dupraz;5th;2440.7;363.4;P;29;1
+Dina Byland;6th;2431.6;362.1;P;29;1
+Martin Reichert;7th;2242.6;334.0;P;36;1
+Melanie Müller-reichert;8th;2352.3;350.3;P;35;1
+Damian Ludlow;9th;2060.6;306.8;P;36;1
+Paul Jennings;10th;2053.8;305.8;P;36;1
+Bartek Was;11th;2106.2;313.6;P;33;1
+Wojtek Was;12th;2105.8;313.5;P;33;1
+Stéphane David;13th;1962.8;292.7;P;36;1
+Carl Carini;14th;1962.0;292.3;P;36;1
+Andreas Steinke;15th;1750.8;261.0;P;47;1
+Christel Vieth;16th;1734.4;258.7;P;42;1
+Bastien Sentubery;17th;1702.5;253.6;P;38;1
+Mylene Vicente;18th;1752.8;260.9;P;39;1
+Jan Bähler;21st;1798.0;267.7;P;37;1
+Mirjam Bonfadelli;22nd;1755.8;261.4;P;36;1
+Richard Parry;23rd;1780.2;265.4;P;40;1
+Sarah Burns;24th;1778.6;265.3;P;40;1
+Michael Hunziker;25th;1493.7;222.4;P;42;1
+Björn Frey;26th;1510.6;225.0;P;42;1
+Luisa Nichelson;27th;1254.0;186.8;P;57;0
+Andrea Nichelson;28th;1262.0;187.9;P;56;0
 Christoph Strasser;31st;1880.2;503.0;S;0;D
 Philip Tellen;32nd;1321.0;354.9;S;0;D
 Laurens Van Gucht;33rd;2253.8;472.5;S;0;D
@@ -838,6 +835,7 @@ Isaac Kuehnle-Nelson;212th;1176.7;247.0;S;0;D
 Carys Brimble;220th;1392.3;252.1;F;0;D
 David Sealey;222nd;739.2;252.3;S;0;D
 Armin Seitz;223rd;1357.2;286.9;S;0;D
+Daniel Tulla;226th;1742.5;269.7;S;0;D
 Maximilian Droste;228th;1607.3;286.2;S;0;D
 Paul Rollings;248th;1106.8;232.3;S;0;D
 Bjorn Menze;251st;1381.1;241.0;S;0;D
@@ -846,6 +844,7 @@ Max Kraus;264th;1100.5;275.9;S;0;D
 Rene Wach;265th;1302.5;285.2;S;0;D
 Amelia Linnett;275th;1306.6;266.0;F;0;D
 Stephan Haß;280th;756.5;207.9;S;0;D
+Ian Budden;283rd;1309.9;222.5;S;0;D
 Karl Björklund;284th;1312.1;269.0;S;0;D
 Matthew Wright;285th;1325.5;278.4;S;0;D
 Sebastian Van den bergen;290th;744.3;240.2;S;0;D
@@ -853,6 +852,7 @@ Christian Trenkle;299th;1125.7;199.2;S;0;D
 Mark Clements;311th;705.7;235.1;S;0;D
 Peter Magill;312th;1174.4;223.1;S;0;D
 Poh Huat Tan;317th;775.4;195.3;S;0;D
+Dirk Hermans;318th;1208.0;181.8;S;0;D
 Albert Coigné;319th;746.6;217.1;S;0;D
 Ben Strause;335th;716.7;148.5;S;0;D
 Christopher Rißmann;342nd;411.2;404.1;S;0;D
@@ -895,7 +895,7 @@ function NOW_D() { return (NOW_MS - START_MS) / 864e5; }
 const SUPA_URL = 'https://ilslkaslmqcylmqhksol.supabase.co';
 const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlsc2xrYXNsbXFjeWxtcWhrc29sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ3OTY4NzQsImV4cCI6MjEwMDM3Mjg3NH0.o441SkmcKpRrq6rouBpFLpaymbnYlfJFYxQhRe34QKE';
 const HANDLES = {"Robin Gemperle":"robingemperle","Max Agut":"le_max__","Nicolas Chatelet":"nicolas.chatelet","Christoph Strasser":"straps_377","Robert Müller":"radbert_m","Martin Moritz":"_martin.mo","Jonas Verest":"jonas_vst","Jakub Tomasik":"jakub_tomasik_ultracycling","Wojciech Wronka":"wotowro","Pawel Pulawski":"pikopulawski","Omar Di Felice":"omardifelice","Riccardo Mosconi":"mosconi_riccardo","Manuel Rudaz":"manurudaz","Nils Oyen":"nils.1616","Laurens Van Gucht":"laurensvangucht","Guillaume Poinsot":"guillaume.poinsot","Lucas Strittmatter":"lucas_strittmatter","Riccardo Kuhar":"rikicro","Jos Koop":"koopjos","Nico Schleippmann":"Curbelix","Josh Ibbett":"joshibbett","Sebi Lehmann":"sebi_lehm","George Hodgkinson":"25hodgkinson","Markus Zimmermann":"m4rku5.z1mm3rm4nn","Ulf Bannick":"ulf.ba","Manuel Feldbaumer":"manifeldbaumer","Oliver Glen":"o.llie.ollie","Camille Albisser":"camillealbi","Sarah Bosslet":"sarahbosslet","Hannah Hiecke":"hannah_hiecke","Jakub Micorek":"jakub.micorek","Hélène Fromenty":"hfrome","Anna Carlqvist":"anna_carlqvist","Viggo Vea":"viggovea","Arthur Jan":"arthurjan.jpg","Elise Sauvinet":"elisecabergnon","Kristian Buljan":"krishatbockaufrad","Henri Do":"henki","Francesco Vettore":"francescovett","Nicole van Batenburg":"NicolevanBatenburg","Valentin Cuenot":"Cuenot_valentin","Rodrigue Lombard":"rodrigue__lombard","Daniel Molino":"instamolino","Markus Carlos hein":"markus.zhongguo","Luís Manuel Silva Carvalho":"lmsc.82","Maximilian Siering":"max.o.menos","Marten Sprecher":"marsprech","Joep van Luijt":"joepvanl","Maxime Prieur":"maxime_prieur_","Larissa Unsinn":"Larissa_martha_","Adrian Vogel":"adi_on_bike","Harald Rinner":"h.rinner","Gergely Bartalos":"ultrabartalos","Pierre-Yves Robert":"pierreyves.robert","Dragomir Titei":"dragomir_titei","Andreas Herrig":"flightaddict_ah","Adrien Charlot":"A_Charlot","Hsi Chun Tsai":"Zigzizagza","Aleksei Konev":"alekkonev","Matthew Spooner":"matt_still_tri_ing","Lukas Müller":"lukmueller","Peter Kronberger":"peter_kronberger","Daniel Schulze Waltrup":"daniel_shwa","Dan Sharp":"rukrymi","Anja Longyka":"longyka_nja","Simon Van Teutem":"simonvanteutem","Christoph Zabel":"zabelisator","Jannis Rieb":"cyciope","Mark Turnbull":"markjude.turnbull.cyclingcoach","Maciej Baranowski":"baran.of.ski","Martin Zettel":"martin.zettel","Oona Baumann":"uuna_uuna","Gabriel Delattre":"Del__gab","Noah Schmid":"schmoahnid","Julian Manrique":"Julianmanrique","Robin Skoge":"robin_sprenger","Christian Chesta":"2ch_Adventure","Sarah Cinquini":"sarah.cinquini","Bernhard Kämmerer":"bernimuc","Christian Pany":"christianpany","Jack Wright":"jackussamuele","Clayton Anderson":"hughyboy","Emiliano Baravalle":"emiliano.baravalle","Alexander Eder":"ultra.eda","Lisa Schrader":"lisa_schr","Alexander Stramma":"strmmbrsch","Matthew Falconer":"b1rdmn","Bart Pombreu":"bartpombreu","Michael Ærenlund Buch":"MiDaBu","Philip Renders":"gravel75trail","Byron Buck":"byron_buck","Nicolas Müller":"nicolascmueller","Marcin Zielkowski":"ultrazielik","Sam Wilson":"samzw_","Katharina Wirth":"kathi.wrt","Kim Heikkinen":"kim_1","Florent De Boisvilliers":"achilletendon33","Alexander Stojkovic":"stojksen","Malte Hager":"malte.cc","Pauline Neuber":"pauli._ne","Henry Jacobson":"henry_.jacobson","Michal Kramář":"reporter_in_shape","Robbie Jebb":"Robbie","Alberto Vaghi":"albe712","Walter Reiterer":"lederhosenracer","Jean-François Badias":"jbadias","Pierre Beck":"pierrepoulpe2","Nora Battermann":"fortunata_outdoors","Lukas Stiller":"lukas_k_stiller","Mohamed Jawhara":"mohamed_jha11","Chun man Lau":"Punkgarfield","Aneta Lamik":"roweroterapia","Floris Bakker":"floris_23","Falk Döring":"falk.doering.randonneur","Gerald Rumpf":"lebendigbleiben","Tomáš Žižlavský":"zizlavsky.t","Robert Tremblay":"robert.tremblay","John Read":"Johnny_e_read","Niko Dangel":"niko.dangel","Filip Bullens":"cojak","Tom Dockal":"thomd_89","Mathilde Germanier":"twentysevenspokes","Dan Jones":"danwildshepherd","Bambang Anggoro Jati":"bembenx_","Till Moosberger":"_oo_studio__","Luca Bessems":"lucabessems","Isaac Kuehnle-Nelson":"ikethepike","Cody Hughes":"cody_hughes91","Christo Dingozov":"dingo_mainata","Jean-paul Sachet":"jpaul_sac","Valerio Cecchini":"sgravell0","Carys Brimble":"carys_brimble","Darron Burns":"darron_burns","Emily Maille":"canadianrouleur","Maximilian Droste":"doktoroste","Sebastian Kerschbaumer":"i__am_sebastian","Alexander Latham-boal":"LATHAMBOAL","Kenneth Lamont":"Kennethlnomat","Nod Nelson":"nod.369","Tom Bryan":"tombryanyeah","Samuel Hussain":"sam_huss23","Cesare Pedrini":"cesare.pedrini","Maksym Matvieiev":"Maxveloalp","Nicole Farrier":"nicole.g.farrier","Erhard Wälchli":"erhardwalchl","Paul Rollings":"paulrollings","Jesko von Werthern":"jesko_werthern","Tobias Geißler":"tobi_the_cyclist","Stephen Dummett":"rising_tide_coaching","Lili Delannoy":"Lili","Erik Olsson":"theprimalswede","Jakob Wall":"_jakobwall_","Boris Krutov":"boris_krutov","Thomas Chateau":"rogerchuchard","Alain Rodriguez":"Alain_rdrgz","Ramona Troxler":"ramona.troxler","Hanif Meeran":"Hanif","Hauke Kottek":"hauke_kt","Max Kraus":"vignavecchia","Rene Wach":"reneneew","Frédéric Rudant":"fredrudan","Sofia Passaretti":"sofiapassarettti","Dennis Wolckenhauer":"searching.sasquatch","Artem Soldatkin":"_leipreachan","Patrick O'connor":"padupnorth","Sönke Kreft":"soekreft","Fritjof Schirmer":"Fite_on_Tour","Gabi Winck":"lumaca.gabi","Tim Lamb":"timbolamb","Ian Budden":"ian_adventuring","Karl Björklund":"khaleb2","Peter Corkill":"petercorkill","Zuzanna Bogucka":"zuzka__kluska_","Andrew Speers":"Andrewgspeers","Greg Fong":"greg.fong","Sebastian Van den bergen":"seb.vandenbergen","Hans Markus Broja":"hmb_quilent","Christian Trenkle":"cycling.blue","Lissa Breugelmans":"caughtinthevoid","Jürgen Ress":"Juergenress","Olli Büttel":"Ironmaennchen","Ro Alegre":"roalegreg","Sarah Steels":"legs_of_steels","Thibault Sabatier":"thibault_sabatier","Andreas Wittkemper":"andreas_wittkemper","Peter Magill":"peter_magill_1964","Grinshina Kartik":"grinshina","Rumen Vachev":"rumen_vachev","Poh Huat Tan":"p.h_tan","Dirk Hermans":"Dirk","Karin Eder":"dieradlfee","George Surjopurnomo":"g.surjopurnomo","Mike Passmann":"mikepassmann","Erekle Bagashvili":"ekkk4","Ronja Derr":"rroxy___","Lionel Bobb":"tabletable1","Luis Cardoso":"fuzzroyale","Maris Brugis":"marisbrugis","Rafael Martinez Gonzalez":"rafaubio","Satomi Yamada":"satomiyamada","Ben Strause":"benjaminstrause","Mex Wieshofer":"mexwieshofer","Bryn Thomas":"wombatting96","Benno Raj":"Benno","Ian Mitchinson":"ian_mitchinson","Thomas Martraire":"thomas._.mar","Lander Wantens":"Wantenslander","Joachim Pittraye":"cyclamen_joachim.pittraye","Ezekiel Amos":"zekesdexd","Mohamed Almarar":"international69","Daniel Huxley":"dhux2509","Romeo Garessus":"Romeo_v_ga","Sebastien Nolens":"sebicicleta","Marco Eberle":"marcoshappyworld","Jefferson Adams":"jeffersonhodgesadams","Stefan Lindkvist":"coachlindkvist777","Lennart Gensch":"mountainride","Sylwia Kuropatwa":"sylwia.qropatwa","Adrien Mabileau":"apy_ultracycling","Christian Dupraz":"veloele","Martin Reichert":"teammuellerreichert","Melanie Müller-reichert":"melaniemueller81","Damian Ludlow":"damianludlow","Paul Jennings":"saddlesore_jenko","Stéphane David":"picardbrothers_bikepacking","Andreas Steinke":"Cycling_for_Mutoto","Christel Vieth":"christelvieth","Bastien Sentubery":"baestiti","Mylene Vicente":"bike_and_ravee","Małgorzata Gryszczuk":"Histeria_jedzie","Kinga Perzyńska":"greymouseland","Michael Hunziker":"migreau","Björn Frey":"bartholin_cyclingandclown","Luisa Nichelson":"f.luis.ter","Andrea Nichelson":"andreanichelson"};
-const DATA_MS = Date.UTC(2026, 6, 26, 10, 27);    // when the rider positions were read
+const DATA_MS = Date.UTC(2026, 6, 27, 13, 53);    // when the rider positions were read
 const DATA_D = (DATA_MS - START_MS) / 864e5;    // race-days elapsed at the snapshot
 const CATNAME = { S: 'Solo', F: 'FLINTA', P: 'Pair' };
 const LABEL = { ahead: 'Inside', edge: 'On the edge', behind: 'Off the pace' };
