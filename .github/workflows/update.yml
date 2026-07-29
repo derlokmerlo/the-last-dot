@@ -1,0 +1,60 @@
+name: update-chart
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: update-chart
+  cancel-in-progress: true
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.54.0-jammy
+    steps:
+      - name: Gate — stop after the race ends
+        id: gate
+        run: |
+          if [ "$(date -u +%s)" -lt 1786320000 ]; then
+            echo "go=yes" >> "$GITHUB_OUTPUT"
+          else
+            echo "Race over (10 Aug 2026 UTC) — nothing to do; disable the schedule."
+            echo "go=no" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: actions/checkout@v4
+        if: steps.gate.outputs.go == 'yes'
+
+      - name: Install playwright-core
+        if: steps.gate.outputs.go == 'yes'
+        run: npm i --no-save --no-audit --no-fund playwright-core@1.54.0
+
+      - name: Scrape live tracker
+        if: steps.gate.outputs.go == 'yes'
+        run: |
+          EPOCH=$(node scraper/scrape.js riders.new.txt)
+          echo "EPOCH=$EPOCH" >> "$GITHUB_ENV"
+
+      - name: Rebuild chart
+        if: steps.gate.outputs.go == 'yes'
+        run: node viz/refresh.js riders.new.txt "$EPOCH"
+
+      - uses: actions/configure-pages@v5
+        if: steps.gate.outputs.go == 'yes'
+
+      - uses: actions/upload-pages-artifact@v3
+        if: steps.gate.outputs.go == 'yes'
+        with:
+          path: viz/dist
+
+      - id: deployment
+        uses: actions/deploy-pages@v4
+        if: steps.gate.outputs.go == 'yes'

@@ -1,0 +1,1597 @@
+<title>The Last Dot — Following the tail of the field · TCRNo12</title>
+
+<style>
+  :root {
+    color-scheme: light;
+    --paper:   #f4f4f1;
+    --panel:   #fdfdfc;
+    --surface: #fdfdfc;
+    --ink:     #0b0c0c;
+    --ink-2:   #4a4b4b;
+    --muted:   #86867f;
+    --grid:    #e2e2dd;
+    --rule:    #c1c1c1;
+    --hair:    #d6d6d0;
+    --mast-bg: #0b0c0c;
+    --mast-fg: #f4f4f1;
+    --ahead:   #00719e;
+    --edge:    #9a7b10;
+    --behind:  #c8352b;
+    --field:   #ffffff;
+    --under:   rgba(200,53,43,.05);
+    --display: "Oswald", "Roboto Condensed", "Arial Narrow", "Helvetica Neue", system-ui, sans-serif;
+    --sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, sans-serif;
+    --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    --mark-fill: #fbfbf9;   /* the logo is a fixed white-disc-with-black-dot in both themes */
+    --mark-ink: #0b0c0c;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:where(:not([data-theme="light"])) {
+      color-scheme: dark;
+      --paper:   #0b0c0c;
+      --panel:   #151617;
+      --surface: #151617;
+      --ink:     #fefefe;
+      --ink-2:   #c1c1c1;
+      --muted:   #8d8d86;
+      --grid:    #262728;
+      --rule:    #3a3b3c;
+      --hair:    #2a2b2c;
+      --mast-bg: #17181a;
+      --mast-fg: #fefefe;
+      --ahead:   #1f93c4;
+      --edge:    #c9a227;
+      --behind:  #e05a51;
+      --field:   #0f1011;
+      --under:   rgba(224,90,81,.07);
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --paper:   #0b0c0c;
+    --panel:   #151617;
+    --surface: #151617;
+    --ink:     #fefefe;
+    --ink-2:   #c1c1c1;
+    --muted:   #8d8d86;
+    --grid:    #262728;
+    --rule:    #3a3b3c;
+    --hair:    #2a2b2c;
+    --mast-bg: #17181a;
+    --mast-fg: #fefefe;
+    --ahead:   #1f93c4;
+    --edge:    #c9a227;
+    --behind:  #e05a51;
+    --field:   #0f1011;
+      --under:   rgba(224,90,81,.07);
+  }
+
+  body { background: var(--paper); color: var(--ink); font-family: var(--sans);
+         line-height: 1.55; -webkit-font-smoothing: antialiased; }
+  * { border-radius: 0; }
+
+  .lbl { font-family: var(--display); font-weight: 500; text-transform: uppercase;
+         letter-spacing: .1em; font-stretch: 87.5%; }
+
+  /* masthead — the one solid block, TCR's hard-edged register */
+  .mast { background: var(--mast-bg); color: var(--mast-fg); }
+  .mast-in { max-width: 1180px; margin: 0 auto; padding: 26px 22px 30px; }
+  .mast .kicker { font-size: 11px; letter-spacing: .2em; opacity: .72; }
+  .wordmark { display: flex; align-items: center; gap: clamp(14px, 2.4vw, 26px); margin: 8px 0 0; }
+  .mark { width: clamp(46px, 8.5vw, 88px); height: auto; flex: none; display: block; }
+  h1 { font-family: var(--display); font-weight: 600; font-stretch: 87.5%;
+       text-transform: uppercase; letter-spacing: .015em; line-height: .96;
+       font-size: clamp(44px, 9vw, 96px); margin: 0; text-wrap: balance; }
+  .deck { font-size: clamp(14px, 2.1vw, 21px); font-weight: 500; letter-spacing: .17em;
+          margin: 12px 0 0; opacity: .74; }
+  .motto { display: inline-block; margin: 18px 0 0; padding: 8px 13px 7px; border: 2px solid var(--mast-fg);
+           font-size: 12.5px; letter-spacing: .22em; opacity: .92; }
+  .lede { max-width: 64ch; margin: 20px 0 0; font-size: 15px; opacity: .88; }
+  .lede b { font-weight: 600; opacity: 1; }
+
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 22px 72px;
+          display: flex; flex-direction: column; gap: 0; }
+
+  .block { border: 1px solid var(--hair); border-top: none; background: var(--panel); }
+  .block:first-of-type { border-top: 3px solid var(--ink); }
+
+  /* parameters */
+  .params { display: flex; flex-wrap: wrap; gap: 20px 30px; padding: 16px 18px; align-items: flex-end; }
+  .field { display: flex; flex-direction: column; gap: 8px; }
+  .field > .lbl { font-size: 10.5px; color: var(--muted); line-height: 1; }
+  .pills { display: flex; }
+  .pill { font-family: var(--display); font-stretch: 87.5%; text-transform: uppercase;
+          letter-spacing: .07em; font-size: 13px; font-weight: 500; padding: 9px 14px;
+          background: var(--field); color: var(--ink-2); border: 1px solid var(--rule);
+          margin-left: -1px; cursor: pointer; }
+  .pill:first-child { margin-left: 0; }
+  .pill[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); position: relative; }
+  .pill:focus-visible, input:focus-visible, svg:focus-visible { outline: 2px solid var(--ahead); outline-offset: 1px; }
+  input[type="search"] { font: 400 13px var(--sans); padding: 9px 11px; width: 172px;
+          border: 1px solid var(--rule); background: var(--field); color: var(--ink); }
+  input[type="range"] { width: 190px; accent-color: var(--ink); }
+  .rangeval { font-family: var(--display); font-stretch: 87.5%; font-size: 15px; font-weight: 500;
+              font-variant-numeric: tabular-nums; }
+  .check { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--ink-2); cursor: pointer; }
+  .spacer { flex: 1 1 auto; }
+
+  /* stat strip — hairline-divided, no cards */
+  .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
+  .tile { padding: 16px 18px; border-left: 1px solid var(--hair); display: flex; flex-direction: column; gap: 3px; }
+  .tile:first-child { border-left: none; }
+  .tile .v { font-family: var(--display); font-stretch: 87.5%; font-size: 40px; font-weight: 600;
+             line-height: 1; letter-spacing: -.005em; }
+  .tile .v .vu { font-size: 15px; font-weight: 500; color: var(--ink-2); margin-left: 5px;
+                 letter-spacing: .02em; }
+  .tile .k { font-size: 12.5px; color: var(--ink-2); }
+  .tile .u { font-size: 11px; color: var(--muted); }
+  .tile.c-ahead .v { color: var(--ahead); }
+  .tile.c-edge  .v { color: var(--edge); }
+  .tile.c-behind .v { color: var(--behind); }
+  .tile.c-dnf .v { color: var(--ink-2); }
+  /* The scratched tile is split by an oblique hairline: officially DNF (top-left,
+     red) vs out of GC / missed a control (bottom-right, grey). */
+  .tile.c-split { position: relative; overflow: hidden; }
+  .tile.c-split .diag { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+  .tile.c-split .sub { position: relative; display: flex; flex-direction: column; gap: 2px; }
+  .tile.c-split .sub.dn { align-items: flex-end; text-align: right; margin-top: 11px; }
+  .tile.c-split .v { font-size: 27px; }
+  .tile.c-split .sub.up .v { color: var(--behind); }
+  .tile.c-split .sub.dn .v { color: var(--ink-2); }
+
+  /* chart */
+  .chartcard { padding: 16px 18px 10px; }
+  .chart-head { display: flex; flex-wrap: wrap; gap: 10px 22px; align-items: baseline;
+                justify-content: space-between; margin-bottom: 10px; }
+  .chart-title { font-family: var(--display); font-stretch: 87.5%; text-transform: uppercase;
+                 letter-spacing: .08em; font-size: 14px; font-weight: 600; }
+  .legend { display: flex; flex-wrap: wrap; gap: 10px 18px; }
+  .lg { display: flex; align-items: center; gap: 7px; font-size: 12.5px; color: var(--ink); }
+  .sw { width: 10px; height: 10px; flex: none; }
+  .sw.line { width: 17px; height: 0; border-top: 2px solid var(--ink); }
+  .em { font-size: 15px; line-height: 1; }
+  .em.flip { display: inline-block; transform: scaleX(-1); }
+  .skull { font-size: 16px; line-height: 1; }
+  #plot { display: block; width: 100%; height: auto; }
+  text { font-family: var(--sans); fill: var(--ink-2); font-size: 11.5px; font-variant-numeric: tabular-nums; }
+  .axname { font-family: var(--display); font-stretch: 87.5%; text-transform: uppercase;
+            letter-spacing: .12em; fill: var(--muted); font-size: 11px; }
+  .marklab { font-family: var(--display); font-stretch: 87.5%; text-transform: uppercase;
+             letter-spacing: .07em; font-size: 12px; font-weight: 600;
+             stroke: var(--surface); stroke-width: 4.5px; paint-order: stroke fill; }
+  .hint { font-size: 12.5px; color: var(--muted); padding: 4px 2px 8px; }
+
+  /* tooltip */
+  .tip { position: fixed; z-index: 9; pointer-events: none; opacity: 0; transition: opacity .1s;
+         background: var(--panel); border: 1px solid var(--ink); padding: 10px 12px; max-width: 265px; }
+  .tip.on { opacity: 1; }
+  .tip .n { font-family: var(--display); font-stretch: 87.5%; text-transform: uppercase;
+            letter-spacing: .05em; font-size: 15px; font-weight: 600; margin-bottom: 7px; }
+  .tip dl { display: grid; grid-template-columns: auto auto; gap: 3px 16px; margin: 0; }
+  .tip dt { font-size: 11.5px; color: var(--ink-2); }
+  .tip dd { font-size: 11.5px; margin: 0; text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; }
+  .tip .st { margin-top: 8px; padding-top: 7px; border-top: 1px solid var(--hair);
+             font-family: var(--display); font-stretch: 87.5%; text-transform: uppercase;
+             letter-spacing: .06em; font-size: 12px; font-weight: 600;
+             display: flex; align-items: center; gap: 6px; }
+
+  /* table */
+  .tblwrap { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; font-size: 13px; }
+  th, td { text-align: right; padding: 8px 13px; border-bottom: 1px solid var(--grid); white-space: nowrap; }
+  th { font-family: var(--display); font-stretch: 87.5%; text-transform: uppercase; letter-spacing: .09em;
+       font-size: 11px; color: var(--muted); font-weight: 500; position: sticky; top: 0;
+       background: var(--panel); border-bottom: 1px solid var(--rule); }
+  td.l, th.l { text-align: left; }
+  td.num { font-variant-numeric: tabular-nums; }
+  .badge { display: inline-flex; align-items: center; gap: 6px; font-family: var(--display);
+           font-stretch: 87.5%; text-transform: uppercase; letter-spacing: .05em;
+           font-size: 12px; font-weight: 600; }
+  .tblcap { padding: 14px 18px 2px; font-size: 12.5px; color: var(--muted); }
+
+  /* wall of support */
+  .wall-head { padding: 16px 18px 6px; }
+  .wall-intro { font-size: 13.5px; color: var(--ink-2); max-width: 74ch; margin: 8px 0 0; }
+  .wall-intro b { color: var(--ink); font-weight: 620; }
+  .wall-grid { display: grid; grid-template-columns: 1fr 1fr; }
+  @media (max-width: 720px) { .wall-grid { grid-template-columns: 1fr; } }
+  .wall-pick, .wall-board { padding: 14px 18px 18px; border-top: 1px solid var(--hair); }
+  .wall-board { border-left: 1px solid var(--hair); }
+  @media (max-width: 720px) { .wall-board { border-left: none; } }
+  .wall-pick .lbl, .wall-board .lbl { display: block; font-size: 10.5px; color: var(--muted); margin-bottom: 9px; }
+  #wall-q { font: 400 13px var(--sans); padding: 9px 11px; width: 100%; margin-bottom: 10px;
+            border: 1px solid var(--rule); background: var(--field); color: var(--ink); }
+  #wall-list { max-height: 340px; overflow-y: auto; display: flex; flex-direction: column; }
+  .wr { display: flex; align-items: center; gap: 10px; padding: 9px 4px; border-bottom: 1px solid var(--grid);
+        cursor: pointer; text-align: left; background: none; border-left: none; border-right: none; border-top: none;
+        width: 100%; color: var(--ink); }
+  .wr:hover { background: var(--chip); }
+  .wr .wr-dot { width: 9px; height: 9px; flex: none; }
+  .wr .wr-name { flex: 1 1 auto; font-size: 13.5px; font-weight: 560; }
+  .wr .wr-ig { font-family: var(--mono); font-size: 11.5px; color: var(--muted); }
+  .wr .wr-cta { font-family: var(--display); font-stretch: 87.5%; text-transform: uppercase; letter-spacing: .06em;
+                font-size: 11px; font-weight: 600; color: var(--ahead); }
+  #wall-feed { max-height: 380px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
+  .wm { border-left: 3px solid var(--edge); padding: 8px 12px; background: var(--panel); }
+  .wm.edge { border-left-color: var(--edge); }
+  .wm.behind { border-left-color: var(--behind); }
+  .wm-to { font-size: 11.5px; color: var(--ink-2); margin-bottom: 3px; }
+  .wm-to a { font-family: var(--mono); color: var(--ahead); text-decoration: none; }
+  .wm-msg { font-size: 14px; color: var(--ink); }
+  .wall-empty { font-size: 13px; color: var(--muted); padding: 8px 2px; }
+
+  /* compose overlay */
+  .compose { position: fixed; inset: 0; z-index: 20; background: rgba(11,12,12,.55);
+             display: flex; align-items: center; justify-content: center; padding: 20px; }
+  .compose-card { background: var(--panel); border: 1px solid var(--ink); width: 100%; max-width: 440px; padding: 18px 20px 20px; }
+  .compose-top { display: flex; justify-content: space-between; align-items: center; }
+  .compose-x { background: none; border: none; font-size: 16px; color: var(--ink-2); cursor: pointer; padding: 2px 4px; }
+  .compose-name { font-family: var(--display); font-stretch: 87.5%; text-transform: uppercase; letter-spacing: .03em;
+                  font-size: 22px; font-weight: 600; margin: 2px 0 2px; }
+  .compose-ig { font-family: var(--mono); font-size: 12.5px; color: var(--ahead); text-decoration: none; }
+  #compose-text { width: 100%; margin: 12px 0 0; font: 400 15px var(--sans); padding: 10px 12px;
+                  border: 1px solid var(--rule); background: var(--field); color: var(--ink); resize: none; }
+  .compose-foot { display: flex; align-items: center; justify-content: space-between; margin-top: 10px; }
+  .compose-count { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+  .pill.send { background: var(--ink); color: var(--paper); border-color: var(--ink); cursor: pointer; }
+  .pill.send:disabled { opacity: .4; cursor: default; }
+  .compose-note { font-size: 11.5px; color: var(--muted); margin: 12px 0 0; }
+  .toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%) translateY(20px);
+           background: var(--ink); color: var(--paper); font-size: 13px; padding: 11px 16px; z-index: 30;
+           opacity: 0; transition: opacity .18s, transform .18s; pointer-events: none; max-width: 90vw; }
+  .toast.on { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  footer { color: var(--ink-2); font-size: 12.5px; padding: 22px 2px 0; }
+  footer p { margin: 0 0 9px; max-width: 82ch; }
+  .disclaimer { border: 1px solid var(--rule); border-left: 4px solid var(--ink);
+                padding: 12px 15px; margin-top: 14px !important; font-size: 13px;
+                background: var(--panel); color: var(--ink); }
+  .disclaimer b { display: inline; }
+  footer b { font-family: var(--display); font-stretch: 87.5%; text-transform: uppercase;
+             letter-spacing: .07em; font-weight: 600; color: var(--ink); }
+  a { color: inherit; } a:hover { color: var(--ahead); }
+  [hidden] { display: none !important; }
+  details.fx { border-top: 1px solid var(--grid); }
+  details.fx:first-of-type { border-top: none; }
+  details.fx summary { cursor: pointer; padding: 11px 2px; font-family: var(--display); font-stretch: 87.5%;
+    text-transform: uppercase; letter-spacing: .09em; font-size: 12px; font-weight: 600; color: var(--ink); list-style: none; }
+  details.fx summary::-webkit-details-marker { display: none; }
+  details.fx summary::before { content: '+  '; color: var(--muted); }
+  details.fx[open] summary::before { content: '\2212  '; }
+  details.fx p { margin: 2px 0 14px; }
+  .chartwrap { position: relative; }
+  .chartwrap svg { touch-action: none; cursor: grab; }
+  .zoomctl { position: absolute; top: 8px; right: 8px; display: flex; flex-direction: column; }
+  .zoomctl button { width: 30px; height: 30px; background: var(--panel); color: var(--ink);
+    border: 1px solid var(--rule); margin-top: -1px; font-size: 17px; line-height: 1; cursor: pointer;
+    font-family: var(--sans); display: flex; align-items: center; justify-content: center; }
+  .zoomctl button:first-child { margin-top: 0; }
+  .zoomctl button:hover { background: var(--chip); }
+  .zoomctl button:focus-visible { outline: 2px solid var(--ahead); outline-offset: 1px; z-index: 1; }
+  @media (max-width: 720px) {
+    .mast-in { padding: 22px 16px 26px; }
+    .wrap { padding: 0 12px 56px; }
+    .params { gap: 16px; padding: 14px; }
+    .field { flex: 1 1 44%; min-width: 0; }
+    .field > div { width: 100%; }
+    input[type="search"] { width: 100%; }
+    input[type="range"] { width: 100%; }
+    .pills { width: 100%; }
+    .pill { padding: 12px 15px; flex: 1 1 auto; text-align: center; }
+    .tiles { grid-template-columns: 1fr 1fr; }
+    .tile { border-left: none; border-top: 1px solid var(--hair); }
+    .tile:first-child { border-top: none; grid-column: 1 / -1; }
+    .tile .v { font-size: 34px; }
+    .zoomctl button { width: 34px; height: 34px; }
+    th, td { padding: 8px 10px; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<header class="mast">
+  <div class="mast-in">
+    <div class="kicker lbl">Transcontinental Race No12 · Trondheim → Kalamata</div>
+    <div class="wordmark">
+      <svg class="mark" viewBox="0 0 100 100" role="img" aria-label="The Last Dot logo: a circle with a dot in its lower-left, the last rider on the map">
+        <circle cx="50" cy="50" r="44" fill="var(--mark-fill)" stroke="var(--mark-ink)" stroke-width="5"/>
+        <circle cx="33" cy="67" r="12" fill="var(--mark-ink)"/>
+      </svg>
+      <h1>The Last Dot</h1>
+    </div>
+    <p class="deck lbl">Follow the tail of the field, racing the cut-off to the finish</p>
+    <p class="motto lbl">Be finisher — or be squared</p>
+    <p class="lede">Every rider is a line — their average kilometres per day since the start.
+      The <b>black line</b> is the pace that keeps you inside the time limit — and it is not one straight run
+      to Kalamata. Every control point closes on its own deadline, so the line bends at each one: the
+      <b>CP1→CP2 leg demands the steepest pace of the whole race</b>. Stay above the line and you make the next
+      cut-off; drop below and you keep riding, but out of the General Classification. <b id="cpline"></b></p>
+    <p class="lede" style="opacity:.6;font-size:13px">Rider positions read
+      <span id="freshness"></span>. Deadlines update live.</p>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <section class="block params" aria-label="Parameters">
+    <div class="field">
+      <span class="lbl" id="lb-cat">Category</span>
+      <div class="pills" role="group" aria-labelledby="lb-cat" id="cats"></div>
+    </div>
+    <div class="field">
+      <label class="lbl" for="q">Find rider</label>
+      <input type="search" id="q" placeholder="e.g. Strasser" autocomplete="off">
+    </div>
+    <div class="field">
+      <label class="lbl" for="tot">Estimated total distance</label>
+      <div style="display:flex;align-items:center;gap:11px">
+        <input type="range" id="tot" min="4700" max="5200" step="50" value="4950">
+        <span class="rangeval" id="totv">4950 km</span>
+      </div>
+    </div>
+    <div class="field">
+      <span class="lbl">Filter</span>
+      <label class="check"><input type="checkbox" id="risk"> Only riders off the pace</label>
+    </div>
+    <div class="field">
+      <span class="lbl" id="lb-scale">Scale</span>
+      <div class="pills" role="group" aria-labelledby="lb-scale">
+        <button class="pill" id="z-now" aria-pressed="true">Now</button>
+        <button class="pill" id="z-full" aria-pressed="false">Whole race</button>
+      </div>
+    </div>
+    <div class="spacer"></div>
+    <div class="field">
+      <span class="lbl" id="lb-view">View</span>
+      <div class="pills" role="group" aria-labelledby="lb-view">
+        <button class="pill" id="v-chart" aria-pressed="true">Chart</button>
+        <button class="pill" id="v-table" aria-pressed="false">Table</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="block tiles" aria-label="Summary">
+    <div class="tile"><span class="v" id="s-req">—</span><span class="k">Pace for the next cut-off</span><span class="u" id="s-req-sub">km per day, steepest leg</span></div>
+    <div class="tile c-ahead"><span class="v" id="s-ahead">—</span><span class="k"><svg viewBox="0 0 20 20" width="12" height="12" style="vertical-align:-2px"><circle cx="10" cy="10" r="7" fill="var(--ahead)"/></svg> Inside, with margin</span><span class="u">at least 10% over the minimum</span></div>
+    <div class="tile c-edge"><span class="v" id="s-edge">—</span><span class="k"><svg viewBox="0 0 20 20" width="12" height="12" style="vertical-align:-2px"><circle cx="10" cy="10" r="6.6" fill="none" stroke="var(--edge)" stroke-width="2.4"/><path d="M10 3.4A6.6 6.6 0 0 0 10 16.6Z" fill="var(--edge)"/></svg> On the edge</span><span class="u">−5% to +10%</span></div>
+    <div class="tile c-behind"><span class="v" id="s-behind">—</span><span class="k"><svg viewBox="0 0 20 20" width="12" height="12" style="vertical-align:-2px"><rect x="3.6" y="3.6" width="12.8" height="12.8" fill="none" stroke="var(--behind)" stroke-width="2.4"/></svg> Off the pace</span><span class="u">more than 5% below</span></div>
+    <div class="tile c-dnf c-split">
+      <svg class="diag" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="100" x2="100" y2="0" stroke="var(--hair)" stroke-width="1" vector-effect="non-scaling-stroke"/></svg>
+      <div class="sub up"><span class="v" id="s-dnf">—</span><span class="k"><svg viewBox="0 0 20 20" width="12" height="12" style="vertical-align:-2px"><path d="M10 0.8C4.4 0.8 1.4 4.5 1.4 9c0 2.7 1.1 4.5 2.7 5.4v2.2c0 1.6 1.3 2.9 2.9 2.9h6c1.6 0 2.9-1.3 2.9-2.9v-2.2c1.6-0.9 2.7-2.7 2.7-5.4C18.6 4.5 15.6 0.8 10 0.8Z" fill="var(--behind)"/><circle cx="6.5" cy="8.7" r="2.5" fill="var(--surface)"/><circle cx="13.5" cy="8.7" r="2.5" fill="var(--surface)"/><path d="M10 11.4l1.5 2.6h-3Z" fill="var(--surface)"/><rect x="7.4" y="16.1" width="1.5" height="3.5" fill="var(--surface)"/><rect x="11.1" y="16.1" width="1.5" height="3.5" fill="var(--surface)"/></svg> Scratched</span><span class="u">official DNF</span></div>
+      <div class="sub dn"><span class="v" id="s-out">—</span><span class="k"><svg viewBox="0 0 20 20" width="12" height="12" style="vertical-align:-2px"><path d="M10 0.8C4.4 0.8 1.4 4.5 1.4 9c0 2.7 1.1 4.5 2.7 5.4v2.2c0 1.6 1.3 2.9 2.9 2.9h6c1.6 0 2.9-1.3 2.9-2.9v-2.2c1.6-0.9 2.7-2.7 2.7-5.4C18.6 4.5 15.6 0.8 10 0.8Z" fill="var(--ink-2)"/><circle cx="6.5" cy="8.7" r="2.5" fill="var(--surface)"/><circle cx="13.5" cy="8.7" r="2.5" fill="var(--surface)"/><path d="M10 11.4l1.5 2.6h-3Z" fill="var(--surface)"/><rect x="7.4" y="16.1" width="1.5" height="3.5" fill="var(--surface)"/><rect x="11.1" y="16.1" width="1.5" height="3.5" fill="var(--surface)"/></svg> Out of GC</span><span class="u">missed a control</span></div>
+    </div>
+  </section>
+
+  <section class="block chartcard" id="chartview">
+    <div class="chart-head">
+      <span class="chart-title">Distance covered against the cut-off</span>
+      <div class="legend">
+        <span class="lg"><svg viewBox="0 0 20 20" width="14" height="14"><circle cx="10" cy="10" r="7" fill="var(--ahead)"/></svg>Inside</span>
+        <span class="lg"><svg viewBox="0 0 20 20" width="14" height="14"><circle cx="10" cy="10" r="6.6" fill="none" stroke="var(--edge)" stroke-width="2.4"/><path d="M10 3.4A6.6 6.6 0 0 0 10 16.6Z" fill="var(--edge)"/></svg>On the edge</span>
+        <span class="lg"><svg viewBox="0 0 20 20" width="14" height="14"><rect x="3.6" y="3.6" width="12.8" height="12.8" fill="none" stroke="var(--behind)" stroke-width="2.4"/></svg>Off the pace · squared</span>
+        <span class="lg"><svg viewBox="0 0 20 20" width="15" height="15"><path d="M10 0.8C4.4 0.8 1.4 4.5 1.4 9c0 2.7 1.1 4.5 2.7 5.4v2.2c0 1.6 1.3 2.9 2.9 2.9h6c1.6 0 2.9-1.3 2.9-2.9v-2.2c1.6-0.9 2.7-2.7 2.7-5.4C18.6 4.5 15.6 0.8 10 0.8Z" fill="var(--ink-2)"/><circle cx="6.5" cy="8.7" r="2.5" fill="var(--surface)"/><circle cx="13.5" cy="8.7" r="2.5" fill="var(--surface)"/><path d="M10 11.4l1.5 2.6h-3Z" fill="var(--surface)"/><rect x="7.4" y="16.1" width="1.5" height="3.5" fill="var(--surface)"/><rect x="11.1" y="16.1" width="1.5" height="3.5" fill="var(--surface)"/></svg>Out of GC · missed a control</span>
+        <span class="lg"><svg viewBox="0 0 20 20" width="15" height="15"><path d="M10 0.8C4.4 0.8 1.4 4.5 1.4 9c0 2.7 1.1 4.5 2.7 5.4v2.2c0 1.6 1.3 2.9 2.9 2.9h6c1.6 0 2.9-1.3 2.9-2.9v-2.2c1.6-0.9 2.7-2.7 2.7-5.4C18.6 4.5 15.6 0.8 10 0.8Z" fill="var(--behind)"/><circle cx="6.5" cy="8.7" r="2.5" fill="var(--surface)"/><circle cx="13.5" cy="8.7" r="2.5" fill="var(--surface)"/><path d="M10 11.4l1.5 2.6h-3Z" fill="var(--surface)"/><rect x="7.4" y="16.1" width="1.5" height="3.5" fill="var(--surface)"/><rect x="11.1" y="16.1" width="1.5" height="3.5" fill="var(--surface)"/></svg>Official DNF · scratched</span>
+        <span class="lg"><span class="sw line"></span>Cut-off pace (per leg)</span>
+      </div>
+    </div>
+    <div class="chartwrap"><svg id="plot" viewBox="0 0 1000 566" role="img" tabindex="0"
+         aria-label="Time-distance diagram: each rider is a projection line compared against the cut-off diagonal. The table view below carries the same data."></svg>
+      <div class="zoomctl" role="group" aria-label="Zoom">
+        <button id="zoom-in" aria-label="Zoom in">+</button>
+        <button id="zoom-out" aria-label="Zoom out">−</button>
+        <button id="zoom-reset" aria-label="Reset zoom" title="Reset">⤢</button>
+      </div>
+    </div>
+    <p class="hint"><b>Drag</b> to move, <b>pinch or the +/− buttons</b> to zoom, <b>⤢</b> to reset;
+      on a trackpad, two fingers pan and pinch zooms. <b>Now</b> frames the field as it stands today so riders
+      separate; <b>Whole race</b> opens out to the cut-off. Hover to identify a rider.</p>
+  </section>
+
+  <section class="block" id="tableview" hidden>
+    <p class="tblcap">The same data as the chart, ordered from the most critical margin. <span id="tcount"></span></p>
+    <div class="tblwrap">
+      <table>
+        <thead><tr>
+          <th class="l">Rider</th><th class="l">Cat.</th><th>Pos.</th><th>km</th><th>km/day</th>
+          <th>Margin</th><th>Binds at</th><th>Est. finish</th><th>Stopped</th><th class="l">Status</th><th class="l">Classification</th>
+        </tr></thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="block wall" id="wall" aria-label="Wall of Support">
+    <div class="wall-head">
+      <span class="chart-title">The Wall of Support</span>
+      <p class="wall-intro">These riders are <b>on the edge</b> or <b>off the pace</b> — still turning the pedals
+        against the clock. Send one a line of up to 100 characters: it goes on the wall, and opens their
+        Instagram so you can send it to them yourself.</p>
+    </div>
+    <div class="wall-grid">
+      <div class="wall-pick">
+        <span class="lbl">Pick a rider to cheer</span>
+        <input type="search" id="wall-q" placeholder="Search the strugglers…" autocomplete="off">
+        <div id="wall-list" role="list"></div>
+      </div>
+      <div class="wall-board">
+        <span class="lbl">Messages sent</span>
+        <div id="wall-feed"><p class="wall-empty">Loading the wall…</p></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="compose" id="compose" hidden>
+    <div class="compose-card" role="dialog" aria-modal="true" aria-labelledby="compose-name">
+      <div class="compose-top">
+        <span class="lbl">Send support to</span>
+        <button class="compose-x" id="compose-x" aria-label="Close">✕</button>
+      </div>
+      <div class="compose-name" id="compose-name"></div>
+      <a class="compose-ig" id="compose-ig" target="_blank" rel="noopener nofollow"></a>
+      <textarea id="compose-text" maxlength="100" rows="3" placeholder="A line of encouragement…"></textarea>
+      <div class="compose-foot">
+        <span class="compose-count" id="compose-count">100</span>
+        <button class="pill send" id="compose-send">Send &amp; open Instagram</button>
+      </div>
+      <p class="compose-note">Your message posts to the wall after a quick check, and is copied so you can paste
+        it into a DM on their Instagram. No account needed.</p>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <footer>
+    <details class="fx" open><summary>How to read this</summary><p> Each rider's line is kilometres ÷ days elapsed, projected forward at that same
+      average. The black line is the deadline envelope: the distance you must have covered at each control's
+      closing time, joined into one path. A rider is <b>inside</b> if their average still clears every remaining
+      deadline — the binding one is whichever demands the most, shown in the tooltip. It is a linear projection,
+      not a forecast: nobody holds one pace for twenty days. It answers who has margin right now, against the
+      deadline that actually bites, not who will arrive.</p></details>
+    <details class="fx"><summary>The assumptions</summary><p> Start 19 July 2026 at 20:00 CEST, cut-off 8 August at 23:59 CEST — 20 days and 4 hours
+      (source: Lost Dot, who mark these details as provisional). The nominal route is roughly 4,800–5,000 km, but every
+      rider plots their own line, so the slider exists to show how much the threshold depends on that guess. Current
+      averages are depressed by the Norwegian opening and the westward detour to CP1 Flåm, so the group just below the
+      line is less compromised than it looks.</p></details>
+    <details class="fx"><summary>The control points</summary><p> Each closing time is taken from the organiser's configuration in the live
+      tracker: CP1 Flåm 22 July 11:00, CP2 Tatra 30 July 11:00, CP3 Sarajevo 2 August 23:59, CP4 Leskovik
+      5 August 23:59, all CEST. Their distances along the route are estimated — CP1 anchored to the shortest
+      distance any rider had covered when validating it (≈685 km), CP2–CP4 placed between that and the finish
+      in proportion to the great-circle legs between the checkpoints. So the exact bends are approximate, but
+      the shape is real: the CP1→CP2 leg is by far the steepest, needing about 280 km/day, well above the
+      race-long average of 245. Under the Lost Dot rules, qualifying for the General Classification requires
+      validating at every control within its window; miss one and you forfeit classification and your official
+      race time, though you may ride on. Those riders are drawn as a calavera rather than a dot — still riding,
+      no longer classified — and for them the line only tracks reaching Kalamata by 8 August. The four riders
+      the organiser listed as outside the classification from the start are excluded entirely.</p></details>
+    <p>Rider data: FollowMyChallenge live leaderboard, TCRNo12.</p>
+    <p class="disclaimer"><b>Not an official page.</b> <em>The Last Dot</em> is an independent dot-watcher's
+      analysis, made by a spectator. It is not affiliated with, endorsed by, or connected to
+      <strong>Lost Dot</strong> or the Transcontinental Race, and the name is a nod to dot-watching, not a
+      claim of association. For official information, results and race reports, go to
+      <a href="https://www.lostdot.cc" rel="noopener nofollow">lostdot.cc</a>.</p>
+  </footer>
+</div>
+
+<div class="tip" id="tip" role="status" aria-live="polite"></div>
+
+<script>
+const RAW = `Robin Gemperle;1st;4396.3;439.1;S;22;1
+Nicolas Chatelet;2nd;4294.3;428.9;S;26;1
+Jos Koop;3rd;4254.3;424.9;S;24;1
+Jocelyn Roth;4th;4236.3;423.1;S;22;1
+Martin Moritz;5th;4202.3;419.7;S;24;1
+Manuel Rudaz;6th;4146.3;414.1;S;22;1
+Thomas Boury;7th;4108.3;410.3;S;21;1
+Tim De Witte;8th;4104.3;409.9;S;19;1
+Robert Müller;9th;4089.3;408.4;S;24;1
+Jonas Verest;10th;4083.3;407.8;S;21;1
+Guillaume Poinsot;11th;4042.3;403.7;S;25;1
+Nils Oyen;12th;4017.3;401.2;S;26;1
+Dieuwe Van Bergen en Henegouwen;13th;3994.3;398.9;S;19;1
+Jakub Tomasik;14th;3973.3;396.8;S;28;1
+Lucas Strittmatter;15th;3915.3;391;S;27;1
+Simon Flury;16th;3904.3;389.9;S;25;1
+Peter Kronberger;17th;3899.3;389.4;S;26;1
+Sarah Bosslet;18th;3890.3;388.5;F;22;1
+Riccardo Kuhar;19th;3889.3;388.4;S;24;1
+Christoph Pernsteiner;20th;3887.3;388.2;S;31;1
+Camille Albisser;21st;3886.3;388.1;F;23;1
+Björn Wirsching;22nd;3884.3;387.9;S;27;1
+Lea Hamberger;23rd;3884.3;387.9;F;23;1
+Oliver Glen;24th;3882.3;387.7;S;24;1
+Riccardo Mosconi;25th;3856.3;385.1;S;28;1
+Pawel Pulawski;26th;3842.3;383.8;S;23;1
+Wojciech Wronka;27th;3838.3;383.4;S;22;1
+Larissa Unsinn;28th;3829.3;382.5;F;21;1
+Roel Massink;29th;3787.3;378.3;S;25;1
+Sebi Lehmann;30th;3774.3;377;S;30;1
+Markus Zimmermann;31st;3773.3;376.9;S;28;1
+Brice Douet;32nd;3769.3;376.5;S;28;1
+Maxime Prieur;33rd;3743.3;373.9;S;27;1
+Christian Holweck;34th;3729.3;372.5;S;32;0
+Jana Kesenheimer;35th;3728.3;372.4;S;31;0
+Axel Restrup;36th;3705.3;370.1;S;31;1
+Daniel Molino;37th;3701.3;369.7;S;31;1
+Florian Thiessen;38th;3700.3;369.6;S;26;1
+Josh Ibbett;39th;3699.3;369.5;S;32;1
+Wojciech Nogalski;40th;3695.3;369.1;S;34;1
+Maximilian Siering;41st;3689.3;368.5;S;28;1
+Manuel Feldbaumer;42nd;3678.3;367.4;S;33;1
+Arthur Jan;43rd;3664.3;366;S;34;1
+Jonas Heyberger;44th;3657.3;365.3;S;28;1
+Jakub Micorek;45th;3656.3;365.2;S;26;1
+Nicole van Batenburg;46th;3653.3;364.9;F;27;1
+Aleksander Konieczny;47th;3651.3;364.7;S;28;1
+Hélène Fromenty;48th;3636.3;363.2;F;25;1
+Rodrigue Lombard;49th;3634.3;363;S;28;1
+Christian Höra;50th;3631.3;362.7;S;33;1
+Markus Carlos hein;51st;3624.3;362;S;25;1
+Christoph Zabel;52nd;3624.3;362;S;34;1
+Max Agut;53rd;3620.3;419.6;S;0;D
+Juan Pedro Moreno;54th;3620.3;361.6;S;29;1
+Elise Sauvinet;55th;3619.3;361.5;F;27;1
+Maximilian Pahl;56th;3599.3;359.5;S;32;1
+Valentin Cuenot;57th;3594.3;359;S;28;1
+Katharina Wirth;58th;3594.3;359;F;27;1
+Franz Nawrocki;59th;3589.3;358.5;S;33;1
+Adrian Vogel;60th;3586.3;358.2;S;27;1
+Ulf Bannick;61st;3584.3;358;S;38;1
+Daniel Schulze Waltrup;62nd;3583.3;357.9;S;29;1
+Larissa Sauter;63rd;3582.3;357.8;F;21;1
+Marten Sprecher;64th;3580.3;357.6;S;30;1
+Martin Carlsson;65th;3574.3;357;S;31;1
+Matthew Spooner;66th;3568.3;356.4;S;34;1
+Gergely Bartalos;67th;3566.3;356.2;S;35;1
+Jim Visschers;68th;3555.3;355.1;S;36;1
+Carl von Walter;69th;3550.3;354.6;S;29;1
+Dragomir Titei;70th;3548.3;354.4;S;33;1
+Pierre Beck;71st;3544.3;354;S;33;1
+Anna Carlqvist;72nd;3536.3;353.2;F;33;1
+Pierre-Yves Robert;73rd;3532.3;352.8;S;33;1
+Aleksei Konev;74th;3530.3;352.6;S;31;1
+Thomas Groenewegen;75th;3529.3;352.5;S;31;1
+Andrew Phillips;76th;3526.3;352.2;S;34;0
+Quirin Taubert;77th;3523.3;351.9;S;33;1
+Julian Manrique;78th;3517.3;351.3;S;33;1
+Sebastian Ritter;79th;3517.3;351.3;S;35;1
+Luís Manuel Silva Carvalho;80th;3508.3;350.4;S;23;1
+Martin Zettel;81st;3506.3;350.2;S;31;1
+Matthew Falconer;82nd;3500.3;349.6;S;36;1
+Dan Sharp;83rd;3499.3;349.5;S;31;1
+Bernhard Kämmerer;84th;3498.3;349.4;S;34;1
+Hsi Chun Tsai;85th;3479.3;347.5;S;29;1
+Harald Rinner;86th;3479.3;347.5;S;30;1
+Robin Skoge;87th;3477.3;347.3;S;34;1
+Lisa Schrader;88th;3470.3;346.6;F;32;1
+Byron Buck;89th;3469.3;346.5;S;36;1
+Jannis Rieb;90th;3461.3;345.7;S;36;1
+Francesco Vettore;91st;3457.3;345.3;S;40;1
+Omar Di Felice;92nd;3453.3;397.9;S;0;D
+Clayton Anderson;93rd;3453.3;344.9;S;30;1
+Gabriel Delattre;94th;3452.3;344.8;S;42;1
+Joanna Ruminska-Pietrzyk;95th;3449.3;344.5;F;26;1
+Mikke Luostarinen;96th;3448.3;344.4;S;30;1
+Hannah Hiecke;97th;3448.3;344.4;F;34;1
+Gerald Huber;98th;3446.3;344.2;S;34;1
+Michal Wolff;99th;3441.3;343.7;S;31;1
+Christian Pany;100th;3428.3;342.4;S;30;1
+Maciej Baranowski;101st;3426.3;342.2;S;38;1
+Tomasz Kuś;102nd;3422.3;341.8;S;35;1
+Alexander Stramma;103rd;3420.3;341.6;S;30;1
+Viggo Vea;104th;3418.3;341.4;S;32;1
+Simon Van Teutem;105th;3417.3;341.3;S;38;1
+Sarah Cinquini;106th;3417.3;341.3;F;35;1
+Michael Ærenlund Buch;107th;3416.3;341.2;S;38;1
+Emiliano Baravalle;108th;3410.3;340.6;S;41;1
+Christian Chesta;109th;3409.3;340.5;S;38;1
+Valentin Reichelt;110th;3405.3;340.1;S;37;1
+Noah Schmid;111th;3405.3;340.1;S;37;1
+Alexander Eder;112th;3403.3;339.9;S;34;1
+Bart Pombreu;113th;3400.3;339.6;S;38;1
+Florent De Boisvilliers;114th;3399.3;339.5;S;34;1
+Paul Williams;115th;3393.3;338.9;S;35;1
+Joep van Luijt;116th;3390.3;338.6;S;40;1
+Nicolas Müller;117th;3387.3;338.3;S;35;1
+Severin Ehrengruber;118th;3380.3;337.6;S;37;1
+James Auburn;119th;3363.3;335.9;S;42;1
+Mark Turnbull;120th;3357.3;335.3;S;36;1
+Grzegorz Oszast;121st;3355.3;335.1;S;35;1
+Kristian Buljan;122nd;3354.3;335;S;35;1
+Gerald Rumpf;123rd;3351.3;334.7;S;30;1
+Falk Döring;124th;3346.3;334.2;S;37;1
+Niklas Wich;125th;3345.3;334.1;S;36;1
+Adrien Ponteville;126th;3342.3;333.8;S;35;1
+Markus Taubner;127th;3337.3;333.3;S;34;1
+Lukas Müller;128th;3328.3;332.4;S;36;1
+Andreas Herrig;129th;3328.3;332.4;S;35;1
+Peter Geldhof;130th;3324.3;332;S;39;1
+Jorn Baan Hofman;131st;3277.3;327.3;S;35;1
+Stephan Simmermacher;132nd;3271.3;326.7;S;33;1
+Yiqun Fu;133rd;3270.3;326.6;S;31;1
+Alexander Stojkovic;134th;3267.3;326.3;S;36;1
+Jesko von Werthern;135th;3266.3;326.2;S;35;1
+Mike Fawcett;136th;3256.3;405;S;0;D
+Nico Schleippmann;137th;3251.3;335.2;S;0;D
+Christian Romero;138th;3242.3;323.8;S;44;1
+Gawan Berentelg;139th;3232.3;322.8;S;30;1
+Chun man Lau;140th;3218.3;321.4;S;35;1
+Alec Gates;141st;3218.3;321.4;S;44;1
+Thomas Martraire;142nd;3217.3;321.3;S;34;1
+Christo Dingozov;143rd;3215.3;321.1;S;33;1
+Mudit Kohli;144th;3215.3;321.1;S;33;1
+Seth Kennard;145th;3213.3;320.9;S;34;1
+Bambang Anggoro Jati;146th;3206.3;320.2;S;28;1
+Josh Roberts;147th;3200.3;319.6;S;38;1
+Tom Dockal;148th;3196.3;319.2;S;34;1
+Mohamed Jawhara;149th;3194.3;319;S;37;1
+Niko Dangel;150th;3194.3;319;S;35;1
+Alexander Kuehn;151st;3193.3;318.9;S;31;1
+Tomáš Žižlavský;152nd;3189.3;318.5;S;36;1
+Jens Ritter;153rd;3186.3;318.2;S;36;1
+Rainer Huelsse;154th;3186.3;318.2;S;41;1
+Mikko Mäkipää;155th;3181.3;317.7;S;35;1
+David Lacey;156th;3177.3;317.3;S;40;1
+Tom Bryan;157th;3176.3;317.2;S;29;1
+Erick Saudubray;158th;3175.3;317.1;S;36;1
+Adrian Lai;159th;3164.3;316;S;36;1
+Dennis Wolckenhauer;160th;3157.3;315.3;S;40;1
+Maris Goldmanis;161st;3148.3;314.4;S;37;1
+Jean-François Badias;162nd;3146.3;314.2;S;32;1
+Boris Krutov;163rd;3146.3;314.2;S;38;1
+Robbie Jebb;164th;3145.3;314.1;S;33;1
+Arnold Graef;165th;3141.3;313.7;S;38;1
+Roland Salowsky;166th;3140.3;313.6;S;38;1
+Nod Nelson;167th;3133.3;312.9;S;34;1
+Lars Olausson;168th;3116.3;311.2;S;43;1
+Aneta Lamik;169th;3116.3;311.2;F;33;1
+Erhard Wälchli;170th;3116.3;311.2;S;33;1
+Thomas Achtner;171st;3116.3;311.2;S;38;1
+Jack Wright;172nd;3115.3;311.1;F;42;1
+Niel Dunnage;173rd;3114.3;311;S;38;1
+Emily Maille;174th;3113.3;310.9;F;34;1
+Dan Jones;175th;3112.3;310.8;S;38;1
+Thilo Kutzer;176th;3106.3;310.2;S;41;1
+Michael Cannon;177th;3104.3;310;S;37;1
+Marc Förschler;178th;3104.3;310;S;35;1
+Floris Bakker;179th;3104.3;310;S;46;1
+Jean-paul Sachet;180th;3099.3;309.5;S;34;1
+Noah Boe-Whitehorn;181st;3099.3;309.5;S;45;1
+Luca Bessems;182nd;3099.3;309.5;F;40;1
+David Tribe;183rd;3098.3;309.4;S;37;1
+Philip Renders;184th;3098.3;309.4;S;43;1
+Kenneth Lamont;185th;3098.3;309.4;S;34;1
+Fritjof Schirmer;186th;3097.3;309.3;S;37;1
+Sarah Hübner;187th;3097.3;309.3;F;40;1
+Valerio Cecchini;188th;3097.3;309.3;S;33;1
+Sönke Kreft;189th;3096.3;309.2;S;35;1
+Manuel Kaufer;190th;3091.3;308.7;S;42;1
+Henri Do;191st;3089.3;353.7;S;0;D
+Oliver Neumann;192nd;3089.3;308.5;S;36;1
+Ramona Troxler;193rd;3089.3;308.5;F;36;1
+Simon Heppell;194th;3089.3;308.5;S;36;1
+Maris Brugis;195th;3088.3;308.4;S;41;1
+Andrew Speers;196th;3087.3;308.3;S;40;1
+Eric Banh;197th;3086.3;308.2;S;32;1
+Cesare Pedrini;198th;3086.3;308.2;S;29;1
+George Hodgkinson;199th;3086.3;454.7;S;0;D
+Fredi Maeder;200th;3085.3;360.6;S;0;D
+Gabi Winck;201st;3085.3;308.1;F;35;1
+Robert Tremblay;202nd;3082.3;307.8;S;45;1
+Filip Bullens;203rd;3082.3;307.8;S;38;1
+Jacob Fahrenkrug;204th;3082.3;307.8;S;42;1
+Nathan Offord;205th;3079.3;307.5;S;42;1
+Frank Gussenstätter;206th;3077.3;307.3;S;40;1
+Samuel Hussain;207th;3073.3;306.9;S;39;1
+Sebastian Kerschbaumer;208th;3072.3;306.8;S;38;1
+Stuart Featherstone;209th;3070.3;306.6;S;36;1
+Baptiste Estela;210th;3070.3;306.6;S;42;1
+Koen Heselmans;211th;3068.3;306.4;S;38;1
+Martin Lau;212th;3068.3;306.4;S;33;1
+Hanif Meeran;213th;3066.3;306.2;S;40;1
+Peter Corkill;214th;3064.3;306;S;42;1
+Tim Hunt;215th;3060.3;305.6;S;39;1
+Henry White;216th;3060.3;305.6;S;39;1
+Knut Kvaran;217th;3049.3;304.5;S;43;1
+Alexander Latham-boal;218th;3049.3;304.5;S;43;1
+Thomas Chateau;219th;3042.3;303.9;S;34;1
+Artem Soldatkin;220th;3019.3;301.6;S;34;1
+Tim Lamb;221st;3018.3;301.5;S;41;1
+Christian Gfeller;222nd;2996.3;299.3;S;37;1
+Michael Grobe;223rd;2992.3;298.9;S;40;1
+Cornelis Nicolaas Leek;224th;2985.3;312;S;0;D
+Alain Rodriguez;225th;2985.3;298.2;S;45;1
+James Soteriou;226th;2979.3;297.6;S;46;1
+Frédéric Rudant;227th;2974.3;297.1;S;36;1
+Malte Hager;228th;2968.3;344.1;S;0;D
+Mike Watson;229th;2965.3;296.2;S;37;1
+Zuzanna Bogucka;230th;2956.3;295.3;F;42;1
+Adrien Charlot;231st;2953.3;437.8;S;0;D
+Maksym Matvieiev;232nd;2948.3;294.5;S;36;1
+Greg Fong;233rd;2945.3;294.2;S;44;1
+Ro Alegre;234th;2941.3;293.8;S;40;1
+Lili Delannoy;235th;2940.3;293.7;F;38;1
+Nicole Farrier;236th;2938.3;293.5;F;35;1
+Oona Baumann;237th;2937.3;388.1;F;0;D
+Thomas Weber;238th;2936.3;293.3;S;42;1
+Stev Krembs;239th;2934.3;293.1;S;37;1
+Lissa Breugelmans;240th;2926.3;292.3;F;43;1
+Michael Welker;241st;2921.3;291.8;S;49;1
+Andreas Wittkemper;242nd;2921.3;291.8;S;38;1
+Nora Battermann;243rd;2897.3;377.8;F;0;D
+Kristin Lome;244th;2880.3;287.7;F;51;1
+Robert Coy;245th;2875.3;287.2;S;48;1
+Sarah Steels;246th;2871.3;286.8;F;48;1
+Patrick O'connor;247th;2856.3;285.3;S;45;1
+Philippe Villepontoux;248th;2839.3;283.6;S;45;1
+Xingjian (Tom) Zhai;249th;2834.3;283.1;S;52;1
+Raymond Dulieu;250th;2826.3;486.1;S;0;D
+Bjørn Kåre Amdal;251st;2826.3;434.1;S;0;D
+Russell Cairns;252nd;2820.3;281.7;S;38;1
+Hank Beerstecher;253rd;2793.3;279;S;50;1
+Karin Eder;254th;2792.3;278.9;F;41;1
+Fabian Graber;255th;2778.3;277.5;S;52;1
+Erik Arentz-Hansen;256th;2778.3;277.5;S;50;1
+Till Moosberger;257th;2777.3;406.6;S;0;D
+Sofia Passaretti;258th;2777.3;353.5;F;0;D
+Conor O'Sullivan;259th;2772.3;276.9;S;50;1
+Susi Pariasek;260th;2770.3;325.1;F;0;D
+Tobias Geißler;261st;2761.3;312.9;S;0;D
+Mex Wieshofer;262nd;2754.3;275.1;S;41;1
+George Surjopurnomo;263rd;2721.3;271.8;S;40;1
+Anja Longyka;264th;2681.3;392.5;F;0;D
+Hugo Manson;265th;2680.3;378.5;S;0;D
+Bart Noëth;266th;2673.3;276.4;S;0;D
+Lukas Stiller;267th;2653.3;339.6;S;0;D
+Lucio Buergisser;268th;2643.3;339.2;S;0;D
+Thibault Sabatier;269th;2640.3;263.7;S;55;1
+Christoph Adrian Schneider;270th;2616.3;333.4;S;0;D
+Niklas Hanses;271st;2612.3;436.4;S;0;D
+Rumen Vachev;272nd;2612.3;260.9;S;49;1
+Hauke Kottek;273rd;2607.3;405.9;S;0;D
+Douglas Migden;274th;2566.3;256.3;S;45;1
+Sam Wilson;275th;2547.3;331.5;S;0;D
+Olli Büttel;276th;2536.3;293.6;S;0;D
+Mariusz Kolodziej;277th;2536.3;337.1;S;0;D
+Roel Hamers;278th;2528.3;380.2;S;0;D
+Marcin Zielkowski;279th;2520.3;416.4;S;0;D
+Cody Hughes;280th;2520.3;332.6;S;0;D
+Mike Passmann;281st;2489.3;248.6;S;48;1
+Mateusz Andrulewicz;282nd;2485.3;291.7;S;0;D
+Florian Imgrund;283rd;2471.3;459.8;S;0;D
+Stephen Dummett;284th;2470.3;310.3;S;0;D
+Pierre Picard;285th;2469.3;326.7;S;0;D
+Michal Kramář;286th;2398.3;431.7;S;0;D
+Daniel Tulla;287th;2398.3;371.3;S;0;D
+Ronja Derr;288th;2373.3;249.6;F;0;D
+Jp De Groot;289th;2372.3;250.4;S;0;D
+Luis Cardoso;290th;2267.3;226.4;S;52;1
+Kim Heikkinen;291st;2265.3;440.7;S;0;D
+Maximilian Droste;292nd;2265.3;403.4;S;0;D
+Eric Lamboley;293rd;2241.3;223.9;S;59;1
+Hans Markus Broja;294th;2220.3;293.7;S;0;D
+Mathilde Germanier;295th;2218.3;378.1;F;0;D
+Juliette Day;296th;2214.3;231.2;F;0;D
+Erik Olsson;297th;2196.3;288;S;0;D
+Sara Lundberg;298th;2186.3;387.1;F;0;D
+Carsten Dreyer;299th;2152.3;273.7;S;0;D
+Aaron Poll;300th;2120.3;211.8;S;60;1
+Carys Brimble;301st;2093.3;379.1;F;0;D
+Erekle Bagashvili;302nd;2093.3;243.5;S;0;D
+Ate van Steenbergen;303rd;2086.3;208.4;S;56;1
+Rafael Martinez Gonzalez;304th;2073.3;207.1;S;58;1
+Bjorn Menze;305th;2064.3;360.3;S;0;D
+Karl Björklund;306th;2031.3;416.5;S;0;D
+Henry Jacobson;307th;2025.3;439.5;S;0;D
+Armin Seitz;308th;2025.3;428.1;S;0;D
+Rene Wach;309th;2025.3;443.6;S;0;D
+Amelia Linnett;310th;2025.3;412.3;F;0;D
+Matthew Wright;311th;2025.3;425.4;S;0;D
+Ian Budden;312th;2024.3;343.8;S;0;D
+Darron Burns;313th;2023.3;338.1;S;0;D
+Bryn Thomas;314th;1965.3;196.3;F;62;1
+Pauline Neuber;315th;1963.3;351.6;F;0;D
+John Read;316th;1957.3;398.8;S;0;D
+Harvey Bates;317th;1957.3;318.7;S;0;D
+Jürgen Ress;318th;1957.3;254.1;S;0;D
+Dirk Hermans;319th;1941.3;292.2;S;0;D
+Mihael Šandro;320th;1929.3;338.9;S;0;D
+Isaac Kuehnle-Nelson;321st;1926.3;404.4;S;0;D
+Peter Magill;322nd;1881.3;357.4;S;0;D
+Grinshina Kartik;323rd;1881.3;273.2;F;0;D
+Max Kraus;324th;1867.3;468.1;S;0;D
+Christian Trenkle;325th;1844.3;326.3;S;0;D
+Jakob Wall;326th;1831.3;396.9;S;0;D
+Colin Halliwell;327th;1819.3;387.4;S;0;D
+Paul Rollings;328th;1772.3;372.1;S;0;D
+Alberto Vaghi;329th;1771.3;385.1;S;0;D
+Walter Reiterer;330th;1714.3;488.9;S;0;D
+Rene Vera-armenta;331st;1674.3;361.9;S;0;D
+Poh Huat Tan;332nd;1626.3;409.6;S;0;D
+Lionel Bobb;333rd;1624.3;439.9;S;0;D
+Stephan Haß;334th;1594.3;438.2;S;0;D
+Albert Coigné;335th;1590.3;462.4;S;0;D
+Ben Strause;336th;1590.3;329.6;S;0;D
+Satomi Yamada;337th;1576.3;182.4;F;0;D
+Benno Raj;338th;1544.3;427.5;S;0;D
+Romeo Garessus;339th;1508.3;150.6;S;0;D
+Marguerite Mulhaus;1st;3651.3;364.7;P;34;1
+Rémi Mejean;2nd;3651.3;364.7;P;35;1
+Christian Dupraz;3rd;3488.3;348.4;P;32;1
+Dina Byland;4th;3488.3;348.4;P;34;1
+Melanie Müller-reichert;5th;3412.3;340.8;P;35;1
+Martin Reichert;6th;3412.3;340.8;P;36;1
+Damian Ludlow;7th;3242.3;323.8;P;38;1
+Paul Jennings;8th;3242.3;323.8;P;38;1
+Carl Carini;9th;3139.3;313.5;P;37;1
+Stéphane David;10th;3139.3;313.5;P;37;1
+Christel Vieth;11th;3099.3;309.5;P;42;1
+Andreas Steinke;12th;3099.3;309.5;P;45;1
+Bastien Sentubery;13th;3069.3;306.5;P;38;1
+Mylene Vicente;14th;3069.3;306.5;P;39;1
+Jan Bähler;15th;3013.3;301;P;39;1
+Mirjam Bonfadelli;16th;3013.3;301;P;39;1
+Björn Frey;17th;2937.3;293.4;P;43;1
+Michael Hunziker;18th;2937.3;293.4;P;43;1
+Bartek Was;19th;2934.3;372.5;P;0;D
+Wojtek Was;20th;2934.3;372.5;P;0;D
+Sarah Burns;21st;2825.3;317.8;P;0;D
+Richard Parry;22nd;2822.3;281.9;P;41;1
+Luisa Nichelson;23rd;2537.3;253.4;P;58;1
+Andrea Nichelson;24th;2537.3;253.4;P;57;1
+Małgorzata Gryszczuk;25th;1867.3;386.3;P;0;D
+Kinga Perzyńska;26th;1867.3;386;P;0;D`;
+
+const START_MS = Date.UTC(2026, 6, 19, 18, 0);   // 19 Jul 2026, 20:00 CEST
+const CUTOFF_MS = Date.UTC(2026, 7, 8, 21, 59);  //  8 Aug 2026, 23:59 CEST
+const LIMIT_D = (CUTOFF_MS - START_MS) / 864e5;  // 20.166 days
+const NOW_MS = Date.now();                       // live clock, for deadline state
+function NOW_D() { return (NOW_MS - START_MS) / 864e5; }
+
+// Wall of Support: fans send a line to struggling riders. Messages persist in a
+// dedicated Supabase project; a database trigger auto-approves clean ones and
+// holds anything with a link or slur for review, so the anon key is safe to ship.
+const SUPA_URL = 'https://ilslkaslmqcylmqhksol.supabase.co';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlsc2xrYXNsbXFjeWxtcWhrc29sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ3OTY4NzQsImV4cCI6MjEwMDM3Mjg3NH0.o441SkmcKpRrq6rouBpFLpaymbnYlfJFYxQhRe34QKE';
+const HANDLES = {"Robin Gemperle":"robingemperle","Max Agut":"le_max__","Nicolas Chatelet":"nicolas.chatelet","Christoph Strasser":"straps_377","Robert Müller":"radbert_m","Martin Moritz":"_martin.mo","Jonas Verest":"jonas_vst","Jakub Tomasik":"jakub_tomasik_ultracycling","Wojciech Wronka":"wotowro","Pawel Pulawski":"pikopulawski","Omar Di Felice":"omardifelice","Riccardo Mosconi":"mosconi_riccardo","Manuel Rudaz":"manurudaz","Nils Oyen":"nils.1616","Laurens Van Gucht":"laurensvangucht","Guillaume Poinsot":"guillaume.poinsot","Lucas Strittmatter":"lucas_strittmatter","Riccardo Kuhar":"rikicro","Jos Koop":"koopjos","Nico Schleippmann":"Curbelix","Josh Ibbett":"joshibbett","Sebi Lehmann":"sebi_lehm","George Hodgkinson":"25hodgkinson","Markus Zimmermann":"m4rku5.z1mm3rm4nn","Ulf Bannick":"ulf.ba","Manuel Feldbaumer":"manifeldbaumer","Oliver Glen":"o.llie.ollie","Camille Albisser":"camillealbi","Sarah Bosslet":"sarahbosslet","Hannah Hiecke":"hannah_hiecke","Jakub Micorek":"jakub.micorek","Hélène Fromenty":"hfrome","Anna Carlqvist":"anna_carlqvist","Viggo Vea":"viggovea","Arthur Jan":"arthurjan.jpg","Elise Sauvinet":"elisecabergnon","Kristian Buljan":"krishatbockaufrad","Henri Do":"henki","Francesco Vettore":"francescovett","Nicole van Batenburg":"NicolevanBatenburg","Valentin Cuenot":"Cuenot_valentin","Rodrigue Lombard":"rodrigue__lombard","Daniel Molino":"instamolino","Markus Carlos hein":"markus.zhongguo","Luís Manuel Silva Carvalho":"lmsc.82","Maximilian Siering":"max.o.menos","Marten Sprecher":"marsprech","Joep van Luijt":"joepvanl","Maxime Prieur":"maxime_prieur_","Larissa Unsinn":"Larissa_martha_","Adrian Vogel":"adi_on_bike","Harald Rinner":"h.rinner","Gergely Bartalos":"ultrabartalos","Pierre-Yves Robert":"pierreyves.robert","Dragomir Titei":"dragomir_titei","Andreas Herrig":"flightaddict_ah","Adrien Charlot":"A_Charlot","Hsi Chun Tsai":"Zigzizagza","Aleksei Konev":"alekkonev","Matthew Spooner":"matt_still_tri_ing","Lukas Müller":"lukmueller","Peter Kronberger":"peter_kronberger","Daniel Schulze Waltrup":"daniel_shwa","Dan Sharp":"rukrymi","Anja Longyka":"longyka_nja","Simon Van Teutem":"simonvanteutem","Christoph Zabel":"zabelisator","Jannis Rieb":"cyciope","Mark Turnbull":"markjude.turnbull.cyclingcoach","Maciej Baranowski":"baran.of.ski","Martin Zettel":"martin.zettel","Oona Baumann":"uuna_uuna","Gabriel Delattre":"Del__gab","Noah Schmid":"schmoahnid","Julian Manrique":"Julianmanrique","Robin Skoge":"robin_sprenger","Christian Chesta":"2ch_Adventure","Sarah Cinquini":"sarah.cinquini","Bernhard Kämmerer":"bernimuc","Christian Pany":"christianpany","Jack Wright":"jackussamuele","Clayton Anderson":"hughyboy","Emiliano Baravalle":"emiliano.baravalle","Alexander Eder":"ultra.eda","Lisa Schrader":"lisa_schr","Alexander Stramma":"strmmbrsch","Matthew Falconer":"b1rdmn","Bart Pombreu":"bartpombreu","Michael Ærenlund Buch":"MiDaBu","Philip Renders":"gravel75trail","Byron Buck":"byron_buck","Nicolas Müller":"nicolascmueller","Marcin Zielkowski":"ultrazielik","Sam Wilson":"samzw_","Katharina Wirth":"kathi.wrt","Kim Heikkinen":"kim_1","Florent De Boisvilliers":"achilletendon33","Alexander Stojkovic":"stojksen","Malte Hager":"malte.cc","Pauline Neuber":"pauli._ne","Henry Jacobson":"henry_.jacobson","Michal Kramář":"reporter_in_shape","Robbie Jebb":"Robbie","Alberto Vaghi":"albe712","Walter Reiterer":"lederhosenracer","Jean-François Badias":"jbadias","Pierre Beck":"pierrepoulpe2","Nora Battermann":"fortunata_outdoors","Lukas Stiller":"lukas_k_stiller","Mohamed Jawhara":"mohamed_jha11","Chun man Lau":"Punkgarfield","Aneta Lamik":"roweroterapia","Floris Bakker":"floris_23","Falk Döring":"falk.doering.randonneur","Gerald Rumpf":"lebendigbleiben","Tomáš Žižlavský":"zizlavsky.t","Robert Tremblay":"robert.tremblay","John Read":"Johnny_e_read","Niko Dangel":"niko.dangel","Filip Bullens":"cojak","Tom Dockal":"thomd_89","Mathilde Germanier":"twentysevenspokes","Dan Jones":"danwildshepherd","Bambang Anggoro Jati":"bembenx_","Till Moosberger":"_oo_studio__","Luca Bessems":"lucabessems","Isaac Kuehnle-Nelson":"ikethepike","Cody Hughes":"cody_hughes91","Christo Dingozov":"dingo_mainata","Jean-paul Sachet":"jpaul_sac","Valerio Cecchini":"sgravell0","Carys Brimble":"carys_brimble","Darron Burns":"darron_burns","Emily Maille":"canadianrouleur","Maximilian Droste":"doktoroste","Sebastian Kerschbaumer":"i__am_sebastian","Alexander Latham-boal":"LATHAMBOAL","Kenneth Lamont":"Kennethlnomat","Nod Nelson":"nod.369","Tom Bryan":"tombryanyeah","Samuel Hussain":"sam_huss23","Cesare Pedrini":"cesare.pedrini","Maksym Matvieiev":"Maxveloalp","Nicole Farrier":"nicole.g.farrier","Erhard Wälchli":"erhardwalchl","Paul Rollings":"paulrollings","Jesko von Werthern":"jesko_werthern","Tobias Geißler":"tobi_the_cyclist","Stephen Dummett":"rising_tide_coaching","Lili Delannoy":"Lili","Erik Olsson":"theprimalswede","Jakob Wall":"_jakobwall_","Boris Krutov":"boris_krutov","Thomas Chateau":"rogerchuchard","Alain Rodriguez":"Alain_rdrgz","Ramona Troxler":"ramona.troxler","Hanif Meeran":"Hanif","Hauke Kottek":"hauke_kt","Max Kraus":"vignavecchia","Rene Wach":"reneneew","Frédéric Rudant":"fredrudan","Sofia Passaretti":"sofiapassarettti","Dennis Wolckenhauer":"searching.sasquatch","Artem Soldatkin":"_leipreachan","Patrick O'connor":"padupnorth","Sönke Kreft":"soekreft","Fritjof Schirmer":"Fite_on_Tour","Gabi Winck":"lumaca.gabi","Tim Lamb":"timbolamb","Ian Budden":"ian_adventuring","Karl Björklund":"khaleb2","Peter Corkill":"petercorkill","Zuzanna Bogucka":"zuzka__kluska_","Andrew Speers":"Andrewgspeers","Greg Fong":"greg.fong","Sebastian Van den bergen":"seb.vandenbergen","Hans Markus Broja":"hmb_quilent","Christian Trenkle":"cycling.blue","Lissa Breugelmans":"caughtinthevoid","Jürgen Ress":"Juergenress","Olli Büttel":"Ironmaennchen","Ro Alegre":"roalegreg","Sarah Steels":"legs_of_steels","Thibault Sabatier":"thibault_sabatier","Andreas Wittkemper":"andreas_wittkemper","Peter Magill":"peter_magill_1964","Grinshina Kartik":"grinshina","Rumen Vachev":"rumen_vachev","Poh Huat Tan":"p.h_tan","Dirk Hermans":"Dirk","Karin Eder":"dieradlfee","George Surjopurnomo":"g.surjopurnomo","Mike Passmann":"mikepassmann","Erekle Bagashvili":"ekkk4","Ronja Derr":"rroxy___","Lionel Bobb":"tabletable1","Luis Cardoso":"fuzzroyale","Maris Brugis":"marisbrugis","Rafael Martinez Gonzalez":"rafaubio","Satomi Yamada":"satomiyamada","Ben Strause":"benjaminstrause","Mex Wieshofer":"mexwieshofer","Bryn Thomas":"wombatting96","Benno Raj":"Benno","Ian Mitchinson":"ian_mitchinson","Thomas Martraire":"thomas._.mar","Lander Wantens":"Wantenslander","Joachim Pittraye":"cyclamen_joachim.pittraye","Ezekiel Amos":"zekesdexd","Mohamed Almarar":"international69","Daniel Huxley":"dhux2509","Romeo Garessus":"Romeo_v_ga","Sebastien Nolens":"sebicicleta","Marco Eberle":"marcoshappyworld","Jefferson Adams":"jeffersonhodgesadams","Stefan Lindkvist":"coachlindkvist777","Lennart Gensch":"mountainride","Sylwia Kuropatwa":"sylwia.qropatwa","Adrien Mabileau":"apy_ultracycling","Christian Dupraz":"veloele","Martin Reichert":"teammuellerreichert","Melanie Müller-reichert":"melaniemueller81","Damian Ludlow":"damianludlow","Paul Jennings":"saddlesore_jenko","Stéphane David":"picardbrothers_bikepacking","Andreas Steinke":"Cycling_for_Mutoto","Christel Vieth":"christelvieth","Bastien Sentubery":"baestiti","Mylene Vicente":"bike_and_ravee","Małgorzata Gryszczuk":"Histeria_jedzie","Kinga Perzyńska":"greymouseland","Michael Hunziker":"migreau","Björn Frey":"bartholin_cyclingandclown","Luisa Nichelson":"f.luis.ter","Andrea Nichelson":"andreanichelson"};
+const DATA_MS = Date.UTC(2026, 6, 29, 18, 0);    // when the rider positions were read
+const DATA_D = (DATA_MS - START_MS) / 864e5;    // race-days elapsed at the snapshot
+const CATNAME = { S: 'Solo', F: 'FLINTA', P: 'Pair' };
+const LABEL = { ahead: 'Inside', edge: 'On the edge', behind: 'Off the pace' };
+// Pictograms in the language of the wordmark: a full dot rides inside the limit,
+// a half dot is on the edge — and off the pace you are, literally, squared.
+function pictoInner(cls) {
+  if (cls === 'ahead') return '<circle cx="10" cy="10" r="7" fill="var(--ahead)"/>';
+  if (cls === 'edge') return '<circle cx="10" cy="10" r="6.6" fill="none" stroke="var(--edge)" stroke-width="2.4"/>' +
+    '<path d="M10 3.4A6.6 6.6 0 0 0 10 16.6Z" fill="var(--edge)"/>';
+  return '<rect x="3.6" y="3.6" width="12.8" height="12.8" fill="none" stroke="var(--behind)" stroke-width="2.4"/>';
+}
+function pictoMark(cx, cy, size, cls) {
+  const k = size / 20, x = cx - size / 2, y = cy - size / 2;
+  return '<g transform="translate(' + x.toFixed(1) + ',' + y.toFixed(1) + ') scale(' + k.toFixed(3) + ')">' + pictoInner(cls) + '</g>';
+}
+function pictoHTML(cls) { return '<svg viewBox="0 0 20 20" width="13" height="13" style="flex:none;vertical-align:-2px">' + pictoInner(cls) + '</svg>'; }
+function skullHTML(colorVar) { return '<svg viewBox="0 0 20 20" width="14" height="14" style="flex:none;vertical-align:-2px">' + skullInner(colorVar) + '</svg>'; }
+const MONTH = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+const RIDERS = RAW.trim().split('\n').map(function (l) {
+  const p = l.split(';');
+  const km = +p[2], kmd = +p[3];
+  // status field: '1' in classification, '0' out of GC (missed a control, still
+  // riding), 'D' official DNF (scratched).
+  return { name: p[0], pos: p[1], km: km, kmd: kmd, cat: p[4], idle: +p[5],
+           gc: p[6] === '1', dnf: p[6] === 'D',
+           // Active riders sit at the snapshot time (their true position now); a
+           // scratched rider sits where they stopped (distance ÷ average pace).
+           elapsed: p[6] === 'D' ? km / kmd : DATA_D };
+});
+
+// Control point closing times, from the organiser's own configuration in the
+// live tracker. Missing a control's window costs General Classification
+// qualification — the rider may continue, but no official race time is awarded.
+const CHECKPOINTS = [
+  { name: 'CP1', place: 'Flåm',        ms: Date.UTC(2026, 6, 22,  9, 0) },
+  { name: 'CP2', place: 'Tatra',       ms: Date.UTC(2026, 6, 30,  9, 0) },
+  { name: 'CP3', place: 'Sarajevo',    ms: Date.UTC(2026, 7,  2, 21, 59) },
+  { name: 'CP4', place: 'Leskovik',    ms: Date.UTC(2026, 7,  5, 21, 59) }
+].map(function (c) { c.day = (c.ms - START_MS) / 864e5; return c; });
+
+// Cumulative route distance to each control. CP1 is anchored to real data — the
+// shortest distance covered by any rider who validated it (≈685 km). CP2–CP4 are
+// placed between that anchor and the finish in proportion to the great-circle
+// legs between the checkpoints' own coordinates, so they track the total-distance
+// slider. This is what turns the deadlines into a required-pace line: not one
+// straight run to Kalamata, but a leg-by-leg envelope whose steepest section
+// (CP1→CP2) is the real constraint right now.
+const CP1_KM = 685;
+const GC_FRAC = [0, 0.5244, 0.7218, 0.8735, 1];   // cumulative CP1→CPn / CP1→finish
+function cpDist(total) {
+  return CHECKPOINTS.map(function (c, i) { return CP1_KM + (total - CP1_KM) * GC_FRAC[i]; });
+}
+// The deadline envelope as [day, km] points: origin, each control, the finish.
+function envelope(total) {
+  var pts = [[0, 0]];
+  var d = cpDist(total);
+  CHECKPOINTS.forEach(function (c, i) { pts.push([c.day, d[i]]); });
+  pts.push([LIMIT_D, total]);
+  return pts;
+}
+// The pace a rider must now hold to still clear every deadline that binds them.
+// In the classification, that means every remaining control; once out of it,
+// only reaching Kalamata by the finish. The binding deadline is whichever
+// demands the most — max over the future points.
+function requiredPace(r, total) {
+  var d = cpDist(total);
+  var pts = r.gc
+    ? CHECKPOINTS.map(function (c, i) { return [c.day, d[i]]; }).concat([[LIMIT_D, total]])
+    : [[LIMIT_D, total]];
+  var req = 0, cp = null;
+  pts.forEach(function (p, i) {
+    if (p[0] <= r.elapsed) return;                 // deadline already in the past
+    var need = (p[1] - r.km) / (p[0] - r.elapsed); // km/day from here to make it
+    if (need > req) { req = need; cp = r.gc ? (i < CHECKPOINTS.length ? CHECKPOINTS[i] : null) : null; }
+  });
+  return { pace: Math.max(0, req), cp: cp };
+}
+
+// A calavera rather than a plain dot: these riders are out of the classification
+// but still on the road. Drawn as a 20x20 glyph, scaled and centred on the point.
+function skullInner(colorVar) {
+  return '<path d="M10 0.8C4.4 0.8 1.4 4.5 1.4 9c0 2.7 1.1 4.5 2.7 5.4v2.2c0 1.6 1.3 2.9 2.9 2.9h6c1.6 0 2.9-1.3 2.9-2.9v-2.2c1.6-0.9 2.7-2.7 2.7-5.4C18.6 4.5 15.6 0.8 10 0.8Z" fill="var(--' + colorVar + ')"/>' +
+    '<circle cx="6.5" cy="8.7" r="2.5" fill="var(--surface)"/>' +
+    '<circle cx="13.5" cy="8.7" r="2.5" fill="var(--surface)"/>' +
+    '<path d="M10 11.4l1.5 2.6h-3Z" fill="var(--surface)"/>' +
+    '<rect x="7.4" y="16.1" width="1.5" height="3.5" fill="var(--surface)"/>' +
+    '<rect x="11.1" y="16.1" width="1.5" height="3.5" fill="var(--surface)"/>';
+}
+function skull(cx, cy, size, colorVar) {
+  const k = size / 20, x = cx - size / 2, y = cy - size / 2;
+  return '<g transform="translate(' + x.toFixed(1) + ',' + y.toFixed(1) + ') scale(' + k.toFixed(3) + ')">' + skullInner(colorVar) + '</g>';
+}
+
+let state = { cat: 'ALL', q: '', total: 4950, riskOnly: false, sel: -1, zoom: 'now', view: null };
+
+// A "nice" gridline step for a given data range and target tick count.
+function niceStep(range, target) {
+  const raw = range / Math.max(1, target);
+  const pow = Math.pow(10, Math.floor(Math.log10(raw)));
+  const n = raw / pow;
+  const step = n < 1.5 ? 1 : n < 3 ? 2 : n < 7 ? 5 : 10;
+  return step * pow;
+}
+// The custom viewport, when the user has zoomed/panned, else the active preset.
+function viewport() {
+  if (state.view) return state.view;
+  const b = bounds();
+  return { xmin: b.xmin, xmax: b.xmax, ymin: b.ymin, ymax: b.ymax };
+}
+// Keep a viewport inside the race domain, with sane min/max spans.
+function clampView(v) {
+  const XD = 24, YD = state.total * 1.07;
+  const xr = Math.min(XD, Math.max(0.25, v.xmax - v.xmin));
+  const yr = Math.min(YD, Math.max(80, v.ymax - v.ymin));
+  const x0 = Math.max(0, Math.min(XD - xr, v.xmin));
+  const y0 = Math.max(0, Math.min(YD - yr, v.ymin));
+  return { xmin: x0, xmax: x0 + xr, ymin: y0, ymax: y0 + yr };
+}
+// Zoom by factor f (<1 in, >1 out) keeping the data point (dcx,dcy) under the cursor.
+function zoomAround(dcx, dcy, f) {
+  if (!isFinite(dcx) || !isFinite(dcy) || !isFinite(f) || f <= 0) return;
+  const v = viewport();
+  state.view = clampView({
+    xmin: dcx - (dcx - v.xmin) * f, xmax: dcx + (v.xmax - dcx) * f,
+    ymin: dcy - (dcy - v.ymin) * f, ymax: dcy + (v.ymax - dcy) * f
+  });
+  state.sel = -1; highlight(-1); render();
+}
+// Pan by a delta given in viewBox pixels.
+function panByVB(dvx, dvy) {
+  if (!isFinite(dvx) || !isFinite(dvy)) return;
+  const v = viewport();
+  const ddx = -dvx / PW * (v.xmax - v.xmin), ddy = dvy / PH * (v.ymax - v.ymin);
+  state.view = clampView({ xmin: v.xmin + ddx, xmax: v.xmax + ddx, ymin: v.ymin + ddy, ymax: v.ymax + ddy });
+  render();
+}
+// Data coordinates under a client point on the SVG.
+function dataAt(clientX, clientY) {
+  const b = svg.getBoundingClientRect(), v = viewport();
+  const vx = (clientX - b.left) / b.width * VW, vy = (clientY - b.top) / b.height * VH;
+  return {
+    d: v.xmin + (vx - ML) / PW * (v.xmax - v.xmin),
+    k: v.ymin + (1 - (vy - MT) / PH) * (v.ymax - v.ymin),
+    vx: vx, vy: vy
+  };
+}
+
+const CATS = [['ALL', 'All'], ['S', 'Solo'], ['F', 'FLINTA'], ['P', 'Pairs']];
+const catBox = document.getElementById('cats');
+CATS.forEach(function (c) {
+  const b = document.createElement('button');
+  b.className = 'pill'; b.textContent = c[1];
+  b.setAttribute('aria-pressed', String(c[0] === state.cat));
+  b.onclick = function () {
+    state.cat = c[0]; state.sel = -1;
+    catBox.querySelectorAll('.pill').forEach(function (x) { x.setAttribute('aria-pressed', 'false'); });
+    b.setAttribute('aria-pressed', 'true'); render();
+  };
+  catBox.appendChild(b);
+});
+
+function classify(r) {
+  const req = requiredPace(r, state.total).pace;
+  const m = req > 0 ? r.kmd / req - 1 : 1;
+  return m >= 0.10 ? 'ahead' : (m >= -0.05 ? 'edge' : 'behind');
+}
+function visible() {
+  const q = state.q.trim().toLowerCase();
+  return RIDERS.filter(function (r) {
+    if (state.cat !== 'ALL' && r.cat !== state.cat) return false;
+    if (state.riskOnly && (r.dnf || classify(r) === 'ahead')) return false;
+    if (q && r.name.toLowerCase().indexOf(q) === -1) return false;
+    return true;
+  });
+}
+function fmtDate(days) {
+  const t = new Date(START_MS + days * 864e5 + 2 * 36e5); // CEST = UTC+2
+  const p = function (n) { return String(n).padStart(2, '0'); };
+  return t.getUTCDate() + ' ' + MONTH[t.getUTCMonth()] + ' ' + p(t.getUTCHours()) + ':' + p(t.getUTCMinutes());
+}
+function kfmt(n) { return n.toLocaleString('en-GB'); }
+function fmtAbs(ms) {
+  const t = new Date(ms + 2 * 36e5), p = function (n) { return String(n).padStart(2, '0'); };
+  return t.getUTCDate() + ' ' + MONTH[t.getUTCMonth()] + ' ' + p(t.getUTCHours()) + ':' + p(t.getUTCMinutes());
+}
+// Race day -> wall-clock label. Sub-day steps read as times, with the date
+// carried by the midnight tick; day-scale steps read as dates.
+function axisLabel(days, step) {
+  const t = new Date(START_MS + days * 864e5 + 2 * 36e5);
+  const dd = t.getUTCDate(), mo = MONTH[t.getUTCMonth()], hh = t.getUTCHours(), mm = t.getUTCMinutes();
+  const p = function (n) { return String(n).padStart(2, '0'); };
+  if (step >= 1) return dd + ' ' + mo;
+  if (hh === 0 && mm === 0) return dd + ' ' + mo;
+  return p(hh) + ':' + p(mm);
+}
+
+const VW = 1000, VH = 566, ML = 62, MR = 22, MT = 22, MB = 46;
+const PW = VW - ML - MR, PH = VH - MT - MB;
+const svg = document.getElementById('plot');
+const tip = document.getElementById('tip');
+let hitList = [];
+// Current viewport. "Now" frames the live field so individual dots separate;
+// "Whole race" opens out to the cut-off. Both are recomputed on every render.
+let CUR = { xmax: 24, ymax: 5000, ystep: 1000, xstep: 2 };
+
+function bounds() {
+  if (state.zoom === 'full') {
+    return { xmin: 0, xmax: 24, ymin: 0, ymax: state.total * 1.07, ystep: 1000, xstep: 2 };
+  }
+  // A three-day window ending past the field horizontally; vertically a 700 km
+  // band anchored to the bottom of the still-racing field, so the strugglers — the
+  // tail this whole page is about — spread out and read individually. The leaders
+  // sit above the window (clipped); Whole race shows everyone.
+  let maxEl = 0, loKm = Infinity;
+  RIDERS.forEach(function (r) {
+    if (r.elapsed > maxEl) maxEl = r.elapsed;
+    if (!r.dnf && r.km < loKm) loKm = r.km;
+  });
+  const ymin = Math.max(0, Math.floor((loKm - 40) / 50) * 50);
+  const ymax = Math.min(state.total * 1.07, ymin + 700);
+  const xmin = Math.max(0, Math.floor((maxEl - 1.3) * 2) / 2);
+  return { xmin: xmin, xmax: xmin + 3, ymin: ymin, ymax: ymax, ystep: 200, xstep: 0.5 };
+}
+
+// Measure the rendered deadline labels and drop overlapping ones onto lower rows —
+// pixel-accurate packing that holds whatever the font metrics are.
+function layoutDeadlines() {
+  const labels = [].slice.call(svg.querySelectorAll('text.dl'));
+  const rowRight = [], TOP = MT + 12, ROW_H = 15, GAP = 9;
+  labels.forEach(function (el) {
+    let bb; try { bb = el.getBBox(); } catch (e) { return; }
+    const x0 = bb.x, x1 = bb.x + bb.width;
+    let row = 0;
+    while (rowRight[row] !== undefined && rowRight[row] > x0 - GAP) row++;
+    rowRight[row] = x1;
+    el.setAttribute('y', TOP + row * ROW_H);
+  });
+}
+
+function render() {
+  if (state.view) {
+    const v = state.view;
+    CUR = { xmin: v.xmin, xmax: v.xmax, ymin: v.ymin, ymax: v.ymax,
+            xstep: niceStep(v.xmax - v.xmin, 8), ystep: niceStep(v.ymax - v.ymin, 5) };
+  } else {
+    CUR = bounds();
+  }
+  const XMIN = CUR.xmin, XMAX = CUR.xmax, YMIN = CUR.ymin, YMAX = CUR.ymax;
+  const zoomed = (XMAX - XMIN) < 6;
+  const X = function (d) { return ML + (d - XMIN) / (XMAX - XMIN) * PW; };
+  const Y = function (k) { return MT + (1 - (k - YMIN) / (YMAX - YMIN)) * PH; };
+  const rows = visible();
+
+  // Headline pace = the steepest leg of the deadline envelope that is still
+  // ahead of the field's leader — the toughest average any rider must average
+  // over a whole segment. Right now that is CP1→CP2.
+  const env = envelope(state.total);
+  let hardest = { pace: 0, cp: null };
+  for (let i = 1; i < env.length; i++) {
+    if (env[i][0] <= NOW_D()) continue;
+    const pace = (env[i][1] - env[i - 1][1]) / (env[i][0] - env[i - 1][0]);
+    if (pace > hardest.pace) { hardest = { pace: pace, cp: CHECKPOINTS[i - 1] || null, seg: i }; }
+  }
+  const nextCp = CHECKPOINTS.filter(function (c) { return c.ms > NOW_MS; })[0];
+
+  const all = RIDERS.filter(function (r) {
+    return (state.cat === 'ALL' || r.cat === state.cat) && !r.dnf && r.gc;
+  });
+  const n = { ahead: 0, edge: 0, behind: 0 };
+  all.forEach(function (r) { n[classify(r)]++; });
+  document.getElementById('s-req').innerHTML = hardest.pace
+    ? Math.round(hardest.pace) + '<small class="vu">km/day</small>' : '—';
+  document.getElementById('s-ahead').textContent = n.ahead;
+  document.getElementById('s-edge').textContent = n.edge;
+  document.getElementById('s-behind').textContent = n.behind;
+  document.getElementById('s-dnf').textContent = RIDERS.filter(function (r) {
+    return r.dnf && (state.cat === 'ALL' || r.cat === state.cat);
+  }).length;
+  document.getElementById('s-out').textContent = RIDERS.filter(function (r) {
+    return !r.gc && !r.dnf && (state.cat === 'ALL' || r.cat === state.cat);
+  }).length;
+  const reqSub = document.getElementById('s-req-sub');
+  if (reqSub && nextCp) reqSub.textContent = 'steepest leg · reach ' + nextCp.place + ' by ' + fmtAbs(nextCp.ms);
+  document.getElementById('totv').textContent = kfmt(state.total) + ' km';
+
+  let s = '';
+  s += '<rect x="0" y="0" width="' + VW + '" height="' + VH + '" fill="var(--surface)"/>';
+
+  const gridTop = (!state.view && state.zoom === 'full') ? state.total - 150 : YMAX;
+  for (let k = Math.ceil((YMIN + 1) / CUR.ystep) * CUR.ystep; k < gridTop; k += CUR.ystep) {
+    s += '<line x1="' + ML + '" y1="' + Y(k).toFixed(1) + '" x2="' + (ML + PW) + '" y2="' + Y(k).toFixed(1) +
+         '" stroke="var(--grid)" stroke-width="1"/>';
+    s += '<text x="' + (ML - 10) + '" y="' + (Y(k) + 4).toFixed(1) + '" text-anchor="end">' + kfmt(k) + '</text>';
+  }
+  // Ticks land on wall-clock boundaries (midnight / midday CEST), not on
+  // multiples of race-day — otherwise the date label never falls on a tick.
+  const stepMs = CUR.xstep * 864e5, TZ = 2 * 36e5;
+  const startMs = START_MS + XMIN * 864e5, endMs = START_MS + XMAX * 864e5;
+  for (let m = Math.ceil((startMs + TZ) / stepMs) * stepMs - TZ; m <= endMs; m += stepMs) {
+    const d = (m - START_MS) / 864e5;
+    const lab = axisLabel(d, CUR.xstep);
+    const isDate = /[A-Za-z]/.test(lab);
+    s += '<text x="' + X(d).toFixed(1) + '" y="' + (MT + PH + 20) + '" text-anchor="middle"' +
+         (isDate ? ' font-weight="600" fill="var(--ink-2)"' : '') + '>' + lab + '</text>';
+  }
+  s += '<text class="axname" x="' + (ML + PW / 2) + '" y="' + (MT + PH + 40) + '" text-anchor="middle">' +
+       (zoomed ? 'date and time · CEST' : 'date · CEST') + '</text>';
+
+  // Deadline ribbon along the top: every control closing plus the finish, as a
+  // vertical rule with a top label. Labels are packed into rows greedily — each
+  // one drops to the first row where it doesn't overlap a label already placed —
+  // so however close the control lines fall, the text never collides. The finish
+  // is the hard limit, so it is set apart in bold red.
+  const DEADLINES = CHECKPOINTS.map(function (c) {
+    return { day: c.day, ms: c.ms, tag: c.name, place: c.place, finish: false };
+  }).concat([{ day: LIMIT_D, ms: CUTOFF_MS, tag: 'Finish', place: 'Kalamata', finish: true }]);
+  // Render each label at row 0; a post-render pass (layoutDeadlines) measures the
+  // real text widths and drops overlapping ones onto lower rows, so the packing is
+  // pixel-accurate whatever the font does.
+  DEADLINES.forEach(function (c) {
+    if (c.day < XMIN || c.day > XMAX) return;
+    const gone = c.ms <= NOW_MS, x = X(c.day), rightSide = x > ML + PW * 0.68;
+    const label = (c.finish ? 'Finish' : c.tag + ' ' + c.place) + ' · ' + (gone ? 'closed' : fmtAbs(c.ms));
+    s += '<line x1="' + x.toFixed(1) + '" y1="' + MT + '" x2="' + x.toFixed(1) + '" y2="' + (MT + PH) +
+         '" stroke="var(--rule)" stroke-width="' + (c.finish ? 2 : 1.5) + '"/>';
+    s += '<text class="marklab dl" x="' + (x + (rightSide ? -7 : 7)).toFixed(1) + '" y="' + (MT + 12) +
+         '" text-anchor="' + (rightSide ? 'end' : 'start') + '" fill="var(--' + (c.finish ? 'behind' : 'ink-2') +
+         ')"' + (c.finish ? ' font-weight="700"' : '') + '>' + label + '</text>';
+  });
+  s += '<text class="axname" x="' + (ML - 46) + '" y="' + (MT + PH / 2) + '" text-anchor="middle" ' +
+       'transform="rotate(-90 ' + (ML - 46) + ' ' + (MT + PH / 2) + ')">kilometres covered</text>';
+  s += '<line x1="' + ML + '" y1="' + (MT + PH) + '" x2="' + (ML + PW) + '" y2="' + (MT + PH) + '" stroke="var(--rule)" stroke-width="1"/>';
+
+  // The finish distance as a horizontal reference; label at the left, below the
+  // line, clear of the top deadline ribbon.
+  if (state.total <= YMAX) {
+    s += '<line x1="' + ML + '" y1="' + Y(state.total).toFixed(1) + '" x2="' + (ML + PW) + '" y2="' + Y(state.total).toFixed(1) +
+         '" stroke="var(--rule)" stroke-width="1.5"/>';
+    s += '<text class="marklab" x="' + (ML + 8) + '" y="' + (Y(state.total) + 15).toFixed(1) + '" fill="var(--ink-2)">Kalamata · ' + kfmt(state.total) + ' km</text>';
+  }
+
+  // Everything below is clipped to the plot rectangle, so leaders whose marks sit
+  // above the zoomed window don't spill into the ribbon.
+  s += '<clipPath id="pc"><rect x="' + ML + '" y="' + MT + '" width="' + PW + '" height="' + PH + '"/></clipPath>';
+  s += '<g clip-path="url(#pc)">';
+
+  // Each rider's line runs from where they are now, y = km + kmd·(x − elapsed),
+  // leaving the frame at whichever comes first: the finish, the right edge, or the
+  // top edge. A scratched rider stopped, so draws no projection — just a marker at
+  // the point they abandoned.
+  hitList = [];
+  rows.forEach(function (r, i) {
+    const cls = r.dnf ? 'dnf' : classify(r);
+    if (r.dnf) { hitList.push({ r: r, cls: cls, end: r.elapsed }); return; }
+    const end = Math.min(r.elapsed + (state.total - r.km) / r.kmd, XMAX, r.elapsed + (YMAX - r.km) / r.kmd);
+    s += '<line x1="' + X(r.elapsed).toFixed(1) + '" y1="' + Y(r.km).toFixed(1) + '" x2="' + X(end).toFixed(1) +
+         '" y2="' + Y(r.km + r.kmd * (end - r.elapsed)).toFixed(1) + '" stroke="var(--' + cls +
+         ')" stroke-width="' + (zoomed ? 1.4 : 1.1) + '" opacity="' + (zoomed ? .42 : .34) + '" data-i="' + i + '"/>';
+    hitList.push({ r: r, cls: cls, end: end });
+  });
+
+  // The deadline envelope, drawn as one polyline through origin → each control
+  // → the finish. Its steepest leg — not the overall average — is the pace that
+  // actually binds. Evaluate km at any day by walking the segments.
+  const envKm = function (day) {
+    for (let i = 1; i < env.length; i++) {
+      if (day <= env[i][0]) {
+        const a = env[i - 1], b = env[i], t = (day - a[0]) / (b[0] - a[0]);
+        return a[1] + t * (b[1] - a[1]);
+      }
+    }
+    return env[env.length - 1][1];
+  };
+  // Vertices inside the viewport, plus the clipped entry/exit x, in order.
+  const xs = [XMIN].concat(env.map(function (p) { return p[0]; }).filter(function (x) { return x > XMIN && x < XMAX; })).concat([XMAX]);
+  let poly = '', pxFirst = null, pxLast = null;
+  xs.forEach(function (x) {
+    const ky = envKm(x);
+    const px = X(x);
+    if (pxFirst === null) pxFirst = px;
+    pxLast = px;
+    // Draw the true envelope km; the plot clip (#pc) trims whatever runs off the
+    // top of the band, so the line keeps rising past CP1 instead of stopping there.
+    poly += (poly ? ' L' : 'M') + px.toFixed(1) + ' ' + Y(ky).toFixed(1);
+  });
+  // Everything under the envelope is outside the classification: a faint wash
+  // makes the danger zone readable at a glance without shouting.
+  if (poly && pxLast > pxFirst) {
+    s += '<path d="' + poly + ' L' + pxLast.toFixed(1) + ' ' + (MT + PH) + ' L' + pxFirst.toFixed(1) + ' ' + (MT + PH) + ' Z" fill="var(--under)"/>';
+  }
+  s += '<path d="' + poly + '" fill="none" stroke="var(--ink)" stroke-width="2.5" stroke-linejoin="round"/>';
+  // Label the steepest still-future leg where it sits, clear of the dot column.
+  if (hardest.seg) {
+    const a = env[hardest.seg - 1], b = env[hardest.seg];
+    const mid = 0.5;
+    const lx = a[0] + (b[0] - a[0]) * mid, ly = a[1] + (b[1] - a[1]) * mid;
+    if (lx >= XMIN && lx <= XMAX && ly <= YMAX) {
+      s += '<text class="marklab" x="' + X(lx).toFixed(1) + '" y="' + (Y(ly) + 22).toFixed(1) +
+           '" fill="var(--ink)">' + Math.round(hardest.pace) + ' km/day to ' +
+           (hardest.cp ? hardest.cp.place : 'the finish') + '</text>';
+    }
+  }
+
+  // Marks: a scratched rider is a red skull; one out of the classification (still
+  // riding) a plain skull; everyone in it an emoji by pace, the cyclist mirrored
+  // to ride toward the finish.
+  rows.forEach(function (r, i) {
+    const cx = X(r.elapsed), cy = Y(r.km);
+    if (r.dnf) {
+      s += skull(cx, cy, zoomed ? 14 : 11, 'behind');
+    } else if (!r.gc) {
+      s += skull(cx, cy, zoomed ? 14 : 11, 'ink-2');
+    } else {
+      s += pictoMark(cx, cy, zoomed ? 15 : 12, hitList[i].cls);
+    }
+  });
+
+  s += '</g>';                       // close plot clip group
+  s += '<g id="hi" clip-path="url(#pc)"></g>';
+  svg.innerHTML = s;
+  layoutDeadlines();
+
+  const sorted = rows.slice().sort(function (a, b) { return a.kmd - b.kmd; });
+  document.getElementById('tcount').textContent = sorted.length + ' riders in the current selection.';
+  document.getElementById('tbody').innerHTML = sorted.map(function (r) {
+    const nm = '<td class="l">' + esc(r.name) + '</td><td class="l">' + CATNAME[r.cat] + '</td>' +
+      '<td class="num">' + r.pos + '</td><td class="num">' + kfmt(Math.round(r.km)) + '</td>' +
+      '<td class="num">' + r.kmd.toFixed(0) + '</td>';
+    if (r.dnf) {
+      return '<tr>' + nm + '<td class="num">—</td><td class="num">—</td>' +
+        '<td class="num">' + fmtDate(r.elapsed) + '</td><td class="num">—</td>' +
+        '<td class="l"><span class="badge" style="color:var(--behind)">' + skullHTML('behind') + 'Scratched</span></td>' +
+        '<td class="l"><span class="badge" style="color:var(--behind)">Official DNF</span></td></tr>';
+    }
+    const rp = requiredPace(r, state.total), req = rp.pace;
+    const cls = classify(r), m = req > 0 ? (r.kmd / req - 1) * 100 : 100;
+    return '<tr>' + nm +
+      '<td class="num" style="color:var(--' + cls + ');font-weight:600">' + (m >= 0 ? '+' : '') + m.toFixed(0) + '%</td>' +
+      '<td class="num">' + (rp.cp ? rp.cp.name : 'finish') + '</td>' +
+      '<td class="num">' + fmtDate(r.elapsed + (state.total - r.km) / r.kmd) + '</td>' +
+      '<td class="num">' + r.idle + '%</td>' +
+      '<td class="l"><span class="badge" style="color:var(--' + cls + ')">' + pictoHTML(cls) + LABEL[cls] + '</span></td>' +
+      '<td class="l">' + (r.gc ? '<span style="color:var(--muted)">in GC</span>'
+                               : '<span class="badge" style="color:var(--ink)">' + skullHTML('ink-2') + 'Missed control</span>') + '</td></tr>';
+  }).join('');
+}
+function esc(t) { return t.replace(/&/g, '&amp;').replace(/</g, '&lt;'); }
+
+function highlight(idx, cx, cy) {
+  const g = document.getElementById('hi');
+  if (!g) return;
+  if (idx < 0) { g.innerHTML = ''; tip.classList.remove('on'); return; }
+  const h = hitList[idx], r = h.r;
+  const XMIN = CUR.xmin, XMAX = CUR.xmax, YMIN = CUR.ymin, YMAX = CUR.ymax;
+  const X = function (d) { return ML + (d - XMIN) / (XMAX - XMIN) * PW; };
+  const Y = function (k) { return MT + (1 - (k - YMIN) / (YMAX - YMIN)) * PH; };
+  const mx = X(r.elapsed), my = Y(r.km);
+  const halo = '<circle cx="' + mx.toFixed(1) + '" cy="' + my.toFixed(1) + '" r="15" fill="var(--surface)" opacity=".85"/>';
+  if (r.dnf) {
+    g.innerHTML = halo + skull(mx, my, 24, 'behind');
+    tip.innerHTML = '<div class="n">' + esc(r.name) + '</div><dl>' +
+      '<dt>Category</dt><dd>' + CATNAME[r.cat] + ' · ' + r.pos + '</dd>' +
+      '<dt>Reached</dt><dd>' + kfmt(Math.round(r.km)) + ' km</dd>' +
+      '<dt>Scratched</dt><dd>' + fmtDate(r.elapsed) + '</dd></dl>' +
+      '<div class="st" style="color:var(--behind)">' + skullHTML('behind') + 'Official DNF · abandoned</div>';
+  } else {
+    g.innerHTML =
+      '<line x1="' + mx.toFixed(1) + '" y1="' + my.toFixed(1) + '" x2="' + X(h.end).toFixed(1) +
+      '" y2="' + Y(r.km + r.kmd * (h.end - r.elapsed)).toFixed(1) + '" stroke="var(--' + h.cls + ')" stroke-width="2.5"/>' +
+      (r.gc ? halo + pictoMark(mx, my, 22, h.cls)
+            : halo + skull(mx, my, 24, 'ink-2'));
+    const rp = requiredPace(r, state.total), req = rp.pace;
+    const m = req > 0 ? (r.kmd / req - 1) * 100 : 100, pf = r.elapsed + (state.total - r.km) / r.kmd;
+    const bindLabel = rp.cp ? rp.cp.name + ' ' + rp.cp.place : 'the finish';
+    tip.innerHTML = '<div class="n">' + esc(r.name) + '</div><dl>' +
+      '<dt>Category</dt><dd>' + CATNAME[r.cat] + ' · ' + r.pos + '</dd>' +
+      '<dt>Covered</dt><dd>' + kfmt(Math.round(r.km)) + ' km</dd>' +
+      '<dt>Average</dt><dd>' + r.kmd.toFixed(0) + ' km/day</dd>' +
+      '<dt>Needs</dt><dd>' + Math.round(req) + ' km/day</dd>' +
+      '<dt>Next binds at</dt><dd>' + bindLabel + '</dd>' +
+      '<dt>Margin</dt><dd>' + (m >= 0 ? '+' : '') + m.toFixed(0) + '%</dd>' +
+      '<dt>Stopped</dt><dd>' + r.idle + '%</dd>' +
+      '<dt>Est. finish</dt><dd>' + fmtDate(pf) + '</dd></dl>' +
+      '<div class="st" style="color:var(--' + h.cls + ')">' + pictoHTML(h.cls) + LABEL[h.cls] +
+      (pf > LIMIT_D ? ' · ' + (pf - LIMIT_D).toFixed(1) + ' days late' : '') + '</div>' +
+      (r.gc ? '' : '<div class="st" style="color:var(--ink-2)">' + skullHTML('ink-2') + 'Missed a control · out of GC</div>');
+  }
+  const b = svg.getBoundingClientRect();
+  const px = b.left + (cx / VW) * b.width, py = b.top + (cy / VH) * b.height;
+  tip.classList.add('on');
+  const tw = tip.offsetWidth, th = tip.offsetHeight;
+  tip.style.left = Math.min(window.innerWidth - tw - 10, Math.max(10, px + 16)) + 'px';
+  tip.style.top = Math.max(10, py - th - 12) + 'px';
+}
+
+// --- pan / zoom / hover ---
+svg.style.touchAction = 'none';       // let us handle touch gestures ourselves
+let drag = null;                      // active mouse/pen drag
+
+svg.addEventListener('pointermove', function (e) {
+  if (e.pointerType === 'touch') return;         // touch handled by touch events
+  if (drag) {                                    // dragging → pan
+    const b = svg.getBoundingClientRect();
+    panByVB((e.clientX - drag.x) / b.width * VW, (e.clientY - drag.y) / b.height * VH);
+    drag.x = e.clientX; drag.y = e.clientY;
+    return;
+  }
+  const b = svg.getBoundingClientRect();
+  const vx = (e.clientX - b.left) / b.width * VW, vy = (e.clientY - b.top) / b.height * VH;
+  const XMIN = CUR.xmin, XMAX = CUR.xmax, YMIN = CUR.ymin, YMAX = CUR.ymax;
+  const dx = XMIN + (vx - ML) / PW * (XMAX - XMIN);
+  let best = -1, bd = 1e9, bx = 0, by = 0;
+  hitList.forEach(function (h, i) {
+    const d = Math.max(h.r.elapsed, Math.min(dx, h.end));
+    const yk = h.r.km + h.r.kmd * (d - h.r.elapsed);
+    const py = MT + (1 - (yk - YMIN) / (YMAX - YMIN)) * PH, px = ML + (d - XMIN) / (XMAX - XMIN) * PW;
+    const dist = Math.hypot(px - vx, py - vy);
+    if (dist < bd) { bd = dist; best = i; bx = px; by = py; }
+  });
+  if (bd > 26) best = -1;
+  state.sel = best;
+  highlight(best, bx, by);
+});
+svg.addEventListener('pointerleave', function () { if (!drag) { state.sel = -1; highlight(-1); } });
+svg.addEventListener('pointerdown', function (e) {
+  if (e.pointerType === 'touch') return;
+  drag = { x: e.clientX, y: e.clientY };
+  state.sel = -1; highlight(-1); svg.style.cursor = 'grabbing';
+  try { svg.setPointerCapture(e.pointerId); } catch (x) {}
+});
+function endDrag() { drag = null; svg.style.cursor = ''; }
+svg.addEventListener('pointerup', endDrag);
+svg.addEventListener('pointercancel', endDrag);
+
+svg.addEventListener('wheel', function (e) {
+  e.preventDefault();
+  const b = svg.getBoundingClientRect(), p = dataAt(e.clientX, e.clientY);
+  if (e.ctrlKey || e.metaKey) {                  // trackpad pinch / ctrl+wheel → zoom
+    zoomAround(p.d, p.k, Math.exp(e.deltaY * 0.01));
+  } else {                                        // two-finger swipe / wheel → pan
+    panByVB(-e.deltaX * VW / b.width, -e.deltaY * VH / b.height);
+  }
+}, { passive: false });
+
+let touchState = null;                            // one finger pans, two pinch-zoom
+svg.addEventListener('touchstart', function (e) {
+  if (e.touches.length === 1) touchState = { mode: 'pan', x: e.touches[0].clientX, y: e.touches[0].clientY };
+  else if (e.touches.length === 2) {
+    const a = e.touches[0], c = e.touches[1];
+    touchState = { mode: 'pinch', dist: Math.hypot(a.clientX - c.clientX, a.clientY - c.clientY) };
+  }
+  state.sel = -1; highlight(-1);
+}, { passive: true });
+svg.addEventListener('touchmove', function (e) {
+  if (!touchState) return;
+  e.preventDefault();
+  const b = svg.getBoundingClientRect();
+  if (touchState.mode === 'pan' && e.touches.length === 1) {
+    const t = e.touches[0];
+    panByVB((t.clientX - touchState.x) / b.width * VW, (t.clientY - touchState.y) / b.height * VH);
+    touchState.x = t.clientX; touchState.y = t.clientY;
+  } else if (touchState.mode === 'pinch' && e.touches.length === 2) {
+    const a = e.touches[0], c = e.touches[1];
+    const dist = Math.hypot(a.clientX - c.clientX, a.clientY - c.clientY);
+    const p = dataAt((a.clientX + c.clientX) / 2, (a.clientY + c.clientY) / 2);
+    zoomAround(p.d, p.k, touchState.dist / Math.max(1, dist));
+    touchState.dist = dist;
+  }
+}, { passive: false });
+svg.addEventListener('touchend', function (e) { if (e.touches.length === 0) touchState = null; });
+
+function zoomCenter(f) { const v = viewport(); zoomAround((v.xmin + v.xmax) / 2, (v.ymin + v.ymax) / 2, f); }
+document.getElementById('zoom-in').onclick = function () { zoomCenter(0.65); };
+document.getElementById('zoom-out').onclick = function () { zoomCenter(1 / 0.65); };
+document.getElementById('zoom-reset').onclick = function () { state.view = null; state.sel = -1; highlight(-1); render(); };
+svg.addEventListener('keydown', function (e) {
+  if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+  e.preventDefault();
+  if (!hitList.length) return;
+  state.sel = (state.sel + (e.key === 'ArrowRight' ? 1 : -1) + hitList.length) % hitList.length;
+  const h = hitList[state.sel];
+  highlight(state.sel, ML + (h.r.elapsed - CUR.xmin) / (CUR.xmax - CUR.xmin) * PW, MT + (1 - (h.r.km - CUR.ymin) / (CUR.ymax - CUR.ymin)) * PH);
+});
+
+document.getElementById('q').addEventListener('input', function (e) { state.q = e.target.value; state.sel = -1; render(); });
+document.getElementById('tot').addEventListener('input', function (e) { state.total = +e.target.value; state.sel = -1; render(); });
+document.getElementById('risk').addEventListener('change', function (e) { state.riskOnly = e.target.checked; state.sel = -1; render(); });
+// Headline and freshness are derived from the data, so an automated refresh
+// only ever has to swap the RAW block and DATA_MS.
+(function () {
+  const out = RIDERS.filter(function (r) { return !r.gc && !r.dnf; }).length;
+  const dnf = RIDERS.filter(function (r) { return r.dnf; }).length;
+  const passed = CHECKPOINTS.filter(function (c) { return c.ms <= NOW_MS; });
+  const last = passed[passed.length - 1];
+  document.getElementById('cpline').textContent = last
+    ? last.name + ' ' + last.place + ' closed on ' + fmtAbs(last.ms) + ': ' + out +
+      (out === 1 ? ' rider has' : ' riders have') + ' since lost their classification, and ' +
+      dnf + ' more have scratched.'
+    : 'The first control closes on ' + fmtAbs(CHECKPOINTS[0].ms) + '.';
+  document.getElementById('freshness').textContent = fmtAbs(DATA_MS) + ' CEST';
+})();
+
+const zn = document.getElementById('z-now'), zf = document.getElementById('z-full');
+function setZoom(z) {
+  state.zoom = z; state.sel = -1; state.view = null;   // presets clear any custom zoom
+  zn.setAttribute('aria-pressed', String(z === 'now'));
+  zf.setAttribute('aria-pressed', String(z === 'full'));
+  highlight(-1); render();
+}
+zn.onclick = function () { setZoom('now'); };
+zf.onclick = function () { setZoom('full'); };
+
+const vc = document.getElementById('v-chart'), vt = document.getElementById('v-table');
+vc.onclick = function () { vc.setAttribute('aria-pressed', 'true'); vt.setAttribute('aria-pressed', 'false');
+  document.getElementById('chartview').hidden = false; document.getElementById('tableview').hidden = true; };
+vt.onclick = function () { vt.setAttribute('aria-pressed', 'true'); vc.setAttribute('aria-pressed', 'false');
+  document.getElementById('tableview').hidden = false; document.getElementById('chartview').hidden = true; };
+
+render();
+
+/* ---------------- Wall of Support ---------------- */
+(function () {
+  const listEl = document.getElementById('wall-list');
+  const feedEl = document.getElementById('wall-feed');
+  const qEl = document.getElementById('wall-q');
+  const comp = document.getElementById('compose');
+  const compName = document.getElementById('compose-name');
+  const compIg = document.getElementById('compose-ig');
+  const compText = document.getElementById('compose-text');
+  const compCount = document.getElementById('compose-count');
+  const compSend = document.getElementById('compose-send');
+  const toastEl = document.getElementById('toast');
+  let current = null;
+
+  // The strugglers: still riding (not scratched), on the edge or off the pace.
+  // Off-the-pace first, then by how far under their required pace they sit.
+  function strugglers() {
+    return RIDERS.filter(function (r) {
+      if (r.dnf) return false;
+      const c = classify(r);
+      return c === 'edge' || c === 'behind';
+    }).map(function (r) {
+      const req = requiredPace(r, state.total).pace;
+      return { r: r, cls: classify(r), handle: HANDLES[r.name] || null, def: req > 0 ? r.kmd / req - 1 : 0 };
+    }).sort(function (a, b) {
+      if (a.cls !== b.cls) return a.cls === 'behind' ? -1 : 1;
+      return a.def - b.def;
+    });
+  }
+
+  function toast(msg) {
+    toastEl.textContent = msg; toastEl.classList.add('on');
+    clearTimeout(toast._t); toast._t = setTimeout(function () { toastEl.classList.remove('on'); }, 3400);
+  }
+
+  function renderList() {
+    const q = qEl.value.trim().toLowerCase();
+    const rows = strugglers().filter(function (s) { return !q || s.r.name.toLowerCase().indexOf(q) !== -1; });
+    listEl.innerHTML = rows.length ? rows.map(function (s, i) {
+      return '<button class="wr" data-i="' + i + '">' +
+        pictoHTML(s.cls) +
+        '<span class="wr-name">' + esc(s.r.name) + '</span>' +
+        (s.handle ? '<span class="wr-ig">@' + esc(s.handle) + '</span>' : '') +
+        '<span class="wr-cta">Cheer</span></button>';
+    }).join('') : '<p class="wall-empty">No matches.</p>';
+    listEl._rows = rows;
+  }
+  listEl.addEventListener('click', function (e) {
+    const b = e.target.closest('.wr'); if (!b) return;
+    openCompose(listEl._rows[+b.getAttribute('data-i')]);
+  });
+  qEl.addEventListener('input', renderList);
+
+  function openCompose(s) {
+    current = s;
+    compName.textContent = s.r.name;
+    if (s.handle) {
+      compIg.textContent = '@' + s.handle + ' · opens on send';
+      compIg.href = 'https://www.instagram.com/' + s.handle + '/';
+      compIg.style.display = '';
+    } else {
+      compIg.textContent = 'No Instagram found — your message still goes on the wall';
+      compIg.removeAttribute('href'); compIg.style.display = '';
+    }
+    compText.value = ''; compCount.textContent = '100'; compSend.disabled = false;
+    comp.hidden = false; compText.focus();
+  }
+  function closeCompose() { comp.hidden = true; current = null; }
+  document.getElementById('compose-x').onclick = closeCompose;
+  comp.addEventListener('click', function (e) { if (e.target === comp) closeCompose(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !comp.hidden) closeCompose(); });
+  compText.addEventListener('input', function () { compCount.textContent = 100 - compText.value.length; });
+
+  compSend.onclick = function () {
+    if (!current) return;
+    const msg = compText.value.trim();
+    if (!msg) { compText.focus(); return; }
+    compSend.disabled = true;
+    const body = { rider_name: current.r.name, rider_handle: current.handle, cat: current.cls, message: msg };
+    fetch(SUPA_URL + '/rest/v1/support_messages', {
+      method: 'POST',
+      headers: { apikey: SUPA_KEY, Authorization: 'Bearer ' + SUPA_KEY, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
+      body: JSON.stringify(body)
+    }).then(function (res) {
+      if (!res.ok) throw new Error('post failed ' + res.status);
+      // Copy for the personal DM, then open their Instagram.
+      if (navigator.clipboard) navigator.clipboard.writeText(msg).catch(function () {});
+      if (current.handle) window.open('https://www.instagram.com/' + current.handle + '/', '_blank', 'noopener');
+      closeCompose();
+      toast(current.handle ? 'On the wall. Message copied — paste it into their Instagram DM.' : 'Posted to the wall of support.');
+      setTimeout(loadFeed, 600);
+    }).catch(function () {
+      compSend.disabled = false;
+      toast('Could not send just now — please try again in a moment.');
+    });
+  };
+
+  function loadFeed() {
+    fetch(SUPA_URL + '/rest/v1/support_messages?status=eq.approved&select=rider_name,rider_handle,cat,message,created_at&order=created_at.desc&limit=80',
+      { headers: { apikey: SUPA_KEY, Authorization: 'Bearer ' + SUPA_KEY } })
+      .then(function (res) { if (!res.ok) throw new Error(res.status); return res.json(); })
+      .then(function (rows) {
+        if (!rows.length) { feedEl.innerHTML = '<p class="wall-empty">No messages yet — be the first to send one.</p>'; return; }
+        feedEl.innerHTML = rows.map(function (m) {
+          const ig = m.rider_handle
+            ? '<a href="https://www.instagram.com/' + esc(m.rider_handle) + '/" target="_blank" rel="noopener nofollow">@' + esc(m.rider_handle) + '</a>'
+            : '';
+          return '<div class="wm ' + (m.cat === 'behind' ? 'behind' : 'edge') + '">' +
+            '<div class="wm-to">To <b>' + esc(m.rider_name) + '</b> ' + ig + '</div>' +
+            '<div class="wm-msg">' + esc(m.message) + '</div></div>';
+        }).join('');
+      })
+      .catch(function () {
+        feedEl.innerHTML = '<p class="wall-empty">The live wall needs the published site — open it at the-last-dot.vercel.app.</p>';
+      });
+  }
+
+  renderList();
+  loadFeed();
+})();
+</script>
