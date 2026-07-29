@@ -78,12 +78,14 @@ const EXTRACT = () => {
       // fills ridersArray; wait for a substantially populated roster.
       await page.waitForFunction(
         () => typeof ridersArray !== 'undefined' && Object.values(ridersArray).length > 300,
+        null,
         { timeout: 120000 },
       );
       await page.waitForTimeout(5000); // let per-rider stats hydrate
       snap = await page.evaluate(EXTRACT);
     } catch (e) {
       log(`attempt ${attempt} failed: ${e.message}`);
+      log(`page title: ${await page.title().catch(() => '?')}`);
       continue;
     }
     // Freshness gate: FMC sometimes serves a stale cached dataset (seen up to
