@@ -60,10 +60,32 @@ if (rows.length < prevRows * 0.8) {
   process.exit(1);
 }
 
+// Out of the GC is permanent — a control validated after it closed cannot be
+// un-missed. A rider flagged 0 in the previous build stays 0 unless they have
+// since scratched, whatever the tracker's grouping says on this read.
+const prevFlag = {};
+prev[1].trim().split('\n').filter(Boolean).forEach(l => { const p = l.split(';'); prevFlag[p[0]] = p[6]; });
+const outRows = rows.map(l => {
+  const p = l.split(';');
+  if (prevFlag[p[0]] === '0' && p[6] === '1') p[6] = '0';
+  return p.join(';');
+});
+
+// Scratched riders cannot un-scratch en masse either (FMC occasionally
+// reinstates one — allow that, refuse a wholesale drop).
+const prevDnf = Object.values(prevFlag).filter(f => f === 'D').length;
+const dnf = outRows.filter(l => l.endsWith(';D')).length;
+if (dnf < prevDnf - 2) {
+  console.error(`ABORT: DNF count fell from ${prevDnf} to ${dnf} — extraction lost scratched riders.`);
+  process.exit(1);
+}
+
+const outData = outRows.join('\n');
+
 const d = new Date(ts);
 const dateExpr = `Date.UTC(${d.getUTCFullYear()}, ${d.getUTCMonth()}, ${d.getUTCDate()}, ${d.getUTCHours()}, ${d.getUTCMinutes()})`;
 
-src = src.replace(/const RAW = `[\s\S]*?`;/, 'const RAW = `' + data + '`;');
+src = src.replace(/const RAW = `[\s\S]*?`;/, 'const RAW = `' + outData + '`;');
 src = src.replace(/const DATA_MS = [^;]+;/, `const DATA_MS = ${dateExpr};`);
 fs.writeFileSync(SRC, src);
 
@@ -91,5 +113,5 @@ const head = [
 fs.mkdirSync(path.dirname(OUT), { recursive: true });
 fs.writeFileSync(OUT, head + '\n' + body + '\n</body>\n</html>\n');
 
-const outOfGc = rows.filter(r => r.endsWith(';0')).length;
-console.log(`OK ${rows.length} riders (${outOfGc} out of GC) @ ${d.toISOString()} -> dist/index.html`);
+const outOfGc = outRows.filter(r => r.endsWith(';0')).length;
+console.log(`OK ${outRows.length} riders (${outOfGc} out of GC, ${dnf} DNF) @ ${d.toISOString()} -> dist/index.html`);
