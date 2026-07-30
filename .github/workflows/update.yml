@@ -1,8 +1,9 @@
 name: update-chart
 
+# NOTE: the 5-min cron is disabled — FMC's Cloudflare hard-blocks GitHub's
+# runner IPs ("Attention Required"). Re-enable the schedule only if the
+# scrape step gains a working network path.
 on:
-  schedule:
-    - cron: '*/5 * * * *'
   workflow_dispatch:
 
 permissions:
