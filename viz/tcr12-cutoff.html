@@ -324,8 +324,8 @@
     <div class="field">
       <label class="lbl" for="tot">Estimated total distance</label>
       <div style="display:flex;align-items:center;gap:11px">
-        <input type="range" id="tot" min="4700" max="5200" step="50" value="4950">
-        <span class="rangeval" id="totv">4950 km</span>
+        <input type="range" id="tot" min="4700" max="5200" step="50" value="4750">
+        <span class="rangeval" id="totv">4750 km</span>
       </div>
     </div>
     <div class="field">
@@ -978,7 +978,7 @@ function skull(cx, cy, size, colorVar) {
   return '<g transform="translate(' + x.toFixed(1) + ',' + y.toFixed(1) + ') scale(' + k.toFixed(3) + ')">' + skullInner(colorVar) + '</g>';
 }
 
-let state = { cat: 'ALL', q: '', total: 4950, riskOnly: false, sel: -1, zoom: 'now', view: null };
+let state = { cat: 'ALL', q: '', total: 4750, riskOnly: false, sel: -1, zoom: 'now', view: null };
 
 // A "nice" gridline step for a given data range and target tick count.
 function niceStep(range, target) {
@@ -1003,6 +1003,15 @@ function clampView(v) {
   const y0 = Math.max(0, Math.min(YD - yr, v.ymin));
   return { xmin: x0, xmax: x0 + xr, ymin: y0, ymax: y0 + yr };
 }
+// Gesture events arrive far faster than a full SVG rebuild can paint; coalesce
+// them so at most one render runs per animation frame (state still updates on
+// every event, so nothing is lost — only the paints are batched).
+let renderQueued = false;
+function scheduleRender() {
+  if (renderQueued) return;
+  renderQueued = true;
+  requestAnimationFrame(function () { renderQueued = false; render(); });
+}
 // Zoom by factor f (<1 in, >1 out) keeping the data point (dcx,dcy) under the cursor.
 function zoomAround(dcx, dcy, f) {
   if (!isFinite(dcx) || !isFinite(dcy) || !isFinite(f) || f <= 0) return;
@@ -1011,7 +1020,7 @@ function zoomAround(dcx, dcy, f) {
     xmin: dcx - (dcx - v.xmin) * f, xmax: dcx + (v.xmax - dcx) * f,
     ymin: dcy - (dcy - v.ymin) * f, ymax: dcy + (v.ymax - dcy) * f
   });
-  state.sel = -1; highlight(-1); render();
+  state.sel = -1; highlight(-1); scheduleRender();
 }
 // Pan by a delta given in viewBox pixels.
 function panByVB(dvx, dvy) {
@@ -1019,7 +1028,7 @@ function panByVB(dvx, dvy) {
   const v = viewport();
   const ddx = -dvx / PW * (v.xmax - v.xmin), ddy = dvy / PH * (v.ymax - v.ymin);
   state.view = clampView({ xmin: v.xmin + ddx, xmax: v.xmax + ddx, ymin: v.ymin + ddy, ymax: v.ymax + ddy });
-  render();
+  scheduleRender();
 }
 // Data coordinates under a client point on the SVG.
 function dataAt(clientX, clientY) {
@@ -1113,14 +1122,21 @@ function bounds() {
 // pixel-accurate packing that holds whatever the font metrics are.
 function layoutDeadlines() {
   const labels = [].slice.call(svg.querySelectorAll('text.dl'));
-  const rowRight = [], TOP = MT + 12, ROW_H = 15, GAP = 9;
+  const rowRight = [], TOP = MT + 12, ROW_H = 15, GAP = 12;
+  // Greedy interval packing is only correct on labels sorted by left edge —
+  // the finish label is end-anchored, so document order can invert the x order
+  // and push it rows deep into the plot.
+  const measured = [];
   labels.forEach(function (el) {
-    let bb; try { bb = el.getBBox(); } catch (e) { return; }
-    const x0 = bb.x, x1 = bb.x + bb.width;
+    try { measured.push({ el: el, bb: el.getBBox() }); } catch (e) {}
+  });
+  measured.sort(function (a, b) { return a.bb.x - b.bb.x; });
+  measured.forEach(function (m) {
+    const x0 = m.bb.x, x1 = m.bb.x + m.bb.width;
     let row = 0;
     while (rowRight[row] !== undefined && rowRight[row] > x0 - GAP) row++;
     rowRight[row] = x1;
-    el.setAttribute('y', TOP + row * ROW_H);
+    m.el.setAttribute('y', TOP + row * ROW_H);
   });
 }
 
@@ -1207,7 +1223,11 @@ function render() {
   DEADLINES.forEach(function (c) {
     if (c.day < XMIN || c.day > XMAX) return;
     const gone = c.ms <= NOW_MS, x = X(c.day), rightSide = x > ML + PW * 0.68;
-    const label = (c.finish ? 'Finish' : c.tag + ' ' + c.place) + ' · ' + (gone ? 'closed' : fmtAbs(c.ms));
+    // Once a control is closed its place no longer matters — the short form
+    // frees ribbon width for the deadlines still in play.
+    const label = c.finish ? 'Finish · ' + (gone ? 'closed' : fmtAbs(c.ms))
+                : gone ? c.tag + ' · closed'
+                : c.tag + ' ' + c.place + ' · ' + fmtAbs(c.ms);
     s += '<line x1="' + x.toFixed(1) + '" y1="' + MT + '" x2="' + x.toFixed(1) + '" y2="' + (MT + PH) +
          '" stroke="var(--rule)" stroke-width="' + (c.finish ? 2 : 1.5) + '"/>';
     s += '<text class="marklab dl" x="' + (x + (rightSide ? -7 : 7)).toFixed(1) + '" y="' + (MT + 12) +
