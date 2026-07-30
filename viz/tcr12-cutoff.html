@@ -1430,14 +1430,17 @@ svg.addEventListener('wheel', function (e) {
 }, { passive: false });
 
 let touchState = null;                            // one finger pans, two pinch-zoom
+function pinchFrom(e) {
+  const a = e.touches[0], c = e.touches[1];
+  return { mode: 'pinch', dist: Math.hypot(a.clientX - c.clientX, a.clientY - c.clientY),
+           cx: (a.clientX + c.clientX) / 2, cy: (a.clientY + c.clientY) / 2 };
+}
 svg.addEventListener('touchstart', function (e) {
+  e.preventDefault();      // keep iOS Safari from starting its own page pan/zoom here
   if (e.touches.length === 1) touchState = { mode: 'pan', x: e.touches[0].clientX, y: e.touches[0].clientY };
-  else if (e.touches.length === 2) {
-    const a = e.touches[0], c = e.touches[1];
-    touchState = { mode: 'pinch', dist: Math.hypot(a.clientX - c.clientX, a.clientY - c.clientY) };
-  }
+  else if (e.touches.length >= 2) touchState = pinchFrom(e);
   state.sel = -1; highlight(-1);
-}, { passive: true });
+}, { passive: false });
 svg.addEventListener('touchmove', function (e) {
   if (!touchState) return;
   e.preventDefault();
@@ -1446,15 +1449,37 @@ svg.addEventListener('touchmove', function (e) {
     const t = e.touches[0];
     panByVB((t.clientX - touchState.x) / b.width * VW, (t.clientY - touchState.y) / b.height * VH);
     touchState.x = t.clientX; touchState.y = t.clientY;
-  } else if (touchState.mode === 'pinch' && e.touches.length === 2) {
-    const a = e.touches[0], c = e.touches[1];
-    const dist = Math.hypot(a.clientX - c.clientX, a.clientY - c.clientY);
-    const p = dataAt((a.clientX + c.clientX) / 2, (a.clientY + c.clientY) / 2);
-    zoomAround(p.d, p.k, touchState.dist / Math.max(1, dist));
-    touchState.dist = dist;
+  } else if (touchState.mode === 'pinch' && e.touches.length >= 2) {
+    const n = pinchFrom(e);
+    // two-finger drag pans by the centroid delta, spread/close zooms
+    panByVB((n.cx - touchState.cx) / b.width * VW, (n.cy - touchState.cy) / b.height * VH);
+    const p = dataAt(n.cx, n.cy);
+    zoomAround(p.d, p.k, touchState.dist / Math.max(1, n.dist));
+    touchState = n;
   }
 }, { passive: false });
-svg.addEventListener('touchend', function (e) { if (e.touches.length === 0) touchState = null; });
+svg.addEventListener('touchend', function (e) {
+  // lifting one finger of a pinch hands over to a pan with the remaining one
+  if (e.touches.length === 0) touchState = null;
+  else if (e.touches.length === 1) touchState = { mode: 'pan', x: e.touches[0].clientX, y: e.touches[0].clientY };
+  else touchState = pinchFrom(e);
+});
+
+// Safari reports trackpad pinch as proprietary gesture events (no ctrlKey+wheel):
+// scale is cumulative since gesturestart, so zoom by the ratio between events.
+// On iOS these fire alongside the touch events above — touchState guards the
+// double-handling; preventDefault still suppresses the native page zoom.
+let gestureScale = null;
+svg.addEventListener('gesturestart', function (e) { e.preventDefault(); gestureScale = e.scale || 1; });
+svg.addEventListener('gesturechange', function (e) {
+  e.preventDefault();
+  if (touchState) return;
+  const s = e.scale || gestureScale;
+  const p = dataAt(e.clientX, e.clientY);
+  zoomAround(p.d, p.k, gestureScale / Math.max(0.01, s));
+  gestureScale = s;
+});
+svg.addEventListener('gestureend', function (e) { e.preventDefault(); gestureScale = null; });
 
 function zoomCenter(f) { const v = viewport(); zoomAround((v.xmin + v.xmax) / 2, (v.ymin + v.ymax) / 2, f); }
 document.getElementById('zoom-in').onclick = function () { zoomCenter(0.65); };

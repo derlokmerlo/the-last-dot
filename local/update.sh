@@ -24,7 +24,10 @@ fi
 trap 'rmdir "$LOCK"' EXIT
 
 cd "$REPO"
-git pull -q --rebase origin main 2>/dev/null || true   # stay current; tolerate offline
+# Stay current with origin/main; tolerate offline. A hard reset (not pull):
+# refresh.js dirties viz/tcr12-cutoff.html every cycle, which makes pull fail,
+# and the runner clone must never diverge from the repo anyway.
+{ git fetch -q origin main && git reset -q --hard origin/main; } 2>/dev/null || true
 echo "=== $(date '+%F %T') scrape"
 SNAP="$(mktemp)"
 EPOCH=$(node scraper/scrape.js "$SNAP")
