@@ -24,6 +24,7 @@ fi
 trap 'rmdir "$LOCK"' EXIT
 
 cd "$REPO"
+git pull -q --rebase origin main 2>/dev/null || true   # stay current; tolerate offline
 echo "=== $(date '+%F %T') scrape"
 SNAP="$(mktemp)"
 EPOCH=$(node scraper/scrape.js "$SNAP")
