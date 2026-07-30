@@ -38,9 +38,9 @@ if (rows.length < 200) {
 }
 const numeric = rows.every(r => {
   const p = r.split(';');
-  return +p[2] > 0 && +p[3] > 0 && /^[10D]$/.test(p[6]);
+  return +p[2] > 0 && +p[3] > 0 && /^[10DF]$/.test(p[6]);
 });
-if (!numeric) { console.error('ABORT: a rider has bad km / km-per-day, or a status that is not 1, 0 or D.'); process.exit(1); }
+if (!numeric) { console.error('ABORT: a rider has bad km / km-per-day, or a status that is not 1, 0, D or F.'); process.exit(1); }
 
 const ts = parseInt(epoch, 10) * 1000;
 if (!Number.isFinite(ts) || ts < Date.UTC(2026, 6, 19)) {

@@ -45,8 +45,13 @@ const EXTRACT = () => {
     // odometer caps it.
     const km = +Math.min(ROUTE - r.dtfKM, r.totalDistance > 0 ? r.totalDistance : Infinity).toFixed(1);
     if (!isFinite(km) || km <= 5) continue;
+    // A finisher carries their crossing time as a Unix epoch (and, oddly,
+    // scratched="100" — which the ==1 check above correctly ignores).
+    const finU = +r.finishTime || 0;
+    const fin = !scr && finU > START;
     const elStop = scr ? parseEl(r.totalTimeElapsed) : null;
-    let kmd = +((scr && elStop > 0.5) ? km / elStop : km / days).toFixed(1);
+    let kmd = +(fin ? km / ((finU - START) / 86400)
+              : (scr && elStop > 0.5) ? km / elStop : km / days).toFixed(1);
     // A frozen scratch-time clock implies an impossible pace — fall back to the
     // race-elapsed average so the rider stays on the board instead of vanishing.
     if (scr && !(kmd > 0 && kmd <= 520)) kmd = +(km / days).toFixed(1);
@@ -56,7 +61,7 @@ const EXTRACT = () => {
       name: (r.riderName || '').trim().replace(/;/g, ','), km, kmd,
       cat: r.groupHeaderLabel === 'Pair' ? 'P' : (/lbtag:FLINTA/.test(r.tags || '') ? 'F' : 'S'),
       idle: scr ? 0 : idle,
-      gc: scr ? 'D' : ((r.groupHeaderLabel === 'Outside of GC' || r.cpCount < closed || late) ? '0' : '1'),
+      gc: fin ? 'F' : scr ? 'D' : ((r.groupHeaderLabel === 'Outside of GC' || r.cpCount < closed || late) ? '0' : '1'),
     });
   }
   const pairs = riders.filter(r => r.cat === 'P').sort((a, b) => b.km - a.km);
