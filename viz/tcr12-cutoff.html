@@ -335,8 +335,8 @@
     <div class="field">
       <span class="lbl" id="lb-scale">Scale</span>
       <div class="pills" role="group" aria-labelledby="lb-scale">
-        <button class="pill" id="z-now" aria-pressed="true">Now</button>
-        <button class="pill" id="z-full" aria-pressed="false">Whole race</button>
+        <button class="pill" id="z-now" aria-pressed="false">Now</button>
+        <button class="pill" id="z-full" aria-pressed="true">Whole race</button>
       </div>
     </div>
     <div class="spacer"></div>
@@ -994,7 +994,7 @@ function skull(cx, cy, size, colorVar) {
   return '<g transform="translate(' + x.toFixed(1) + ',' + y.toFixed(1) + ') scale(' + k.toFixed(3) + ')">' + skullInner(colorVar) + '</g>';
 }
 
-let state = { cat: 'ALL', q: '', total: 4750, riskOnly: false, sel: -1, zoom: 'now', view: null };
+let state = { cat: 'ALL', q: '', total: 4750, riskOnly: false, sel: -1, zoom: 'full', view: null };
 
 // A "nice" gridline step for a given data range and target tick count.
 function niceStep(range, target) {
