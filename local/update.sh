@@ -33,8 +33,11 @@ rm -f "$SNAP"
 echo "=== publish (data branch)"
 TMP="$(mktemp -d)"
 cp viz/dist/index.html "$TMP"/
+# the workflow file must exist on the pushed branch or the push won't trigger it
+mkdir -p "$TMP/.github/workflows"
+cp .github/workflows/deploy.yml "$TMP/.github/workflows/"
 git -C "$TMP" init -q -b data
-git -C "$TMP" add index.html
+git -C "$TMP" add -A
 git -C "$TMP" -c user.name="tld-updater" -c user.email="tld-updater@local" \
   commit -q -m "site @ $(date -u '+%F %T UTC')"
 git -C "$TMP" -c credential.helper='!gh auth git-credential' \
