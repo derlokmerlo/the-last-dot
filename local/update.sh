@@ -28,6 +28,14 @@ cd "$REPO"
 # refresh.js dirties viz/tcr12-cutoff.html every cycle, which makes pull fail,
 # and the runner clone must never diverge from the repo anyway.
 { git fetch -q origin main && git reset -q --hard origin/main; } 2>/dev/null || true
+
+# Keep Playwright's browsers OUT of ~/Library/Caches — macOS purges that under
+# storage pressure (it has already eaten Chromium twice). Reinstall if missing.
+export PLAYWRIGHT_BROWSERS_PATH="$REPO/local/pw-browsers"
+if ! node -e 'const p=require("playwright-core").chromium.executablePath();process.exit(require("fs").existsSync(p)?0:1)' 2>/dev/null; then
+  echo "=== chromium missing — reinstalling into $PLAYWRIGHT_BROWSERS_PATH"
+  npx --yes playwright-core install chromium chromium-headless-shell >/dev/null 2>&1 || npx --yes playwright-core install chromium
+fi
 echo "=== $(date '+%F %T') scrape"
 SNAP="$(mktemp)"
 EPOCH=$(node scraper/scrape.js "$SNAP")

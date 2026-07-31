@@ -3,3 +3,6 @@ viz/dist/
 riders.new.txt
 package.json
 package-lock.json
+local/pw-browsers/
+local/update.log
+local/.update.lock/
