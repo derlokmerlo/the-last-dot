@@ -261,6 +261,8 @@
   details.fx p { margin: 2px 0 14px; }
   .chartwrap { position: relative; }
   .chartwrap svg { touch-action: none; cursor: grab; }
+  .mapwrap { max-width: 500px; margin: 0 auto; }
+  .mapwrap svg { display: block; width: 100%; }
   .zoomctl { position: absolute; top: 8px; right: 8px; display: flex; flex-direction: column; }
   .zoomctl button { width: 30px; height: 30px; background: var(--panel); color: var(--ink);
     border: 1px solid var(--rule); margin-top: -1px; font-size: 17px; line-height: 1; cursor: pointer;
@@ -344,6 +346,7 @@
       <span class="lbl" id="lb-view">View</span>
       <div class="pills" role="group" aria-labelledby="lb-view">
         <button class="pill" id="v-chart" aria-pressed="true">Chart</button>
+        <button class="pill" id="v-map" aria-pressed="false">Map</button>
         <button class="pill" id="v-table" aria-pressed="false">Table</button>
       </div>
     </div>
@@ -384,6 +387,26 @@
     <p class="hint"><b>Drag</b> to move, <b>pinch or the +/− buttons</b> to zoom, <b>⤢</b> to reset;
       on a trackpad, two fingers pan and pinch zooms. <b>Now</b> frames the field as it stands today so riders
       separate; <b>Whole race</b> opens out to the cut-off. Hover to identify a rider.</p>
+  </section>
+
+  <section class="block chartcard" id="mapview" hidden>
+    <div class="chart-head">
+      <span class="chart-title">The corridor, Trondheim to Kalamata — and the broom behind the field</span>
+      <div class="legend">
+        <span class="lg"><svg viewBox="0 0 20 20" width="12" height="12"><circle cx="10" cy="10" r="7" fill="var(--ahead)"/></svg>Inside</span>
+        <span class="lg"><svg viewBox="0 0 20 20" width="12" height="12"><circle cx="10" cy="10" r="7" fill="var(--edge)"/></svg>On the edge</span>
+        <span class="lg"><svg viewBox="0 0 20 20" width="12" height="12"><circle cx="10" cy="10" r="7" fill="var(--behind)"/></svg>Off the pace</span>
+        <span class="lg"><svg viewBox="0 0 20 20" width="12" height="12"><circle cx="10" cy="10" r="7" fill="var(--ink-2)"/></svg>Out of GC</span>
+        <span class="lg"><svg viewBox="0 0 20 20" width="12" height="12"><path d="M4 4L16 16M4 16L16 4" stroke="var(--behind)" stroke-width="2.6"/></svg>Scratched here</span>
+        <span class="lg"><span class="sw line"></span>The broom · minimum GC pace</span>
+      </div>
+    </div>
+    <div class="mapwrap"><svg id="mapplot" viewBox="0 0 460 820" role="img"
+      aria-label="Stylised vertical map of Europe from Norway to Greece: riders as dots along the race corridor, scratched riders marked where they stopped, and the broom line at the minimum pace still compatible with the cut-off."></svg></div>
+    <p class="hint">The TCR is free-route — riders are placed along a stylised corridor by distance ridden,
+      so lateral position is indicative, not GPS. <b>Hover</b> a mark to identify the rider. The dashed
+      line is <b>the broom</b>: it sweeps toward Kalamata at the minimum pace that still clears every
+      cut-off; anyone behind it is losing the race against the clock, not against other riders.</p>
   </section>
 
   <section class="block" id="tableview" hidden>
@@ -1376,6 +1399,7 @@ function render() {
       '<td class="l">' + (r.gc ? '<span style="color:var(--muted)">in GC</span>'
                                : '<span class="badge" style="color:var(--ink)">' + skullHTML('ink-2') + 'Missed control</span>') + '</td></tr>';
   }).join('');
+  if (!document.getElementById('mapview').hidden) renderMap();
 }
 function esc(t) { return t.replace(/&/g, '&amp;').replace(/</g, '&lt;'); }
 
@@ -1577,11 +1601,120 @@ function setZoom(z) {
 zn.onclick = function () { setZoom('now'); };
 zf.onclick = function () { setZoom('full'); };
 
-const vc = document.getElementById('v-chart'), vt = document.getElementById('v-table');
-vc.onclick = function () { vc.setAttribute('aria-pressed', 'true'); vt.setAttribute('aria-pressed', 'false');
-  document.getElementById('chartview').hidden = false; document.getElementById('tableview').hidden = true; };
-vt.onclick = function () { vt.setAttribute('aria-pressed', 'true'); vc.setAttribute('aria-pressed', 'false');
-  document.getElementById('tableview').hidden = false; document.getElementById('chartview').hidden = true; };
+const vc = document.getElementById('v-chart'), vt = document.getElementById('v-table'),
+      vm = document.getElementById('v-map');
+function setView(which) {
+  vc.setAttribute('aria-pressed', String(which === 'chart'));
+  vm.setAttribute('aria-pressed', String(which === 'map'));
+  vt.setAttribute('aria-pressed', String(which === 'table'));
+  document.getElementById('chartview').hidden = which !== 'chart';
+  document.getElementById('mapview').hidden = which !== 'map';
+  document.getElementById('tableview').hidden = which !== 'table';
+  if (which === 'map') renderMap();
+}
+vc.onclick = function () { setView('chart'); };
+vm.onclick = function () { setView('map'); };
+vt.onclick = function () { setView('table'); };
+
+// --- Map view: a stylised vertical Europe with the field along the corridor ---
+const MAPDATA = {"w":460,"h":820,"borders":["M376.4 363.7L344.6 364.1L323.4 360.8L327.3 347.9L351.1 338.4L369.2 343.5L376.8 348.2L374.9 356.3L376.4 363.7","M500 320.4L490.9 324L488.5 316.6L470.3 308.9L464.8 290.8L463.3 275.7L454.9 268.5L462.4 258.5L457.2 228.4L469.5 209.4L466.9 203.6L486.6 185L468.5 168.8M493.9 4","M218 10.5L224.3 24L218.3 39.5L201.2 38.8L190 74.6L191.1 123.2L202.1 141.3L196.3 182L182 205.1L174.4 224.1L162.8 203.8L128.8 241.8L105.7 249.3L81.9 232.8L75.7 197.4L70.2 117.1L86.1 93.6L131.7 62.3L165.8 22.4L197.3 -33.9","M90.9 497.4L99 504.2L123.9 509L115.2 526.6L113 544.6L108.2 548.9L100.4 546.6L100.9 553L88.3 566.9L88 578.1L96.3 574.2L102.2 585L101.5 591.8L106.6 600.9L100.6 608.3L105 626.7L114.4 629.7L112.4 639.9L96.8 653.1L62.7 646.8L37.6 654.3L35.6 668.2L15.6 671.2L-3.8 660.8L-10.1 665.7M-39.8 632.2L-36.5 584.4M-32.9 500.5L7.2 480L12.4 458.2L27.5 452.7L30 462.2L38 462.6L46 473.3L58.1 485.8L67 483.8L82 495.7L85.9 498L90.9 497.4","M135 664.6L146.2 655.8L149.1 675.6L143.4 693.1L135.5 688.5L131.6 673.2L135 664.6","M114 849.4L124.6 837.9L128.6 820.9L125.9 800.9L129.4 790.1L148.2 781.5L160.3 784L159.8 794.8L174.4 787L175.7 791L167 801.4L166.9 811.1L172.9 816.3L170.6 834.3L159.3 844.6L162.6 855.8L171.4 856.1","M-36.7 816L-18.1 812.3L-7.2 803.7L9.4 797.3L38.7 793.5L67.2 791.8L75.9 794.9L92.2 786.6L110.6 786.4L117.6 791.3L129.4 790.1L125.9 800.9L128.6 820.9L124.6 837.9L114 849.4","M174.4 224.1L182 205.1L196.3 182L202.1 141.3L191.1 123.2L190 74.6L201.2 38.8L218.3 39.5L224.3 24L218 10.5M396.6 -39.1L366.9 -27.4L350.1 1L352.8 25.2L325.4 56.3L292.1 88.7L279.5 139.6L291.8 164.2L308.3 183.2L292.4 220.9L274.5 228.5L267.9 282.1L258.2 310.9L237.2 308L227.4 331.9L207.5 333.2L201.9 304.7L187.5 269.5L174.4 224.1","M470.3 308.9L488.5 316.6L490.9 324L500 320.4M488.9 446.8L484.4 440.4L477.9 445.2L471.4 441.2L457.9 440.7L438.6 434.1L421.2 431.9L407.8 432.6L398.4 440L390.1 441.1L389.7 428.9L384.4 416L394.8 410.3L394.9 399.1L390.1 388.4L389.3 375.7L406 375.9L424.8 365L428.7 348.5L442.9 339L441.3 325.7L451.8 320.6L470.3 308.9","M494.9 601.9L487.1 597.7L479 601.6L471.3 597.2L475.6 594.6L478.7 586.2L483.4 578.4L482.2 574L485.8 572.1L487.4 575.4L497.6 576.2M499 571.9M494.1 561.9L491.7 551.5L485.4 547.4L486.6 538.9L478.9 532L471.7 531.1L459 523.2L447.6 525.7L443.5 529.4L436.1 529.4L431.8 535.4L419.1 537.8L413.2 541.7L405.2 535.5L394.1 535.4L383.4 532.6L376 538L374.8 531.2L365.2 524.3L368.6 514L373.4 507.2L377.1 508.8L372.7 497.1L388.4 475.2L396.9 472.1L398.7 464.6L390.1 441.1L398.4 440L407.8 432.6L421.2 431.9L438.6 434.1L457.9 440.7L471.4 441.2L477.9 445.2L484.4 440.4L488.9 446.8","M389.3 375.7L390.1 388.4L394.9 399.1L394.8 410.3L384.4 416L389.7 428.9L390.1 441.1L398.7 464.6L396.9 472.1L388.4 475.2L372.7 497.1L377.1 508.8L373.4 507.2L357 497.2L344.6 501L336.4 498.3L326.2 503.9L317.5 494.6L310.4 498.2L309.4 496.6L301.5 483.7L288.7 482.1L287 473.8L275.2 470.8L272.6 477.7L263.2 472.2L264.3 464.8L251.4 462.5L243.2 453.8L236.2 436.5L237.5 427L233.2 412.2L227 402.2L231.8 394.6L227.8 380.2L239.5 371.7L266.5 358.3L288.2 348.4L305.4 353.3L306.7 360.5L323.4 360.8L344.6 364.1L376.4 363.7L385.2 366.8L389.3 375.7","M277.1 531.9L275.8 542.2L266.1 542.3L269.4 547.8L263.7 563.8L260.4 568L245.3 568.6L236.6 574.2L222.4 572.3L197.6 565.9L193.8 557.3L176.8 561.6L174.8 566.3L164.3 562.8L155.5 562.1L147.7 557.6L150.3 551.4L149.7 547L154.8 545.6L163.6 552.6L166 546L181.2 547L193.6 542.5L201.9 543.3L207.3 548.4L208.9 544.2L206.4 527.7L212.6 524.5L218.7 512.6L231.5 520.9L241.3 510.4L247.3 508.5L260.7 516.3L268.8 515L276.8 519.8L275.4 523.1L277.1 531.9","M365.2 524.3L374.8 531.2L376 538L365.4 543.3L357.3 560.3L346.9 577L333 581.6L322.3 580.5L309 586.9L302.6 590.6L288.3 585.9L275.4 575.4L270 572.4L266.6 564L263.7 563.8L269.4 547.8L266.1 542.3L275.8 542.2L277.1 531.9L285.9 538.4L292.3 541.2L306.7 538L308.1 533L315 532.2L323.4 528.3L325.2 529.9L333.3 526.7L337.4 520.7L343.1 519.1L361.5 526.9L365.2 524.3","M443.5 529.4L447.6 525.7L459 523.2L471.7 531.1L478.9 532L486.6 538.9L485.4 547.4L491.7 551.5L494.1 561.9M499 571.9M497.6 576.2L487.4 575.4L485.8 572.1L482.2 574L483.4 578.4L478.7 586.2L475.6 594.6L471.3 597.2L468.2 586.1L470 575.6L469.5 564.8L459.5 550L454 539.4L448.7 531.9L443.5 529.4","M471.3 597.2L479 601.6L487.1 597.7L494.9 601.9L495.3 608.1L486.9 613.2L481.7 611L476.9 639.6L466.7 637.1L454.2 628.5L433.9 634L425.3 640L400 638.8L386.7 635.1L380 636.8L375.1 627.1L371.9 623L375.9 619L371.6 616L366.2 621.4L356.2 614.5L354.8 604.6L344.3 598.9L342.4 591.2L333 581.6L346.9 577L357.3 560.3L365.4 543.3L376 538L383.4 532.6L394.1 535.4L405.2 535.5L413.2 541.7L419.1 537.8L431.8 535.4L436.1 529.4L443.5 529.4L448.7 531.9L454 539.4L459.5 550L469.5 564.8L470 575.6L468.2 586.1L471.3 597.2","M441.3 325.7L442.9 339L428.7 348.5L424.8 365L406 375.9L389.3 375.7L385.2 366.8L376.4 363.7L374.9 356.3L376.8 348.2L369.2 343.5L351.1 338.4L347.4 313.1L367.2 303.8L396.1 305.8L413.1 302.7L415.5 309.1L424.7 311L441.3 325.7","M454.9 268.5L463.3 275.7L464.8 290.8L470.3 308.9L451.8 320.6L441.3 325.7L424.7 311L415.5 309.1L413.1 302.7L396.1 305.8L367.2 303.8L347.4 313.1L348 290.1L356.5 270.5L372.8 259.7L386.5 283.2L400.3 282.5L403.6 258.4L418.4 252.8L425.9 256.7L440.7 268.4L454.9 268.5","M466.9 203.6L469.5 209.4L457.2 228.4L462.4 258.5L454.9 268.5L440.7 268.4L425.9 256.7L418.4 252.8L403.6 258.4L405.6 239.5L399.3 243.6L388.4 232.1L386.9 213.2L408.7 204L430.4 199.1L449.1 204.6L466.9 203.6","M227.8 380.2L231.8 394.6L227 402.2L233.2 412.2L237.5 427L236.2 436.5L243.2 453.8L235.5 456.7L231 453.6L226.7 458.7L214.2 463.9L207.8 470.5L195.3 476.3L198.3 484.2L200.2 495.3L209 501.5L218.7 512.6L212.6 524.5L206.4 527.7L208.9 544.2L207.3 548.4L201.9 543.3L193.6 542.5L181.2 547L166 546L163.6 552.6L154.8 545.6L149.7 547L131.2 539.3L127.6 544.8L113 544.6L115.2 526.6L123.9 509L99 504.2L90.9 497.4L91.9 485.9L88.4 480L90.4 462L87.5 433.6L97.8 433.6L102.2 423.2L106.5 397.6L103.3 388L106.6 382L121.1 380.4L124.3 386.7L136 372.6L132.1 361.7L131.2 345.1L144.3 349L155.3 344.5L155.6 355.8L173.1 362.6L172.9 372.9L190.4 367.5L200.1 359.5L219.6 371L227.8 380.2","M375.1 627.1L380 636.8L386.7 635.1L400 638.8L425.3 640L433.9 634L454.2 628.5L466.7 637.1L476.9 639.6L467.9 649.2L461.7 665.8L467.2 678.8L452.3 675.8L434.8 683L434.6 694.2L418.9 696.4L406.7 688.5L392.9 694.7L380.2 694L378.9 679L370.3 671.7L373.1 668.5L371.3 665.7L374.2 658.4L380.7 651.1L372.3 641.1L370.8 632.5L375.1 627.1","M437.7 824.6L435.6 830.7L410.7 832.5L410.9 829L389.8 825L393.1 816.2L402.5 823.2L415.9 822L428.8 823.5L428.4 827.1L437.7 824.6","M380.2 694L392.9 694.7L406.7 688.5L418.9 696.4L434.6 694.2L434.8 683L443.1 689L437.8 703.1L433.7 705.6L423.2 705L414.2 702.8L393.3 708.7L405.2 721.2L396.5 724.8L386.9 724.8L377.8 713.4L374.6 718.3L378.4 731.5L387 741.8L380.5 746.5L390.2 756.6L398.7 762.8L398.9 775L382.9 769.3L388 780.2L377.1 782.4L383.6 801.1L372.2 801.4L358 792.2L351.6 775.2L348.5 760.9L341.8 750.9L332.9 738.5L331.8 732.2L339.8 721.5L340.8 714.3L346.5 711.1L346.8 705.2L358.1 703.2L364.7 698.3L374 698.7L376.9 694.8L380.2 694","M496.6 807L479.9 795.8L461.1 796.2L450.8 775L438.2 763.1L446.6 746.2L435.7 735.7L454.8 714.6L481.4 713.7L488.7 696.7","M434.8 683L452.3 675.8L467.2 678.8L469.2 687.6L484.3 694.9L481.2 700.4L460.7 701.7L453.3 708.6L438.9 720.6L433.5 710.2L433.7 705.6L437.8 703.1L443.1 689L434.8 683","M346.8 705.2L346.5 711.1L340.8 714.3L339.8 721.5L331.8 732.2L328.8 730.7L328.5 725.8L319 718.4L317.5 707.8L318.9 692.4L321.3 685.4L318.3 681.8L317.2 674.6L324.7 663.2L325.8 667.6L330.5 665.5L334.1 671.7L338.2 674L339.4 682.3L337.2 690L339.7 699.7L346.8 705.2","M270 572.4L275.4 575.4L288.3 585.9L302.6 590.6L309 586.9L313.2 596.4L318.7 603.3L312.1 612.3L304.2 607L292.3 607.3L277.5 603.3L269.4 603.8L265.7 608.8L259.5 603.3L255.9 613.2L264.3 624.4L268.1 631.7L276 640.5L282.6 645.7L289.1 655.4L304.4 664.1L302.4 668L286.2 659.5L276.2 651.2L260.5 644.2L246 627L249.5 625.2L241.6 615.2L241.3 607.1L230.1 603.3L224.9 613.6L219.8 605.6L220.1 597.3L232.8 597.7L236 593.6L241.8 597.6L248.6 598L248.5 591.3L254.5 588.8L256.2 578.9L270 572.4","M149.7 547L150.3 551.4L147.7 557.6L155.5 562.1L164.3 562.8L162.9 572.9L155.3 577.1L142.6 573.9L138.8 583.9L130.6 584.6L127.6 580.8L118 589L109.6 590.2L102.2 585L96.3 574.2L88 578.1L88.3 566.9L100.9 553L100.4 546.6L108.2 548.9L113 544.6L127.6 544.8L131.2 539.3L149.7 547","M88.4 480L91.9 485.9L90.9 497.4L85.9 498L82 495.7L83.9 481L88.4 480","M90.4 462L88.4 480L83.9 481L82 495.7L67 483.8L58.1 485.8L46 473.3L38 462.6L30 462.2L27.5 452.7L41.3 447.4L54 449.5L69.9 443.9L80.9 455.7L90.4 462","M103.3 388L106.5 397.6L102.2 423.2L97.8 433.6L87.5 433.6L90.4 462L80.9 455.7L69.9 443.9L54 449.5L41.3 447.4L50.2 439.9L65.3 399.1L88.9 387.2L103.3 388","M-10.1 665.7L-3.8 660.8L15.6 671.2L35.6 668.2L36.6 681.5L20.2 696.6L-1.9 701.3L-3.4 708.9L-14 721.2L-20.7 739.1L-14 751.6L-23.9 761.2L-27.7 775.2","M164.3 562.8L174.8 566.3L176.8 561.6L193.8 557.3L197.6 565.9L222.4 572.3L220.4 584.3L224.6 594.7L210.9 591.1L196.8 599.7L197.8 611.7L195.7 618.4L201.3 630.5L217.5 642.4L226.2 661.6L245.4 680L258.9 679.9L263.1 684.9L258.3 689.5L273.7 697.6L286.4 704.4L301.2 716L303 720.2L299.8 728.1L290.2 717.8L275.2 714.1L268 728.4L280.4 736.6L278.3 748L271.1 749.3L261.9 767.8L254.7 769.5L254.8 762.9L258.3 751.3L262.1 746.7L255.4 734L250.1 722.9L242.9 720.1L237.8 710.5L226.7 706.4L219.3 697.4L206.5 696L193 685.7L177.2 670.9L165.5 657.7L160.1 634.5L151.6 631.8L137.5 624L129.6 627.2L119.6 638.2L112.4 639.9L114.4 629.7L105 626.7L100.6 608.3L106.6 600.9L101.5 591.8L102.2 585L109.6 590.2L118 589L127.6 580.8L130.6 584.6L138.8 583.9L142.6 573.9L155.3 577.1L162.9 572.9L164.3 562.8","M238.8 764.5L251.9 762.6L245.7 779.5L248.3 786.1L244.7 796.9L231.4 789L222.7 786.7L198.6 775.9L201 764.8L221.2 766.8L238.8 764.5","M134.4 703.9L143 696.9L153.4 712.8L150.9 742L143.1 740.6L136.1 747.9L129.6 742.2L128.9 715.6L124.9 702.8L134.4 703.9","M155.3 344.5L144.3 349L131.2 345.1L124.2 328.6L123.7 297.6L126.6 289.3L131.6 280L146.7 278L152.8 269.4L166.7 260.4L166.1 276.6L161 286.8L163 295.4L172.4 300.1L168.2 311.6L163 308.3L150.6 330L155.3 344.5","M197.6 310.7L203.1 325.8L192.7 349.9L174.7 333.2L172.2 320.7L197.6 310.7","M-35.1 355L-23.3 359.7L-12.7 392.5L-7.8 403.6L13.2 409L11 426.8L2.2 434.8L9.1 448.9L-6.4 463L-29.5 462.8","M222.4 572.3L236.6 574.2L245.3 568.6L260.4 568L263.7 563.8L266.6 564L270 572.4L256.2 578.9L254.5 588.8L248.5 591.3L248.6 598L241.8 597.6L236 593.6L232.8 597.7L220.8 596.9L224.6 594.7L220.4 584.3L222.4 572.3","M493.9 4M468.5 168.8L437.2 171.6L406.8 184L378.7 191.2L368.7 172.6L352 161.3L355.9 126.7L347.5 93.9L355.7 72.2L371.4 48.4L410.8 5.9L422.3 -2.5L420.6 -19.6L396.6 -39.1","M373.4 507.2L368.6 514L365.2 524.3L361.5 526.9L343.1 519.1L337.4 520.7L333.3 526.7L325.2 529.9L323.4 528.3L315 532.2L308.1 533L306.7 538L292.3 541.2L285.9 538.4L277.1 531.9L275.4 523.1L276.8 519.8L279.2 514.2L286.9 514.6L292.8 512L293.2 509.5L296.5 508.3L297.7 502.4L301.6 501.3L304.3 496.6L309.4 496.6L310.4 498.2L317.5 494.6L326.2 503.9L336.4 498.3L344.6 501L357 497.2L373.4 507.2","M243.2 453.8L251.4 462.5L264.3 464.8L263.2 472.2L272.6 477.7L275.2 470.8L287 473.8L288.7 482.1L301.5 483.7L309.4 496.6L304.3 496.6L301.6 501.3L297.7 502.4L296.5 508.3L293.2 509.5L292.8 512L286.9 514.6L279.2 514.2L276.8 519.8L268.8 515L260.7 516.3L247.3 508.5L241.3 510.4L231.5 520.9L218.7 512.6L209 501.5L200.2 495.3L198.3 484.2L195.3 476.3L207.8 470.5L214.2 463.9L226.7 458.7L231 453.6L235.5 456.7L243.2 453.8","M304.4 664.1L289.1 655.4L282.6 645.7L276 640.5L268.1 631.7L264.3 624.4L255.9 613.2L259.5 603.3L265.7 608.8L269.4 603.8L277.5 603.3L292.3 607.3L304.2 607L312.1 612.3L318.3 612.2L314 622.7L322.3 631.8L319.8 642.8L315.7 643.9L312.5 646L306.9 651.4L304.4 664.1","M370.3 671.7L378.9 679L380.2 694L376.9 694.8L374 698.7L364.7 698.3L358.1 703.2L346.8 705.2L339.7 699.7L337.2 690L339.4 682.3L341.6 682.5L342.4 677.8L352.6 674.3L356.4 673.4L362.3 672.1L370.3 671.7","M309 586.9L322.3 580.5L333 581.6L342.4 591.2L344.3 598.9L354.8 604.6L356.2 614.5L366.2 621.4L371.6 616L375.9 619L371.9 623L375.1 627.1L370.8 632.5L372.3 641.1L380.7 651.1L374.2 658.4L371.3 665.7L373.1 668.5L370.3 671.7L362.3 672.1L356.4 673.4L355.9 671.7L357.9 669L359.8 663.4L357.4 663.5L354.1 659.2L351.2 658.1L349 654.4L345.7 653L343.3 649.7L340.1 651L337.8 658.7L333.7 660.4L335.1 658.4L328.5 653.6L322.8 651.1L320.3 647.9L315.7 643.9L319.8 642.8L322.3 631.8L314 622.7L318.3 612.2L312.1 612.3L318.7 603.3L313.2 596.4L309 586.9","M330.5 665.5L325.8 667.6L324.7 663.2L317.2 674.6L318.3 681.8L314.7 680L309.9 672.6L302.4 668L304.4 664.1L306.9 651.4L312.5 646L315.7 643.9L320.3 647.9L322.8 651.1L328.5 653.6L335.1 658.4L333.7 660.4L330.5 665.5","M339.4 682.3L338.2 674L334.1 671.7L330.5 665.5L333.7 660.4L337.8 658.7L340.1 651L343.3 649.7L345.7 653L349 654.4L351.2 658.1L354.1 659.2L357.4 663.5L359.8 663.4L357.9 669L355.9 671.7L356.4 673.4L352.6 674.3L342.4 677.8L341.6 682.5L339.4 682.3"],"labels":[["Norvegia",132.5,119.7],["Svezia",248.1,179.2],["Danimarca",137.7,311],["Germania",154.9,412.9],["Polonia",322.3,421.2],["Cechia",246.4,487.3],["Austria",229.1,550.1],["Ungheria",322.3,560.1],["Croazia",258.5,594.5],["Bosnia",280.9,625.6],["Serbia",344.7,630.3],["Albania",326.6,703.9],["Grecia",374.1,741.5],["Italia",187.7,646.7]],"route":[[163.4,63.2,0],[180.5,94.9,180],[138,140.7,500],[106.8,156.8,685],[113.5,165.5,726],[104.9,222.7,947],[154.9,264.5,1206],[163.6,332.1,1492],[192.9,364.5,1682],[234.3,390.4,1898],[275.7,418.4,2125],[277.5,454,2293],[279,481.5,2426],[281.4,481.3,2438],[319.6,504.5,2655],[322.1,510.5,2688],[322.3,535,2816],[312.8,547.6,2898],[299.9,582.3,3097],[303.3,608.9,3244],[302.3,636.2,3397],[310.2,660.7,3540],[320.6,674.5,3637],[336.1,679.7,3729],[339.6,720.6,3967],[344.7,732.8,4052],[349.9,748.1,4156],[357.7,775.3,4342],[365.6,788.1,4442]]};
+// Corridor interpolation: distance ridden -> projected point + segment normal.
+function mapP(km) {
+  const R = MAPDATA.route;
+  km = Math.max(0, Math.min(km, R[R.length - 1][2]));
+  let i = 1;
+  while (i < R.length - 1 && R[i][2] < km) i++;
+  const a = R[i - 1], b = R[i], t = (km - a[2]) / ((b[2] - a[2]) || 1);
+  const dx = b[0] - a[0], dy = b[1] - a[1], l = Math.hypot(dx, dy) || 1;
+  return { x: a[0] + dx * t, y: a[1] + dy * t, nx: -dy / l, ny: dx / l };
+}
+const MAP_CPS = [{ km: 685, l: 'CP1 Flåm' }, { km: 2655, l: 'CP2 Tatra' },
+                 { km: 3397, l: 'CP3 Sarajevo' }, { km: 3967, l: 'CP4 Leskovik' }];
+const mapSvg = document.getElementById('mapplot');
+let mapHits = [];
+function renderMap() {
+  const rows = visible();
+  let s = '';
+  MAPDATA.borders.forEach(function (d) {
+    s += '<path d="' + d + '" fill="none" stroke="var(--ink-2)" stroke-width="0.8" opacity=".35"/>';
+  });
+  MAPDATA.labels.forEach(function (l) {
+    s += '<text x="' + l[1] + '" y="' + l[2] + '" text-anchor="middle" class="axname" opacity=".75">' + l[0] + '</text>';
+  });
+  s += '<path d="' + MAPDATA.route.map(function (p, i) { return (i ? 'L' : 'M') + p[0].toFixed(1) + ' ' + p[1].toFixed(1); }).join('') +
+       '" fill="none" stroke="var(--ink-2)" stroke-width="1.5" opacity=".5" stroke-linejoin="round"/>';
+  MAP_CPS.forEach(function (c) {
+    const p = mapP(c.km);
+    s += '<circle cx="' + p.x.toFixed(1) + '" cy="' + p.y.toFixed(1) + '" r="3.2" fill="var(--surface)" stroke="var(--ink)" stroke-width="1.4"/>';
+    s += '<text class="marklab" x="' + (p.x + 8).toFixed(1) + '" y="' + (p.y - 4).toFixed(1) + '" fill="var(--ink-2)" font-size="10.5">' + c.l + '</text>';
+  });
+  const st = mapP(0), fi = mapP(4442);
+  s += '<text class="marklab" x="' + (st.x + 9).toFixed(1) + '" y="' + (st.y + 4).toFixed(1) + '" fill="var(--ink-2)" font-size="10.5">Trondheim · start</text>';
+  s += '<text class="marklab" x="' + (fi.x - 9).toFixed(1) + '" y="' + (fi.y + 12).toFixed(1) + '" text-anchor="end" fill="var(--ink-2)" font-size="10.5">Kalamata · finish</text>';
+
+  // riders along the corridor; deterministic sideways jitter so dots stack visibly
+  mapHits = [];
+  rows.forEach(function (r, i) {
+    const p = mapP(r.km), o = ((i * 37) % 9 - 4) * 2.0;
+    const x = r.fin ? p.x : p.x + p.nx * o, y = r.fin ? p.y : p.y + p.ny * o;
+    if (r.fin) {
+      s += flagMark(x, y - 6, 14);
+      s += '<text x="' + (x + 10).toFixed(1) + '" y="' + (y - 8).toFixed(1) + '" font-size="10" fill="var(--ink-2)">' + esc(r.name) + '</text>';
+    } else if (r.dnf) {
+      s += '<path d="M' + (x - 2.7).toFixed(1) + ' ' + (y - 2.7).toFixed(1) + 'L' + (x + 2.7).toFixed(1) + ' ' + (y + 2.7).toFixed(1) +
+           'M' + (x - 2.7).toFixed(1) + ' ' + (y + 2.7).toFixed(1) + 'L' + (x + 2.7).toFixed(1) + ' ' + (y - 2.7).toFixed(1) +
+           '" stroke="var(--behind)" stroke-width="1.4" opacity=".8"/>';
+    } else if (!r.gc) {
+      s += '<circle cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1) + '" r="2.6" fill="var(--ink-2)" opacity=".75"/>';
+    } else {
+      s += '<circle cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1) + '" r="2.8" fill="var(--' + classify(r) + ')" opacity=".85"/>';
+    }
+    mapHits.push({ x: x, y: y, r: r });
+  });
+
+  // the broom: where the minimum-GC-pace rider would be right now
+  const envT = [[START_MS, 0]].concat(CHECKPOINTS.map(function (c, i) { return [c.ms, MAP_CPS[i].km]; }))
+    .concat([[CUTOFF_MS, 4442]]);
+  let bk = 4442;
+  const nowMs = Date.now();
+  for (let i = 1; i < envT.length; i++) {
+    if (nowMs <= envT[i][0]) {
+      bk = envT[i - 1][1] + (envT[i][1] - envT[i - 1][1]) * (nowMs - envT[i - 1][0]) / (envT[i][0] - envT[i - 1][0]);
+      break;
+    }
+  }
+  const bp = mapP(bk), L = 36;
+  s += '<line x1="' + (bp.x - bp.nx * L).toFixed(1) + '" y1="' + (bp.y - bp.ny * L).toFixed(1) +
+       '" x2="' + (bp.x + bp.nx * L).toFixed(1) + '" y2="' + (bp.y + bp.ny * L).toFixed(1) +
+       '" stroke="var(--behind)" stroke-width="2" stroke-dasharray="5 4"/>';
+  s += '<text class="marklab" x="' + (bp.x + bp.nx * L + 6).toFixed(1) + '" y="' + (bp.y + bp.ny * L + 3).toFixed(1) +
+       '" fill="var(--behind)" font-size="10.5">the broom · ' + Math.round(bk) + ' km</text>';
+  mapSvg.innerHTML = s;
+}
+mapSvg.addEventListener('pointermove', function (e) {
+  const b = mapSvg.getBoundingClientRect();
+  const vx = (e.clientX - b.left) / b.width * 460, vy = (e.clientY - b.top) / b.height * 820;
+  let best = null, bd = 1e9;
+  mapHits.forEach(function (h) {
+    const d = Math.hypot(h.x - vx, h.y - vy);
+    if (d < bd) { bd = d; best = h; }
+  });
+  if (!best || bd > 12) { tip.classList.remove('on'); return; }
+  const r = best.r;
+  const stLine = r.fin ? 'Finisher · inside the time limit'
+    : r.dnf ? 'Scratched here · official DNF'
+    : !r.gc ? 'Out of GC · still riding'
+    : LABEL[classify(r)] + ' · ' + r.kmd.toFixed(0) + ' km/day';
+  tip.innerHTML = '<div class="n">' + esc(r.name) + '</div><dl>' +
+    '<dt>Category</dt><dd>' + CATNAME[r.cat] + ' · ' + r.pos + '</dd>' +
+    '<dt>Covered</dt><dd>' + kfmt(Math.round(r.km)) + ' km</dd></dl>' +
+    '<div class="st">' + stLine + '</div>';
+  tip.classList.add('on');
+  const tw = tip.offsetWidth, th = tip.offsetHeight;
+  tip.style.left = Math.min(window.innerWidth - tw - 10, Math.max(10, e.clientX + 14)) + 'px';
+  tip.style.top = Math.max(10, e.clientY - th - 12) + 'px';
+});
+mapSvg.addEventListener('pointerleave', function () { tip.classList.remove('on'); });
 
 render();
 
