@@ -391,22 +391,22 @@
 
   <section class="block chartcard" id="mapview" hidden>
     <div class="chart-head">
-      <span class="chart-title">The corridor, Trondheim to Kalamata — and the broom behind the field</span>
+      <span class="chart-title">The corridor, Trondheim to Kalamata — and the broom wagon behind the field</span>
       <div class="legend">
         <span class="lg"><svg viewBox="0 0 20 20" width="12" height="12"><circle cx="10" cy="10" r="7" fill="var(--ahead)"/></svg>Inside</span>
         <span class="lg"><svg viewBox="0 0 20 20" width="12" height="12"><circle cx="10" cy="10" r="7" fill="var(--edge)"/></svg>On the edge</span>
         <span class="lg"><svg viewBox="0 0 20 20" width="12" height="12"><circle cx="10" cy="10" r="7" fill="var(--behind)"/></svg>Off the pace</span>
         <span class="lg"><svg viewBox="0 0 20 20" width="12" height="12"><circle cx="10" cy="10" r="7" fill="var(--ink-2)"/></svg>Out of GC</span>
         <span class="lg"><svg viewBox="0 0 20 20" width="12" height="12"><path d="M4 4L16 16M4 16L16 4" stroke="var(--behind)" stroke-width="2.6"/></svg>Scratched here</span>
-        <span class="lg"><span class="sw line"></span>The broom · minimum GC pace</span>
+        <span class="lg"><span class="sw line"></span>Broom wagon · minimum GC pace</span>
       </div>
     </div>
     <div class="mapwrap"><svg id="mapplot" viewBox="0 0 460 820" role="img"
-      aria-label="Stylised vertical map of Europe from Norway to Greece: riders as dots along the race corridor, scratched riders marked where they stopped, and the broom line at the minimum pace still compatible with the cut-off."></svg></div>
+      aria-label="Stylised vertical map of Europe from Norway to Greece: riders as dots along the race corridor, scratched riders marked where they stopped, and the broom wagon line at the minimum pace still compatible with the cut-off."></svg></div>
     <p class="hint">The TCR is free-route — riders are placed along a stylised corridor by distance ridden,
       so lateral position is indicative, not GPS. <b>Drag</b> to move, <b>pinch or ctrl+scroll</b> to zoom,
       <b>double-tap</b> to reset; <b>hover</b> a mark to identify the rider. The dashed line is
-      <b>the broom</b>: it sweeps toward Kalamata at the minimum pace that still clears every
+      <b>the broom wagon</b>: it sweeps toward Kalamata at the minimum pace that still clears every
       cut-off; anyone behind it is losing the race against the clock, not against other riders.</p>
   </section>
 
@@ -1694,7 +1694,7 @@ function renderMap() {
   // label at the western end of the line, where the map is empty
   const sgn = bp.nx <= 0 ? 1 : -1;
   s += '<text class="marklab" x="' + (bp.x + bp.nx * sgn * L - 6).toFixed(1) + '" y="' + (bp.y + bp.ny * sgn * L + 3).toFixed(1) +
-       '" text-anchor="end" fill="var(--behind)" font-size="10.5">the broom · ' + Math.round(bk) + ' km</text>';
+       '" text-anchor="end" fill="var(--behind)" font-size="10.5">broom wagon · ' + Math.round(bk) + ' km</text>';
   mapSvg.innerHTML = s;
 }
 // Map zoom/pan: the whole scene lives in one viewBox, so zooming is a cheap
