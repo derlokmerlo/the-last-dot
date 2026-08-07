@@ -333,8 +333,8 @@
     <div class="field">
       <label class="lbl" for="tot">Estimated total distance</label>
       <div style="display:flex;align-items:center;gap:11px">
-        <input type="range" id="tot" min="4700" max="5200" step="50" value="4750">
-        <span class="rangeval" id="totv">4750 km</span>
+        <input type="range" id="tot" min="4400" max="5200" step="50" value="4450">
+        <span class="rangeval" id="totv">4450 km</span>
       </div>
     </div>
     <div class="field">
@@ -1032,7 +1032,8 @@ function skull(cx, cy, size, colorVar) {
   return '<g transform="translate(' + x.toFixed(1) + ',' + y.toFixed(1) + ') scale(' + k.toFixed(3) + ')">' + skullInner(colorVar) + '</g>';
 }
 
-let state = { cat: 'ALL', q: '', total: 4750, riskOnly: false, sel: -1, zoom: 'full', view: null };
+// 4450: the tracker route measures 4,442 km — known now that riders have finished on it.
+let state = { cat: 'ALL', q: '', total: 4450, riskOnly: false, sel: -1, zoom: 'full', view: null };
 
 // A "nice" gridline step for a given data range and target tick count.
 function niceStep(range, target) {
@@ -1110,6 +1111,9 @@ CATS.forEach(function (c) {
 });
 
 function classify(r) {
+  // The tracker's route ends at 4,442 km: a rider there has physically reached
+  // Kalamata (finish pending official verification) — safe whatever the slider says.
+  if (r.km >= 4440) return 'ahead';
   const req = requiredPace(r, state.total).pace;
   const m = req > 0 ? r.kmd / req - 1 : 1;
   return m >= 0.10 ? 'ahead' : (m >= -0.05 ? 'edge' : 'behind');
