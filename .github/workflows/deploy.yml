@@ -1,0 +1,31 @@
+name: deploy-site
+
+# The `data` branch holds the freshly built site (a single force-pushed
+# commit, produced by local/update.sh on a machine with a residential IP —
+# cloud runners cannot scrape FMC, its Cloudflare hard-blocks their IPs).
+# Every push to `data` deploys it to GitHub Pages.
+on:
+  push:
+    branches: [data]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: deploy-site
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+      - id: deployment
+        uses: actions/deploy-pages@v4

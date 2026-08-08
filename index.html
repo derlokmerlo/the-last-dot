@@ -1,0 +1,1974 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Last Dot — Following the tail of the field · TCRNo12</title>
+<meta name="description" content="The Last Dot follows the tail of the field in ultra-distance bike races - the riders racing the cut-off to the finish. Current edition: Transcontinental Race No12. An independent dot-watcher project, not affiliated with the organisers.">
+<meta name="robots" content="index, follow">
+<meta property="og:title" content="The Last Dot - Following the tail of the field">
+<meta property="og:description" content="The riders at the back, racing the cut-off to the finish. Current edition: Transcontinental Race No12.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%20100%20100'%3E%3Ccircle%20cx%3D'50'%20cy%3D'50'%20r%3D'44'%20fill%3D'%23fbfbf9'%20stroke%3D'%230b0c0c'%20stroke-width%3D'6'%2F%3E%3Ccircle%20cx%3D'33'%20cy%3D'67'%20r%3D'13'%20fill%3D'%230b0c0c'%2F%3E%3C%2Fsvg%3E">
+<style>*,*::before,*::after{box-sizing:border-box}html{-webkit-text-size-adjust:100%}body{margin:0}img,svg{max-width:100%}button,input,textarea{font:inherit;color:inherit}</style>
+</head>
+<body>
+<style>
+  :root {
+    color-scheme: light;
+    --paper:   #f4f4f1;
+    --panel:   #fdfdfc;
+    --surface: #fdfdfc;
+    --ink:     #0b0c0c;
+    --ink-2:   #4a4b4b;
+    --muted:   #86867f;
+    --grid:    #e2e2dd;
+    --rule:    #c1c1c1;
+    --hair:    #d6d6d0;
+    --mast-bg: #0b0c0c;
+    --mast-fg: #f4f4f1;
+    --ahead:   #00719e;
+    --edge:    #9a7b10;
+    --behind:  #c8352b;
+    --fin:     #1d7d4f;
+    --field:   #ffffff;
+    --under:   rgba(200,53,43,.05);
+    --display: "Oswald", "Roboto Condensed", "Arial Narrow", "Helvetica Neue", system-ui, sans-serif;
+    --sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, sans-serif;
+    --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    --mark-fill: #fbfbf9;   /* the logo is a fixed white-disc-with-black-dot in both themes */
+    --mark-ink: #0b0c0c;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:where(:not([data-theme="light"])) {
+      color-scheme: dark;
+      --paper:   #0b0c0c;
+      --panel:   #151617;
+      --surface: #151617;
+      --ink:     #fefefe;
+      --ink-2:   #c1c1c1;
+      --muted:   #8d8d86;
+      --grid:    #262728;
+      --rule:    #3a3b3c;
+      --hair:    #2a2b2c;
+      --mast-bg: #17181a;
+      --mast-fg: #fefefe;
+      --ahead:   #1f93c4;
+      --edge:    #c9a227;
+      --behind:  #e05a51;
+      --fin:     #3fbf7f;
+      --field:   #0f1011;
+      --under:   rgba(224,90,81,.07);
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --paper:   #0b0c0c;
+    --panel:   #151617;
+    --surface: #151617;
+    --ink:     #fefefe;
+    --ink-2:   #c1c1c1;
+    --muted:   #8d8d86;
+    --grid:    #262728;
+    --rule:    #3a3b3c;
+    --hair:    #2a2b2c;
+    --mast-bg: #17181a;
+    --mast-fg: #fefefe;
+    --ahead:   #1f93c4;
+    --edge:    #c9a227;
+    --behind:  #e05a51;
+      --fin:     #3fbf7f;
+    --field:   #0f1011;
+      --under:   rgba(224,90,81,.07);
+  }
+
+  body { background: var(--paper); color: var(--ink); font-family: var(--sans);
+         line-height: 1.55; -webkit-font-smoothing: antialiased; }
+  * { border-radius: 0; }
+
+  .lbl { font-family: var(--display); font-weight: 500; text-transform: uppercase;
+         letter-spacing: .1em; font-stretch: 87.5%; }
+
+  /* masthead — the one solid block, TCR's hard-edged register */
+  .mast { background: var(--mast-bg); color: var(--mast-fg); }
+  .mast-in { max-width: 1180px; margin: 0 auto; padding: 26px 22px 30px; }
+  .mast .kicker { font-size: 11px; letter-spacing: .2em; opacity: .72; }
+  .wordmark { display: flex; align-items: center; gap: clamp(14px, 2.4vw, 26px); margin: 8px 0 0; }
+  .mark { width: clamp(46px, 8.5vw, 88px); height: auto; flex: none; display: block; }
+  h1 { font-family: var(--display); font-weight: 600; font-stretch: 87.5%;
+       text-transform: uppercase; letter-spacing: .015em; line-height: .96;
+       font-size: clamp(44px, 9vw, 96px); margin: 0; text-wrap: balance; }
+  .deck { font-size: clamp(14px, 2.1vw, 21px); font-weight: 500; letter-spacing: .17em;
+          margin: 12px 0 0; opacity: .74; }
+  .motto { display: inline-block; margin: 18px 0 0; padding: 8px 13px 7px; border: 2px solid var(--mast-fg);
+           font-size: 12.5px; letter-spacing: .22em; opacity: .92; }
+  .lede { max-width: 64ch; margin: 20px 0 0; font-size: 15px; opacity: .88; }
+  .lede b { font-weight: 600; opacity: 1; }
+
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 22px 72px;
+          display: flex; flex-direction: column; gap: 0; }
+
+  .block { border: 1px solid var(--hair); border-top: none; background: var(--panel); }
+  .block:first-of-type { border-top: 3px solid var(--ink); }
+
+  /* parameters */
+  .params { display: flex; flex-wrap: wrap; gap: 20px 30px; padding: 16px 18px; align-items: flex-end; }
+  .field { display: flex; flex-direction: column; gap: 8px; }
+  .field > .lbl { font-size: 10.5px; color: var(--muted); line-height: 1; }
+  .pills { display: flex; }
+  .pill { font-family: var(--display); font-stretch: 87.5%; text-transform: uppercase;
+          letter-spacing: .07em; font-size: 13px; font-weight: 500; padding: 9px 14px;
+          background: var(--field); color: var(--ink-2); border: 1px solid var(--rule);
+          margin-left: -1px; cursor: pointer; }
+  .pill:first-child { margin-left: 0; }
+  .pill[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); position: relative; }
+  .pill:focus-visible, input:focus-visible, svg:focus-visible { outline: 2px solid var(--ahead); outline-offset: 1px; }
+  input[type="search"] { font: 400 13px var(--sans); padding: 9px 11px; width: 172px;
+          border: 1px solid var(--rule); background: var(--field); color: var(--ink); }
+  input[type="range"] { width: 190px; accent-color: var(--ink); }
+  .rangeval { font-family: var(--display); font-stretch: 87.5%; font-size: 15px; font-weight: 500;
+              font-variant-numeric: tabular-nums; }
+  .check { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--ink-2); cursor: pointer; }
+  .spacer { flex: 1 1 auto; }
+
+  /* stat strip — hairline-divided, no cards */
+  .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
+  .tile { padding: 16px 18px; border-left: 1px solid var(--hair); display: flex; flex-direction: column; gap: 3px; }
+  .tile:first-child { border-left: none; }
+  .tile .v { font-family: var(--display); font-stretch: 87.5%; font-size: 40px; font-weight: 600;
+             line-height: 1; letter-spacing: -.005em; }
+  .tile .v .vu { font-size: 15px; font-weight: 500; color: var(--ink-2); margin-left: 5px;
+                 letter-spacing: .02em; }
+  .tile .k { font-size: 12.5px; color: var(--ink-2); }
+  .tile .u { font-size: 11px; color: var(--muted); }
+  .tile.c-ahead .v { color: var(--ahead); }
+  .tile.c-edge  .v { color: var(--edge); }
+  .tile.c-behind .v { color: var(--behind); }
+  .tile.c-dnf .v { color: var(--ink-2); }
+  /* The scratched tile is split by an oblique hairline: officially DNF (top-left,
+     red) vs out of GC / missed a control (bottom-right, grey). */
+  .tile.c-split { position: relative; overflow: hidden; }
+  .tile.c-split .diag { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+  .tile.c-split .sub { position: relative; display: flex; flex-direction: column; gap: 2px; }
+  .tile.c-split .sub.dn { align-items: flex-end; text-align: right; margin-top: 11px; }
+  .tile.c-split .v { font-size: 27px; }
+  .tile.cs-in .sub.up .v { color: var(--ahead); }
+  .tile.cs-in .sub.dn .v { color: var(--fin); }
+  .tile.cs-pace .sub.up .v { color: var(--edge); }
+  .tile.cs-pace .sub.dn .v { color: var(--behind); }
+  .tile.cs-dnf .sub.up .v { color: var(--behind); }
+  .tile.cs-dnf .sub.dn .v { color: var(--ink-2); }
+
+  /* chart */
+  .chartcard { padding: 16px 18px 10px; }
+  .chart-head { display: flex; flex-wrap: wrap; gap: 10px 22px; align-items: baseline;
+                justify-content: space-between; margin-bottom: 10px; }
+  .chart-title { font-family: var(--display); font-stretch: 87.5%; text-transform: uppercase;
+                 letter-spacing: .08em; font-size: 14px; font-weight: 600; }
+  .legend { display: flex; flex-wrap: wrap; gap: 10px 18px; }
+  .lg { display: flex; align-items: center; gap: 7px; font-size: 12.5px; color: var(--ink); }
+  .sw { width: 10px; height: 10px; flex: none; }
+  .sw.line { width: 17px; height: 0; border-top: 2px solid var(--ink); }
+  .em { font-size: 15px; line-height: 1; }
+  .em.flip { display: inline-block; transform: scaleX(-1); }
+  .skull { font-size: 16px; line-height: 1; }
+  #plot { display: block; width: 100%; height: auto; }
+  text { font-family: var(--sans); fill: var(--ink-2); font-size: 11.5px; font-variant-numeric: tabular-nums; }
+  .axname { font-family: var(--display); font-stretch: 87.5%; text-transform: uppercase;
+            letter-spacing: .12em; fill: var(--muted); font-size: 11px; }
+  .marklab { font-family: var(--display); font-stretch: 87.5%; text-transform: uppercase;
+             letter-spacing: .07em; font-size: 12px; font-weight: 600;
+             stroke: var(--surface); stroke-width: 4.5px; paint-order: stroke fill; }
+  .hint { font-size: 12.5px; color: var(--muted); padding: 4px 2px 8px; }
+
+  /* tooltip */
+  .tip { position: fixed; z-index: 9; pointer-events: none; opacity: 0; transition: opacity .1s;
+         background: var(--panel); border: 1px solid var(--ink); padding: 10px 12px; max-width: 265px; }
+  .tip.on { opacity: 1; }
+  .tip .n { font-family: var(--display); font-stretch: 87.5%; text-transform: uppercase;
+            letter-spacing: .05em; font-size: 15px; font-weight: 600; margin-bottom: 7px; }
+  .tip dl { display: grid; grid-template-columns: auto auto; gap: 3px 16px; margin: 0; }
+  .tip dt { font-size: 11.5px; color: var(--ink-2); }
+  .tip dd { font-size: 11.5px; margin: 0; text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; }
+  .tip .st { margin-top: 8px; padding-top: 7px; border-top: 1px solid var(--hair);
+             font-family: var(--display); font-stretch: 87.5%; text-transform: uppercase;
+             letter-spacing: .06em; font-size: 12px; font-weight: 600;
+             display: flex; align-items: center; gap: 6px; }
+
+  /* table */
+  .tblwrap { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; font-size: 13px; }
+  th, td { text-align: right; padding: 8px 13px; border-bottom: 1px solid var(--grid); white-space: nowrap; }
+  th { font-family: var(--display); font-stretch: 87.5%; text-transform: uppercase; letter-spacing: .09em;
+       font-size: 11px; color: var(--muted); font-weight: 500; position: sticky; top: 0;
+       background: var(--panel); border-bottom: 1px solid var(--rule); }
+  td.l, th.l { text-align: left; }
+  td.num { font-variant-numeric: tabular-nums; }
+  .badge { display: inline-flex; align-items: center; gap: 6px; font-family: var(--display);
+           font-stretch: 87.5%; text-transform: uppercase; letter-spacing: .05em;
+           font-size: 12px; font-weight: 600; }
+  .tblcap { padding: 14px 18px 2px; font-size: 12.5px; color: var(--muted); }
+
+  /* wall of support */
+  .wall-head { padding: 16px 18px 6px; }
+  .wall-intro { font-size: 13.5px; color: var(--ink-2); max-width: 74ch; margin: 8px 0 0; }
+  .wall-intro b { color: var(--ink); font-weight: 620; }
+  .wall-grid { display: grid; grid-template-columns: 1fr 1fr; }
+  @media (max-width: 720px) { .wall-grid { grid-template-columns: 1fr; } }
+  .wall-pick, .wall-board { padding: 14px 18px 18px; border-top: 1px solid var(--hair); }
+  .wall-board { border-left: 1px solid var(--hair); }
+  @media (max-width: 720px) { .wall-board { border-left: none; } }
+  .wall-pick .lbl, .wall-board .lbl { display: block; font-size: 10.5px; color: var(--muted); margin-bottom: 9px; }
+  #wall-q { font: 400 13px var(--sans); padding: 9px 11px; width: 100%; margin-bottom: 10px;
+            border: 1px solid var(--rule); background: var(--field); color: var(--ink); }
+  #wall-list { max-height: 340px; overflow-y: auto; display: flex; flex-direction: column; }
+  .wr { display: flex; align-items: center; gap: 10px; padding: 9px 4px; border-bottom: 1px solid var(--grid);
+        cursor: pointer; text-align: left; background: none; border-left: none; border-right: none; border-top: none;
+        width: 100%; color: var(--ink); }
+  .wr:hover { background: var(--chip); }
+  .wr .wr-dot { width: 9px; height: 9px; flex: none; }
+  .wr .wr-name { flex: 1 1 auto; font-size: 13.5px; font-weight: 560; }
+  .wr .wr-ig { font-family: var(--mono); font-size: 11.5px; color: var(--muted); }
+  .wr .wr-cta { font-family: var(--display); font-stretch: 87.5%; text-transform: uppercase; letter-spacing: .06em;
+                font-size: 11px; font-weight: 600; color: var(--ahead); }
+  #wall-feed { max-height: 380px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
+  .wm { border-left: 3px solid var(--edge); padding: 8px 12px; background: var(--panel); }
+  .wm.edge { border-left-color: var(--edge); }
+  .wm.behind { border-left-color: var(--behind); }
+  .wm-to { font-size: 11.5px; color: var(--ink-2); margin-bottom: 3px; }
+  .wm-to a { font-family: var(--mono); color: var(--ahead); text-decoration: none; }
+  .wm-msg { font-size: 14px; color: var(--ink); }
+  .wall-empty { font-size: 13px; color: var(--muted); padding: 8px 2px; }
+
+  /* compose overlay */
+  .compose { position: fixed; inset: 0; z-index: 20; background: rgba(11,12,12,.55);
+             display: flex; align-items: center; justify-content: center; padding: 20px; }
+  .compose-card { background: var(--panel); border: 1px solid var(--ink); width: 100%; max-width: 440px; padding: 18px 20px 20px; }
+  .compose-top { display: flex; justify-content: space-between; align-items: center; }
+  .compose-x { background: none; border: none; font-size: 16px; color: var(--ink-2); cursor: pointer; padding: 2px 4px; }
+  .compose-name { font-family: var(--display); font-stretch: 87.5%; text-transform: uppercase; letter-spacing: .03em;
+                  font-size: 22px; font-weight: 600; margin: 2px 0 2px; }
+  .compose-ig { font-family: var(--mono); font-size: 12.5px; color: var(--ahead); text-decoration: none; }
+  #compose-text { width: 100%; margin: 12px 0 0; font: 400 15px var(--sans); padding: 10px 12px;
+                  border: 1px solid var(--rule); background: var(--field); color: var(--ink); resize: none; }
+  .compose-foot { display: flex; align-items: center; justify-content: space-between; margin-top: 10px; }
+  .compose-count { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+  .pill.send { background: var(--ink); color: var(--paper); border-color: var(--ink); cursor: pointer; }
+  .pill.send:disabled { opacity: .4; cursor: default; }
+  .compose-note { font-size: 11.5px; color: var(--muted); margin: 12px 0 0; }
+  .toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%) translateY(20px);
+           background: var(--ink); color: var(--paper); font-size: 13px; padding: 11px 16px; z-index: 30;
+           opacity: 0; transition: opacity .18s, transform .18s; pointer-events: none; max-width: 90vw; }
+  .toast.on { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  footer { color: var(--ink-2); font-size: 12.5px; padding: 22px 2px 0; }
+  footer p { margin: 0 0 9px; max-width: 82ch; }
+  .disclaimer { border: 1px solid var(--rule); border-left: 4px solid var(--ink);
+                padding: 12px 15px; margin-top: 14px !important; font-size: 13px;
+                background: var(--panel); color: var(--ink); }
+  .disclaimer b { display: inline; }
+  footer b { font-family: var(--display); font-stretch: 87.5%; text-transform: uppercase;
+             letter-spacing: .07em; font-weight: 600; color: var(--ink); }
+  a { color: inherit; } a:hover { color: var(--ahead); }
+  [hidden] { display: none !important; }
+  details.fx { border-top: 1px solid var(--grid); }
+  details.fx:first-of-type { border-top: none; }
+  details.fx summary { cursor: pointer; padding: 11px 2px; font-family: var(--display); font-stretch: 87.5%;
+    text-transform: uppercase; letter-spacing: .09em; font-size: 12px; font-weight: 600; color: var(--ink); list-style: none; }
+  details.fx summary::-webkit-details-marker { display: none; }
+  details.fx summary::before { content: '+  '; color: var(--muted); }
+  details.fx[open] summary::before { content: '\2212  '; }
+  details.fx p { margin: 2px 0 14px; }
+  .chartwrap { position: relative; }
+  .chartwrap svg { touch-action: none; cursor: grab; }
+  .mapwrap { max-width: 500px; margin: 0 auto; }
+  .mapwrap svg { display: block; width: 100%; }
+  .zoomctl { position: absolute; top: 8px; right: 8px; display: flex; flex-direction: column; }
+  .zoomctl button { width: 30px; height: 30px; background: var(--panel); color: var(--ink);
+    border: 1px solid var(--rule); margin-top: -1px; font-size: 17px; line-height: 1; cursor: pointer;
+    font-family: var(--sans); display: flex; align-items: center; justify-content: center; }
+  .zoomctl button:first-child { margin-top: 0; }
+  .zoomctl button:hover { background: var(--chip); }
+  .zoomctl button:focus-visible { outline: 2px solid var(--ahead); outline-offset: 1px; z-index: 1; }
+  @media (max-width: 720px) {
+    .mast-in { padding: 22px 16px 26px; }
+    .wrap { padding: 0 12px 56px; }
+    .params { gap: 16px; padding: 14px; }
+    .field { flex: 1 1 44%; min-width: 0; }
+    .field > div { width: 100%; }
+    input[type="search"] { width: 100%; }
+    input[type="range"] { width: 100%; }
+    .pills { width: 100%; }
+    .pill { padding: 12px 15px; flex: 1 1 auto; text-align: center; }
+    .tiles { grid-template-columns: 1fr 1fr; }
+    .tile { border-left: none; border-top: 1px solid var(--hair); }
+    .tile:first-child { border-top: none; grid-column: 1 / -1; }
+    .tile .v { font-size: 34px; }
+    .zoomctl button { width: 34px; height: 34px; }
+    th, td { padding: 8px 10px; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<header class="mast">
+  <div class="mast-in">
+    <div class="kicker lbl">Transcontinental Race No12 · Trondheim → Kalamata</div>
+    <div class="wordmark">
+      <svg class="mark" viewBox="0 0 100 100" role="img" aria-label="The Last Dot logo: a circle with a dot in its lower-left, the last rider on the map">
+        <circle cx="50" cy="50" r="44" fill="var(--mark-fill)" stroke="var(--mark-ink)" stroke-width="5"/>
+        <circle cx="33" cy="67" r="12" fill="var(--mark-ink)"/>
+      </svg>
+      <h1>The Last Dot</h1>
+    </div>
+    <p class="deck lbl">Follow the tail of the field, racing the cut-off to the finish</p>
+    <p class="motto lbl">Be finisher — or be squared</p>
+    <p class="lede">Every rider is a line — their average kilometres per day since the start.
+      The <b>black line</b> is the pace that keeps you inside the time limit — and it is not one straight run
+      to Kalamata. Every control point closes on its own deadline, so the line bends at each one: the
+      <b>CP1→CP2 leg demands the steepest pace of the whole race</b>. Stay above the line and you make the next
+      cut-off; drop below and you keep riding, but out of the General Classification. <b id="cpline"></b></p>
+    <p class="lede" style="opacity:.6;font-size:13px">Rider positions read
+      <span id="freshness"></span>. Deadlines update live.</p>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <section class="block params" aria-label="Parameters">
+    <div class="field">
+      <span class="lbl" id="lb-cat">Category</span>
+      <div class="pills" role="group" aria-labelledby="lb-cat" id="cats"></div>
+    </div>
+    <div class="field">
+      <label class="lbl" for="q">Find rider</label>
+      <input type="search" id="q" placeholder="e.g. Strasser" autocomplete="off">
+    </div>
+    <div class="field">
+      <label class="lbl" for="tot">Estimated total distance</label>
+      <div style="display:flex;align-items:center;gap:11px">
+        <input type="range" id="tot" min="4400" max="5200" step="50" value="4450">
+        <span class="rangeval" id="totv">4450 km</span>
+      </div>
+    </div>
+    <div class="field">
+      <span class="lbl">Filter</span>
+      <label class="check"><input type="checkbox" id="risk"> Only riders off the pace</label>
+    </div>
+    <div class="field">
+      <span class="lbl" id="lb-scale">Scale</span>
+      <div class="pills" role="group" aria-labelledby="lb-scale">
+        <button class="pill" id="z-now" aria-pressed="false">Now</button>
+        <button class="pill" id="z-full" aria-pressed="true">Whole race</button>
+      </div>
+    </div>
+    <div class="spacer"></div>
+    <div class="field">
+      <span class="lbl" id="lb-view">View</span>
+      <div class="pills" role="group" aria-labelledby="lb-view">
+        <button class="pill" id="v-chart" aria-pressed="true">Chart</button>
+        <button class="pill" id="v-map" aria-pressed="false">Map</button>
+        <button class="pill" id="v-table" aria-pressed="false">Table</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="block tiles" aria-label="Summary">
+    <div class="tile"><span class="v" id="s-req">—</span><span class="k">Pace for the next cut-off</span><span class="u" id="s-req-sub">km per day, steepest leg</span></div>
+    <div class="tile c-split cs-in">
+      <svg class="diag" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="100" x2="100" y2="0" stroke="var(--hair)" stroke-width="1" vector-effect="non-scaling-stroke"/></svg>
+      <div class="sub up"><span class="v" id="s-ahead">—</span><span class="k"><svg viewBox="0 0 20 20" width="12" height="12" style="vertical-align:-2px"><circle cx="10" cy="10" r="7" fill="var(--ahead)"/></svg> Inside, with margin</span><span class="u">at least 10% over the minimum</span></div>
+      <div class="sub dn"><span class="v" id="s-fin">—</span><span class="k"><svg viewBox="0 0 20 20" width="12" height="12" style="vertical-align:-2px"><rect x="4" y="1.5" width="1.7" height="17" fill="var(--fin)"/><rect x="5.7" y="2.2" width="11.2" height="8.4" fill="none" stroke="var(--fin)" stroke-width="1.3"/><rect x="5.7" y="2.2" width="5.6" height="4.2" fill="var(--fin)"/><rect x="11.3" y="6.4" width="5.6" height="4.2" fill="var(--fin)"/></svg> Finished</span><span class="u">crossed the line in Kalamata</span></div>
+    </div>
+    <div class="tile c-split cs-pace">
+      <svg class="diag" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="100" x2="100" y2="0" stroke="var(--hair)" stroke-width="1" vector-effect="non-scaling-stroke"/></svg>
+      <div class="sub up"><span class="v" id="s-edge">—</span><span class="k"><svg viewBox="0 0 20 20" width="12" height="12" style="vertical-align:-2px"><circle cx="10" cy="10" r="6.6" fill="none" stroke="var(--edge)" stroke-width="2.4"/><path d="M10 3.4A6.6 6.6 0 0 0 10 16.6Z" fill="var(--edge)"/></svg> On the edge</span><span class="u">−5% to +10%</span></div>
+      <div class="sub dn"><span class="v" id="s-behind">—</span><span class="k"><svg viewBox="0 0 20 20" width="12" height="12" style="vertical-align:-2px"><rect x="3.6" y="3.6" width="12.8" height="12.8" fill="none" stroke="var(--behind)" stroke-width="2.4"/></svg> Off the pace</span><span class="u">more than 5% below</span></div>
+    </div>
+    <div class="tile c-dnf c-split cs-dnf">
+      <svg class="diag" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="100" x2="100" y2="0" stroke="var(--hair)" stroke-width="1" vector-effect="non-scaling-stroke"/></svg>
+      <div class="sub up"><span class="v" id="s-dnf">—</span><span class="k"><svg viewBox="0 0 20 20" width="12" height="12" style="vertical-align:-2px"><path d="M10 0.8C4.4 0.8 1.4 4.5 1.4 9c0 2.7 1.1 4.5 2.7 5.4v2.2c0 1.6 1.3 2.9 2.9 2.9h6c1.6 0 2.9-1.3 2.9-2.9v-2.2c1.6-0.9 2.7-2.7 2.7-5.4C18.6 4.5 15.6 0.8 10 0.8Z" fill="var(--behind)"/><circle cx="6.5" cy="8.7" r="2.5" fill="var(--surface)"/><circle cx="13.5" cy="8.7" r="2.5" fill="var(--surface)"/><path d="M10 11.4l1.5 2.6h-3Z" fill="var(--surface)"/><rect x="7.4" y="16.1" width="1.5" height="3.5" fill="var(--surface)"/><rect x="11.1" y="16.1" width="1.5" height="3.5" fill="var(--surface)"/></svg> Scratched</span><span class="u">official DNF</span></div>
+      <div class="sub dn"><span class="v" id="s-out">—</span><span class="k"><svg viewBox="0 0 20 20" width="12" height="12" style="vertical-align:-2px"><path d="M10 0.8C4.4 0.8 1.4 4.5 1.4 9c0 2.7 1.1 4.5 2.7 5.4v2.2c0 1.6 1.3 2.9 2.9 2.9h6c1.6 0 2.9-1.3 2.9-2.9v-2.2c1.6-0.9 2.7-2.7 2.7-5.4C18.6 4.5 15.6 0.8 10 0.8Z" fill="var(--ink-2)"/><circle cx="6.5" cy="8.7" r="2.5" fill="var(--surface)"/><circle cx="13.5" cy="8.7" r="2.5" fill="var(--surface)"/><path d="M10 11.4l1.5 2.6h-3Z" fill="var(--surface)"/><rect x="7.4" y="16.1" width="1.5" height="3.5" fill="var(--surface)"/><rect x="11.1" y="16.1" width="1.5" height="3.5" fill="var(--surface)"/></svg> Out of GC</span><span class="u">missed a control</span></div>
+    </div>
+  </section>
+
+  <section class="block chartcard" id="chartview">
+    <div class="chart-head">
+      <span class="chart-title">Distance covered against the cut-off</span>
+      <div class="legend">
+        <span class="lg"><svg viewBox="0 0 20 20" width="14" height="14"><circle cx="10" cy="10" r="7" fill="var(--ahead)"/></svg>Inside</span>
+        <span class="lg"><svg viewBox="0 0 20 20" width="14" height="14"><circle cx="10" cy="10" r="6.6" fill="none" stroke="var(--edge)" stroke-width="2.4"/><path d="M10 3.4A6.6 6.6 0 0 0 10 16.6Z" fill="var(--edge)"/></svg>On the edge</span>
+        <span class="lg"><svg viewBox="0 0 20 20" width="14" height="14"><rect x="3.6" y="3.6" width="12.8" height="12.8" fill="none" stroke="var(--behind)" stroke-width="2.4"/></svg>Off the pace · squared</span>
+        <span class="lg"><svg viewBox="0 0 20 20" width="15" height="15"><path d="M10 0.8C4.4 0.8 1.4 4.5 1.4 9c0 2.7 1.1 4.5 2.7 5.4v2.2c0 1.6 1.3 2.9 2.9 2.9h6c1.6 0 2.9-1.3 2.9-2.9v-2.2c1.6-0.9 2.7-2.7 2.7-5.4C18.6 4.5 15.6 0.8 10 0.8Z" fill="var(--ink-2)"/><circle cx="6.5" cy="8.7" r="2.5" fill="var(--surface)"/><circle cx="13.5" cy="8.7" r="2.5" fill="var(--surface)"/><path d="M10 11.4l1.5 2.6h-3Z" fill="var(--surface)"/><rect x="7.4" y="16.1" width="1.5" height="3.5" fill="var(--surface)"/><rect x="11.1" y="16.1" width="1.5" height="3.5" fill="var(--surface)"/></svg>Out of GC · missed a control</span>
+        <span class="lg"><svg viewBox="0 0 20 20" width="15" height="15"><path d="M10 0.8C4.4 0.8 1.4 4.5 1.4 9c0 2.7 1.1 4.5 2.7 5.4v2.2c0 1.6 1.3 2.9 2.9 2.9h6c1.6 0 2.9-1.3 2.9-2.9v-2.2c1.6-0.9 2.7-2.7 2.7-5.4C18.6 4.5 15.6 0.8 10 0.8Z" fill="var(--behind)"/><circle cx="6.5" cy="8.7" r="2.5" fill="var(--surface)"/><circle cx="13.5" cy="8.7" r="2.5" fill="var(--surface)"/><path d="M10 11.4l1.5 2.6h-3Z" fill="var(--surface)"/><rect x="7.4" y="16.1" width="1.5" height="3.5" fill="var(--surface)"/><rect x="11.1" y="16.1" width="1.5" height="3.5" fill="var(--surface)"/></svg>Official DNF · scratched</span>
+        <span class="lg"><span class="sw line"></span>Cut-off pace (per leg)</span>
+      </div>
+    </div>
+    <div class="chartwrap"><svg id="plot" viewBox="0 0 1000 566" role="img" tabindex="0"
+         aria-label="Time-distance diagram: each rider is a projection line compared against the cut-off diagonal. The table view below carries the same data."></svg>
+      <div class="zoomctl" role="group" aria-label="Zoom">
+        <button id="zoom-in" aria-label="Zoom in">+</button>
+        <button id="zoom-out" aria-label="Zoom out">−</button>
+        <button id="zoom-reset" aria-label="Reset zoom" title="Reset">⤢</button>
+      </div>
+    </div>
+    <p class="hint"><b>Drag</b> to move, <b>pinch or the +/− buttons</b> to zoom, <b>⤢</b> to reset;
+      on a trackpad, two fingers pan and pinch zooms. <b>Now</b> frames the field as it stands today so riders
+      separate; <b>Whole race</b> opens out to the cut-off. Hover to identify a rider.</p>
+  </section>
+
+  <section class="block chartcard" id="mapview" hidden>
+    <div class="chart-head">
+      <span class="chart-title">The corridor, Trondheim to Kalamata — and the broom wagon behind the field</span>
+      <div class="legend">
+        <span class="lg"><svg viewBox="0 0 20 20" width="12" height="12"><circle cx="10" cy="10" r="7" fill="var(--ahead)"/></svg>Inside</span>
+        <span class="lg"><svg viewBox="0 0 20 20" width="12" height="12"><circle cx="10" cy="10" r="7" fill="var(--edge)"/></svg>On the edge</span>
+        <span class="lg"><svg viewBox="0 0 20 20" width="12" height="12"><circle cx="10" cy="10" r="7" fill="var(--behind)"/></svg>Off the pace</span>
+        <span class="lg"><svg viewBox="0 0 20 20" width="12" height="12"><circle cx="10" cy="10" r="7" fill="var(--ink-2)"/></svg>Out of GC</span>
+        <span class="lg"><svg viewBox="0 0 20 20" width="12" height="12"><path d="M4 4L16 16M4 16L16 4" stroke="var(--behind)" stroke-width="2.6"/></svg>Scratched here</span>
+        <span class="lg"><span class="sw line"></span>Broom wagon · minimum GC pace</span>
+      </div>
+    </div>
+    <div class="mapwrap"><svg id="mapplot" viewBox="0 0 460 820" role="img"
+      aria-label="Stylised vertical map of Europe from Norway to Greece: riders as dots along the race corridor, scratched riders marked where they stopped, and the broom wagon line at the minimum pace still compatible with the cut-off."></svg></div>
+    <p class="hint">The TCR is free-route — riders are placed along a stylised corridor by distance ridden,
+      so lateral position is indicative, not GPS. <b>Drag</b> to move, <b>pinch or ctrl+scroll</b> to zoom,
+      <b>double-tap</b> to reset; <b>hover</b> a mark to identify the rider. The dashed line is
+      <b>the broom wagon</b>: it sweeps toward Kalamata at the minimum pace that still clears every
+      cut-off; anyone behind it is losing the race against the clock, not against other riders.</p>
+  </section>
+
+  <section class="block" id="tableview" hidden>
+    <p class="tblcap">The same data as the chart, ordered from the most critical margin. <span id="tcount"></span></p>
+    <div class="tblwrap">
+      <table>
+        <thead><tr>
+          <th class="l">Rider</th><th class="l">Cat.</th><th>Pos.</th><th>km</th><th>km/day</th>
+          <th>Margin</th><th>Binds at</th><th>Est. finish</th><th>Stopped</th><th class="l">Status</th><th class="l">Classification</th>
+        </tr></thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="block wall" id="wall" aria-label="Wall of Support">
+    <div class="wall-head">
+      <span class="chart-title">The Wall of Support</span>
+      <p class="wall-intro">These riders are <b>on the edge</b> or <b>off the pace</b> — still turning the pedals
+        against the clock. Send one a line of up to 100 characters: it goes on the wall, and opens their
+        Instagram so you can send it to them yourself.</p>
+    </div>
+    <div class="wall-grid">
+      <div class="wall-pick">
+        <span class="lbl">Pick a rider to cheer</span>
+        <input type="search" id="wall-q" placeholder="Search the strugglers…" autocomplete="off">
+        <div id="wall-list" role="list"></div>
+      </div>
+      <div class="wall-board">
+        <span class="lbl">Messages sent</span>
+        <div id="wall-feed"><p class="wall-empty">Loading the wall…</p></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="compose" id="compose" hidden>
+    <div class="compose-card" role="dialog" aria-modal="true" aria-labelledby="compose-name">
+      <div class="compose-top">
+        <span class="lbl">Send support to</span>
+        <button class="compose-x" id="compose-x" aria-label="Close">✕</button>
+      </div>
+      <div class="compose-name" id="compose-name"></div>
+      <a class="compose-ig" id="compose-ig" target="_blank" rel="noopener nofollow"></a>
+      <textarea id="compose-text" maxlength="100" rows="3" placeholder="A line of encouragement…"></textarea>
+      <div class="compose-foot">
+        <span class="compose-count" id="compose-count">100</span>
+        <button class="pill send" id="compose-send">Send &amp; open Instagram</button>
+      </div>
+      <p class="compose-note">Your message posts to the wall after a quick check, and is copied so you can paste
+        it into a DM on their Instagram. No account needed.</p>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <footer>
+    <details class="fx" open><summary>How to read this</summary><p> Each rider's line is kilometres ÷ days elapsed, projected forward at that same
+      average. The black line is the deadline envelope: the distance you must have covered at each control's
+      closing time, joined into one path. A rider is <b>inside</b> if their average still clears every remaining
+      deadline — the binding one is whichever demands the most, shown in the tooltip. It is a linear projection,
+      not a forecast: nobody holds one pace for twenty days. It answers who has margin right now, against the
+      deadline that actually bites, not who will arrive.</p></details>
+    <details class="fx"><summary>The assumptions</summary><p> Start 19 July 2026 at 20:00 CEST, cut-off 8 August at 23:59 CEST — 20 days and 4 hours
+      (source: Lost Dot, who mark these details as provisional). The nominal route is roughly 4,800–5,000 km, but every
+      rider plots their own line, so the slider exists to show how much the threshold depends on that guess. Current
+      averages are depressed by the Norwegian opening and the westward detour to CP1 Flåm, so the group just below the
+      line is less compromised than it looks.</p></details>
+    <details class="fx"><summary>The control points</summary><p> Each closing time is taken from the organiser's configuration in the live
+      tracker: CP1 Flåm 22 July 11:00, CP2 Tatra 30 July 11:00, CP3 Sarajevo 2 August 23:59, CP4 Leskovik
+      5 August 23:59, all CEST. Their distances along the route are estimated — CP1 anchored to the shortest
+      distance any rider had covered when validating it (≈685 km), CP2–CP4 placed between that and the finish
+      in proportion to the great-circle legs between the checkpoints. So the exact bends are approximate, but
+      the shape is real: the CP1→CP2 leg is by far the steepest, needing about 280 km/day, well above the
+      race-long average of 245. Under the Lost Dot rules, qualifying for the General Classification requires
+      validating at every control within its window; miss one and you forfeit classification and your official
+      race time, though you may ride on. Those riders are drawn as a calavera rather than a dot — still riding,
+      no longer classified — and for them the line only tracks reaching Kalamata by 8 August. The four riders
+      the organiser listed as outside the classification from the start are excluded entirely.</p></details>
+    <p>Rider data: FollowMyChallenge live leaderboard, TCRNo12.</p>
+    <p class="disclaimer"><b>Not an official page.</b> <em>The Last Dot</em> is an independent dot-watcher's
+      analysis, made by a spectator. It is not affiliated with, endorsed by, or connected to
+      <strong>Lost Dot</strong> or the Transcontinental Race, and the name is a nod to dot-watching, not a
+      claim of association. For official information, results and race reports, go to
+      <a href="https://www.lostdot.cc" rel="noopener nofollow">lostdot.cc</a>.</p>
+  </footer>
+</div>
+
+<div class="tip" id="tip" role="status" aria-live="polite"></div>
+
+<script>
+const RAW = `Robin Gemperle;1st;4442.3;428.3;S;22;F
+Jocelyn Roth;2nd;4442.3;408.9;S;21;F
+Jos Koop;3rd;4442.3;404.5;S;24;F
+Martin Moritz;4th;4442.3;400.9;S;24;F
+Manuel Rudaz;5th;4442.3;398.8;S;21;F
+Robert Müller;6th;4442.3;393;S;23;F
+Thomas Boury;7th;4442.3;389.6;S;20;F
+Tim De Witte;8th;4442.3;388.3;S;20;F
+Jonas Verest;9th;4442.3;384.1;S;21;F
+Nils Oyen;10th;4442.3;381.4;S;25;F
+Guillaume Poinsot;11th;4442.3;378;S;26;F
+Dieuwe Van Bergen en Henegouwen;12th;4442.3;368.1;S;19;F
+Peter Kronberger;13th;4442.3;365.4;S;24;F
+Lucas Strittmatter;14th;4442.3;362.6;S;27;F
+Björn Wirsching;15th;4442.3;359.8;S;26;F
+Oliver Glen;16th;4442.3;357.5;S;24;F
+Sarah Bosslet;17th;4442.3;356.5;F;22;F
+Riccardo Mosconi;18th;4442.3;354.6;S;27;F
+Christoph Pernsteiner;19th;4442.3;353.4;S;33;F
+Camille Albisser;20th;4442.3;351.1;F;23;F
+Simon Flury;21st;4442.3;348.9;S;27;F
+Larissa Unsinn;22nd;4442.3;347;F;20;F
+Wojciech Wronka;23rd;4442.3;343.5;S;23;F
+Roel Massink;24th;4442.3;341;S;25;F
+Jakub Tomasik;25th;4442.3;340.3;S;32;F
+Sebi Lehmann;26th;4442.3;336.1;S;30;F
+Lea Hamberger;27th;4442.3;335.2;F;27;F
+Brice Douet;28th;4442.3;334.7;S;29;F
+Josh Ibbett;29th;4442.3;330;S;30;F
+Daniel Molino;30th;4442.3;329.1;S;31;F
+Maxime Prieur;31st;4442.3;328.7;S;28;F
+Manuel Feldbaumer;32nd;4442.3;326.9;S;30;F
+Axel Restrup;33rd;4442.3;326.2;S;30;F
+Florian Thiessen;34th;4442.3;324.3;S;26;F
+Christian Höra;35th;4442.3;320.1;S;31;F
+Arthur Jan;36th;4442.3;319.7;S;33;F
+Maximilian Siering;37th;4442.3;318.5;S;30;F
+Wojciech Nogalski;38th;4442.3;317.8;S;35;F
+Ulf Bannick;39th;4442.3;315.8;S;34;F
+Jonas Heyberger;40th;4442.3;315.8;S;28;F
+Markus Carlos hein;41st;4442.3;314;S;23;F
+Aleksander Konieczny;42nd;4442.3;313.1;S;28;F
+Katharina Wirth;43rd;4442.3;311.1;F;26;F
+Jakub Micorek;44th;4442.3;305.9;S;27;F
+Carl von Walter;45th;4442.3;303.3;S;29;F
+Nicole van Batenburg;46th;4442.3;302.4;F;28;F
+Rodrigue Lombard;47th;4442.3;300.2;S;31;F
+Daniel Schulze Waltrup;48th;4442.3;299.9;S;28;F
+Hélène Fromenty;49th;4442.3;299.4;F;24;F
+Dan Sharp;50th;4442.3;299.2;S;30;F
+Quirin Taubert;51st;4442.3;298.9;S;33;F
+Elise Sauvinet;52nd;4442.3;298.6;F;27;F
+Thomas Groenewegen;53rd;4442.3;296.9;S;32;F
+Valentin Cuenot;54th;4442.3;296.2;S;30;F
+Marten Sprecher;55th;4442.3;295.8;S;32;F
+Pierre-Yves Robert;56th;4442.3;295.7;S;31;F
+Francesco Vettore;57th;4442.3;295.4;S;38;F
+Maximilian Pahl;58th;4442.3;294.7;S;33;F
+Martin Carlsson;59th;4442.3;294.7;S;32;F
+Adrian Vogel;60th;4442.3;294.2;S;26;F
+Matthew Spooner;61st;4442.3;293.4;S;33;F
+Franz Nawrocki;62nd;4442.3;293;S;34;F
+Pierre Beck;63rd;4442.3;292.8;S;31;F
+Michael Ærenlund Buch;64th;4442.3;287.7;S;36;F
+Gergely Bartalos;65th;4442.3;285.8;S;36;F
+Robin Skoge;66th;4442.3;285;S;35;F
+Bernhard Kämmerer;67th;4442.3;284.1;S;35;F
+Martin Zettel;68th;4442.3;283.4;S;32;F
+Matthew Falconer;69th;4442.3;283.1;S;37;F
+Aleksei Konev;70th;4442.3;282.7;S;31;F
+Clayton Anderson;71st;4442.3;282.3;S;31;F
+Lisa Schrader;72nd;4442.3;282.3;F;32;F
+Juan Pedro Moreno;73rd;4442.3;281.3;S;35;F
+Luís Manuel Silva Carvalho;74th;4442.3;281;S;24;F
+Dragomir Titei;75th;4442.3;280.9;S;36;F
+Byron Buck;76th;4442.3;280.4;S;36;F
+Christian Pany;77th;4442.3;279.3;S;30;F
+Hannah Hiecke;78th;4442.3;279;F;34;F
+Gabriel Delattre;79th;4442.3;279;S;43;F
+Sebastian Ritter;80th;4442.3;278.6;S;35;F
+Michal Wolff;81st;4442.3;278.4;S;32;F
+Valentin Reichelt;82nd;4442.3;278.2;S;37;F
+Severin Ehrengruber;83rd;4442.3;278.1;S;37;F
+Harald Rinner;84th;4442.3;277.5;S;30;F
+Larissa Sauter;85th;4442.3;277.3;F;26;F
+Jim Visschers;86th;4442.3;276.9;S;40;F
+Jannis Rieb;87th;4442.3;276.2;S;36;F
+Paul Williams;88th;4442.3;275.6;S;35;F
+Florent De Boisvilliers;89th;4442.3;274.6;S;34;F
+Gerald Huber;90th;4442.3;273.9;S;35;F
+Alexander Stramma;91st;4442.3;272.9;S;33;F
+Alexander Stojkovic;92nd;4442.3;272.1;S;34;F
+Sarah Cinquini;93rd;4442.3;272.1;F;35;F
+Simon Van Teutem;94th;4442.3;269.7;S;38;F
+Viggo Vea;95th;4442.3;268.8;S;33;F
+Emiliano Baravalle;96th;4442.3;268.3;S;42;F
+Falk Döring;97th;4442.3;267.7;S;38;F
+Noah Schmid;98th;4442.3;267.7;S;39;F
+Bart Pombreu;99th;4442.3;267.5;S;39;F
+Joanna Ruminska-Pietrzyk;100th;4442.3;267.5;F;27;F
+James Auburn;101st;4442.3;267.5;S;44;F
+Nicolas Müller;102nd;4442.3;266.7;S;36;F
+Christian Chesta;103rd;4442.3;266.2;S;41;F
+Niklas Wich;104th;4442.3;264.7;S;37;F
+Kristian Buljan;105th;4442.3;262.8;S;37;F
+Tomasz Kuś;106th;4442.3;262.7;S;38;F
+Maciej Baranowski;107th;4442.3;261.5;S;39;F
+Joep van Luijt;108th;4442.3;260.7;S;41;F
+Jorn Baan Hofman;109th;4442.3;259.5;S;36;F
+Christo Dingozov;110th;4442.3;259.4;S;32;F
+Markus Taubner;111th;4442.3;259.2;S;35;F
+Yiqun Fu;112th;4442.3;259.2;S;34;F
+Alec Gates;113th;4442.3;255.8;S;46;F
+Christian Romero;114th;4442.3;255.7;S;40;F
+Tom Bryan;115th;4442.3;252.8;S;28;F
+Grzegorz Oszast;116th;4442.3;252.3;S;37;F
+Mikke Luostarinen;117th;4442.3;251.5;S;39;F
+Lukas Müller;118th;4442.3;250.2;S;41;F
+Niko Dangel;119th;4442.3;249.5;S;35;F
+Jesko von Werthern;120th;4442.3;249.4;S;38;F
+Gawan Berentelg;121st;4442.3;249.3;S;32;F
+Josh Roberts;122nd;4442.3;249.2;S;39;F
+Stephan Simmermacher;123rd;4442.3;248.5;S;36;F
+Peter Geldhof;124th;4442.3;248.4;S;42;F
+Erick Saudubray;125th;4442.3;247.9;S;36;F
+Boris Krutov;126th;4442.3;247;S;38;F
+Mark Turnbull;127th;4442.3;246.8;S;40;F
+Jens Ritter;128th;4442.3;246.5;S;37;F
+Niel Dunnage;129th;4442.3;246.4;S;39;F
+Mudit Kohli;130th;4442.3;246;S;36;F
+Tom Dockal;131st;4442.3;245.4;S;36;F
+Thomas Achtner;132nd;4442.3;245.2;S;36;F
+Seth Kennard;133rd;4442.3;245.1;S;38;F
+Floris Bakker;134th;4442.3;244.8;S;44;F
+Chun man Lau;135th;4442.3;244.6;S;37;F
+Jean-François Badias;136th;4442.3;243.8;S;32;F
+Mohamed Jawhara;137th;4442.3;242.7;S;37;F
+Sönke Kreft;138th;4442.3;239.9;S;35;F
+Philip Renders;139th;4442.3;239.8;S;42;F
+Erhard Wälchli;140th;4442.3;239.7;S;33;F
+Aneta Lamik;141st;4442.3;239;F;35;F
+Dennis Wolckenhauer;142nd;4442.3;238.6;S;42;F
+Mikko Mäkipää;143rd;4442.3;238.5;S;39;F
+Tomáš Žižlavský;144th;4442.3;238.3;S;39;F
+Adrian Lai;145th;4442.3;237.8;S;38;F
+Dan Jones;146th;4442.3;237.5;S;38;F
+Marc Förschler;147th;4442.3;237.1;S;36;F
+Manuel Kaufer;148th;4442.3;236.5;S;43;F
+Arnold Graef;149th;4442.3;236.4;S;39;F
+Maris Goldmanis;150th;4442.3;236.4;S;36;F
+Alexander Kuehn;151st;4442.3;236.2;S;34;F
+Lars Olausson;152nd;4442.3;235.4;S;43;F
+Filip Bullens;153rd;4442.3;235.1;S;38;F
+Emily Maille;154th;4442.3;234.6;F;37;F
+Eric Banh;155th;4442.3;233.3;S;36;F
+Robert Tremblay;156th;4442.3;232.4;S;45;F
+Sebastian Kerschbaumer;157th;4442.3;232.3;S;38;F
+Nathan Offord;158th;4442.3;231.3;S;41;F
+Noah Boe-Whitehorn;159th;4442.3;231.1;S;45;F
+Fritjof Schirmer;160th;4442.3;227.3;S;39;F
+Cesare Pedrini;161st;4442.3;226.8;S;32;F
+Simon Heppell;162nd;4442.3;226.1;S;39;F
+Oliver Neumann;163rd;4442.3;225.8;S;38;F
+Samuel Hussain;164th;4442.3;225.3;S;40;F
+David Lacey;165th;4442.3;224.9;S;43;F
+Valerio Cecchini;166th;4442.3;224.3;S;35;F
+Tim Hunt;167th;4442.3;222.2;S;40;0
+Baptiste Estela;168th;4442.3;222.2;S;44;0
+Maris Brugis;169th;4442.3;222.2;S;41;0
+Thomas Martraire;170th;4442.3;222.2;S;38;0
+Damian Ludlow;171st;4442.3;222.2;S;41;0
+Jana Kesenheimer;172nd;4442.3;222.2;S;33;0
+Christian Holweck;173rd;4442.3;222.2;S;35;0
+Andrew Phillips;174th;4442.3;222.2;S;33;0
+Alexander Eder;175th;4441.3;261.3;S;36;F
+Julian Manrique;176th;4440.3;294.2;S;33;F
+Luca Bessems;177th;4440.3;238.8;F;39;F
+Nicolas Chatelet;178th;4438.3;415.9;S;26;F
+Alexander Latham-boal;179th;4434.3;221.8;S;41;1
+Jack Wright;180th;4419.3;221.1;F;46;0
+Hanif Meeran;181st;4384.3;219.3;S;41;0
+Andrew Speers;182nd;4361.3;218.2;S;44;0
+Jean-paul Sachet;183rd;4361.3;218.2;S;40;0
+James Soteriou;184th;4323.3;216.3;S;46;0
+Kristin Lome;185th;4320.3;216.1;F;44;0
+Andreas Herrig;186th;4309.3;215.6;S;41;0
+Pawel Pulawski;187th;4299.3;350;S;0;D
+Michael Grobe;188th;4297.3;215;S;39;0
+Thomas Chateau;189th;4240.3;212.1;S;37;0
+Thilo Kutzer;190th;4222.3;211.2;S;49;0
+Artem Soldatkin;191st;4137.3;207;S;37;0
+Ro Alegre;192nd;4056.3;202.9;S;43;0
+Greg Fong;193rd;4027.3;201.5;S;47;0
+Martin Lau;194th;3990.3;199.6;S;42;0
+Christian Gfeller;195th;3988.3;199.5;S;44;0
+Gerald Rumpf;196th;3974.3;268.3;S;0;D
+Zuzanna Bogucka;197th;3904.3;195.3;F;45;0
+Frédéric Rudant;198th;3899.3;195.1;S;43;0
+Adrien Ponteville;199th;3862.3;249;S;0;D
+Patrick O'connor;200th;3829.3;191.6;S;49;0
+Robert Coy;201st;3798.3;190;S;49;0
+Knut Kvaran;202nd;3792.3;230;S;0;D
+Lissa Breugelmans;203rd;3790.3;189.6;F;48;0
+Conor O'Sullivan;204th;3779.3;189.1;S;51;0
+Maksym Matvieiev;205th;3778.3;189;S;44;0
+Bambang Anggoro Jati;206th;3773.3;272.4;S;0;D
+Michael Welker;207th;3772.3;188.7;S;54;0
+Mex Wieshofer;208th;3739.3;187.1;S;44;0
+Erik Arentz-Hansen;209th;3725.3;186.4;S;54;0
+Hank Beerstecher;210th;3632.3;181.7;S;54;0
+Lili Delannoy;211th;3621.3;215.2;F;0;D
+Michael Cannon;212th;3620.3;244.3;S;0;D
+Kenneth Lamont;213th;3614.9;217.3;S;0;D
+Xingjian (Tom) Zhai;214th;3603.3;180.3;S;58;0
+Peter Corkill;215th;3590.3;258.9;S;0;D
+Tim Lamb;216th;3539.8;224.6;S;0;D
+Hsi Chun Tsai;217th;3532;317.9;S;0;D
+Sarah Hübner;218th;3531.4;256.5;F;0;D
+Max Agut;219th;3522.4;408.3;S;0;D
+Rumen Vachev;220th;3491;174.6;S;53;0
+Stuart Featherstone;221st;3390.3;248.7;S;0;D
+Koen Heselmans;222nd;3338.2;247.1;S;0;D
+Anna Carlqvist;223rd;3299.4;308.3;F;0;D
+Mike Watson;224th;3254.3;207.8;S;0;D
+Russell Cairns;225th;3250.3;191.6;S;0;D
+Frank Gussenstätter;226th;3243.3;268.2;S;0;D
+Omar Di Felice;227th;3222.6;371.3;S;0;D
+Nicole Farrier;228th;3213.2;218.4;F;0;D
+Philippe Villepontoux;229th;3123.4;189.1;S;0;D
+Douglas Migden;230th;3104.8;155.3;S;52;0
+Nico Schleippmann;231st;3068.5;316.4;S;0;D
+David Tribe;232nd;3038.7;257.8;S;0;D
+Mike Fawcett;233rd;3013.6;374.8;S;0;D
+Henry White;234th;3009;251;S;0;D
+George Surjopurnomo;235th;2983.8;167.5;S;0;D
+Ramona Troxler;236th;2983.5;257.1;F;0;D
+Rainer Huelsse;237th;2949.4;273;S;0;D
+Robbie Jebb;238th;2945.6;294.9;S;0;D
+Thomas Weber;239th;2897.3;183.9;S;0;D
+Roland Salowsky;240th;2884.3;269.8;S;0;D
+Mike Passmann;241st;2880.2;163.7;S;0;D
+Alain Rodriguez;242nd;2725.8;233.4;S;0;D
+Fredi Maeder;243rd;2668.3;311.9;S;0;D
+Henri Do;244th;2664.8;305.1;S;0;D
+Jacob Fahrenkrug;245th;2598.5;263;S;0;D
+Andreas Wittkemper;246th;2592.7;205.8;S;0;D
+Karin Eder;247th;2560.9;218.6;F;0;D
+George Hodgkinson;248th;2532.9;373.1;S;0;D
+Malte Hager;249th;2408.3;279.2;S;0;D
+Stev Krembs;250th;2388.1;247.6;S;0;D
+Cornelis Nicolaas Leek;251st;2385.9;249.3;S;0;D
+Ronja Derr;252nd;2373.3;249.6;F;0;D
+Fabian Graber;253rd;2352.7;199.3;S;0;D
+Adrien Charlot;254th;2324.8;344.6;S;0;D
+Oona Baumann;255th;2323.2;307;F;0;D
+Nora Battermann;256th;2283;297.7;F;0;D
+Laurens Van Gucht;257th;2253.8;472.5;S;0;D
+Bart Noëth;258th;2189.4;226.3;S;0;D
+Bjørn Kåre Amdal;259th;2146.4;329.7;S;0;D
+Susi Pariasek;260th;2130.4;250;F;0;D
+Tobias Geißler;261st;2124.1;240.7;S;0;D
+Sarah Steels;262nd;2108.3;105.5;F;56;0
+Till Moosberger;263rd;2093.9;306.5;S;0;D
+Raymond Dulieu;264th;2081.1;358;S;0;D
+Hugo Manson;265th;2022.8;285.7;S;0;D
+Luis Cardoso;266th;1978.6;162.9;S;0;D
+Lukas Stiller;267th;1941.8;248.5;S;0;D
+Thibault Sabatier;268th;1940.9;180.6;S;0;D
+Anja Longyka;269th;1900.6;278.2;F;0;D
+Lucio Buergisser;270th;1882.6;241.6;S;0;D
+Christoph Strasser;271st;1880.2;503;S;0;D
+Roel Hamers;272nd;1863.7;280.3;S;0;D
+Niklas Hanses;273rd;1858.6;310.5;S;0;D
+Hauke Kottek;274th;1848.9;287.9;S;0;D
+Bryn Thomas;275th;1838;117.4;F;0;D
+Stephen Dummett;276th;1826.7;229.5;S;0;D
+Christoph Adrian Schneider;277th;1821;232.1;S;0;D
+Cody Hughes;278th;1791.5;236.4;S;0;D
+Mariusz Kolodziej;279th;1782.8;237;S;0;D
+Olli Büttel;280th;1781.3;206.2;S;0;D
+Sam Wilson;281st;1764.6;229.6;S;0;D
+Marcin Zielkowski;282nd;1751.2;289.3;S;0;D
+Mateusz Andrulewicz;283rd;1749.5;205.3;S;0;D
+Daniel Tulla;284th;1742.5;269.7;S;0;D
+Ate van Steenbergen;285th;1720.5;127.2;S;0;D
+Aaron Poll;286th;1686;140.2;S;0;D
+Michal Kramář;287th;1678.4;302.1;S;0;D
+Pierre Picard;288th;1655.6;219;S;0;D
+Florian Imgrund;289th;1644.4;306;S;0;D
+Hans Markus Broja;290th;1623;214.7;S;0;D
+Juliette Day;291st;1621.3;169.3;F;0;D
+Kim Heikkinen;292nd;1620.5;315.3;S;0;D
+Maximilian Droste;293rd;1607.3;286.2;S;0;D
+Sara Lundberg;294th;1602.2;283.7;F;0;D
+Mathilde Germanier;295th;1596.4;272.1;F;0;D
+Carsten Dreyer;296th;1581.1;201;S;0;D
+Erik Olsson;297th;1579.8;207.2;S;0;D
+Tobias Johansson;298th;1536.6;420;S;0;D
+Sofia Passaretti;299th;1509.1;218;F;0;D
+Eric Lamboley;300th;1508;189.1;S;0;D
+Jp De Groot;301st;1507.9;159.2;S;0;D
+Erekle Bagashvili;302nd;1440.9;167.6;S;0;D
+Carys Brimble;303rd;1392.3;252.1;F;0;D
+Darron Burns;304th;1383.2;231.1;S;0;D
+Bjorn Menze;305th;1381.1;241;S;0;D
+Rafael Martinez Gonzalez;306th;1369.5;138.5;S;0;D
+Armin Seitz;307th;1357.2;286.9;S;0;D
+Matthew Wright;308th;1325.5;278.4;S;0;D
+Henry Jacobson;309th;1324.2;287.3;S;0;D
+Philip Tellen;310th;1321;354.9;S;0;D
+Karl Björklund;311th;1312.1;269;S;0;D
+Ian Budden;312th;1309.9;222.5;S;0;D
+Amelia Linnett;313th;1306.6;266;F;0;D
+Rene Wach;314th;1302.5;285.3;S;0;D
+Pauline Neuber;315th;1297.4;232.3;F;0;D
+Alberto Vaghi;316th;1272.6;276.7;S;0;D
+Jürgen Ress;317th;1259.3;163.5;S;0;D
+John Read;318th;1231.4;250.9;S;0;D
+Grinshina Kartik;319th;1231;178.8;F;0;D
+Filip Slomski;320th;1229.2;416.2;S;0;D
+Harvey Bates;321st;1214.6;197.8;S;0;D
+Dirk Hermans;322nd;1208;181.8;S;0;D
+Mihael Šandro;323rd;1188.4;208.8;S;0;D
+Isaac Kuehnle-Nelson;324th;1176.7;247;S;0;D
+Peter Magill;325th;1174.4;223.1;S;0;D
+Robin Reinsch;326th;1153;323.6;S;0;D
+Christian Trenkle;327th;1125.7;199.2;S;0;D
+Colin Halliwell;328th;1110.7;236.5;S;0;D
+Paul Rollings;329th;1106.8;232.4;S;0;D
+Max Kraus;330th;1100.5;275.9;S;0;D
+Jakob Wall;331st;1063.1;230.4;S;0;D
+Jon Endres;332nd;839.5;295.8;S;0;D
+Poh Huat Tan;333rd;775.4;195.3;S;0;D
+Stephan Haß;334th;756.5;207.9;S;0;D
+Rene Vera-armenta;335th;751.7;162.5;S;0;D
+Walter Reiterer;336th;749.9;213.9;S;0;D
+Albert Coigné;337th;746.6;217.1;S;0;D
+Sebastian Van den bergen;338th;744.3;240.3;S;0;D
+David Sealey;339th;739.2;252.4;S;0;D
+Sebastien Nolens;340th;736.3;263;S;0;D
+Ben Strause;341st;716.7;148.5;S;0;D
+Ian Mitchinson;342nd;706.1;258.6;S;0;D
+Mark Clements;343rd;705.7;235.1;S;0;D
+Benno Raj;344th;670.7;185.7;S;0;D
+Satomi Yamada;345th;651;75.3;F;0;D
+Lander Wantens;346th;649.8;342.1;S;0;D
+Marco Eberle;347th;643.7;32.2;S;0;D
+Lionel Bobb;348th;616.5;167;S;0;D
+Benjamin Günzke;349th;570.5;223.9;S;0;D
+Joachim Pittraye;350th;567.2;493.2;S;0;D
+Mohamed Almarar;351st;555;223.7;S;0;D
+Lennart Gensch;352nd;548.8;254.4;S;0;D
+Stefan Lindkvist;353rd;548.2;194.4;S;0;D
+Robert Abbott;354th;544;291.8;S;0;D
+Sebastian Cario;355th;542.7;334;S;0;D
+Sylwia Kuropatwa;356th;513.1;479.2;F;0;D
+Ezekiel Amos;357th;499.6;193.9;S;0;D
+Daniel Huxley;358th;459.9;174.3;S;0;D
+Christopher Rißmann;359th;411.2;404.2;S;0;D
+Marco Lang;360th;408.1;159.4;S;0;D
+Mehmet Engin Uysal;361st;397.9;153.7;S;0;D
+Kelvin hau han Lim;362nd;301.4;469.7;S;0;D
+Romeo Garessus;363rd;197.1;9.9;S;0;D
+Jefferson Adams;364th;105.5;172.6;S;0;D
+Marguerite Mulhaus;1st;4442.3;313.8;P;34;F
+Rémi Mejean;2nd;4442.3;313.8;P;34;F
+Christian Dupraz;3rd;4442.3;287.5;P;32;F
+Dina Byland;4th;4442.3;287.5;P;33;F
+Martin Reichert;5th;4442.3;275.3;P;37;F
+Melanie Müller-reichert;6th;4442.3;275.3;P;36;F
+Carl Carini;7th;4442.3;239.9;P;39;F
+Stéphane David;8th;4442.3;239.9;P;39;F
+Christel Vieth;9th;4442.3;224.9;P;40;F
+Andreas Steinke;10th;4442.3;224.9;P;44;F
+Paul Jennings;11th;4070.3;245.8;P;0;D
+Mylene Vicente;12th;2839.7;247.9;P;0;D
+Bastien Sentubery;13th;2789.5;243.5;P;0;D
+Jan Bähler;14th;2580.5;254.7;P;0;D
+Björn Frey;15th;2561.6;218.6;P;0;D
+Michael Hunziker;16th;2502.6;213.6;P;0;D
+Mirjam Bonfadelli;17th;2494.7;246.3;P;0;D
+Bartek Was;18th;2292.3;291;P;0;D
+Wojtek Was;19th;2290.7;290.8;P;0;D
+Pierre-yves Fontaine;20th;2190.4;402;P;0;D
+Sarah Burns;21st;2161.5;243.1;P;0;D
+Richard Parry;22nd;2156.3;268.3;P;0;D
+Luisa Nichelson;23rd;2090.3;178.4;P;0;D
+Andrea Nichelson;24th;2088.8;178.3;P;0;D
+Adrien Mabileau;25th;1969.6;403.7;P;0;D
+Małgorzata Gryszczuk;26th;1135.9;235;P;0;D
+Kinga Perzyńska;27th;1131.3;233.9;P;0;D`;
+
+const START_MS = Date.UTC(2026, 6, 19, 18, 0);   // 19 Jul 2026, 20:00 CEST
+const CUTOFF_MS = Date.UTC(2026, 7, 8, 21, 59);  //  8 Aug 2026, 23:59 CEST
+const LIMIT_D = (CUTOFF_MS - START_MS) / 864e5;  // 20.166 days
+const NOW_MS = Date.now();                       // live clock, for deadline state
+function NOW_D() { return (NOW_MS - START_MS) / 864e5; }
+
+// Wall of Support: fans send a line to struggling riders. Messages persist in a
+// dedicated Supabase project; a database trigger auto-approves clean ones and
+// holds anything with a link or slur for review, so the anon key is safe to ship.
+const SUPA_URL = 'https://ilslkaslmqcylmqhksol.supabase.co';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlsc2xrYXNsbXFjeWxtcWhrc29sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ3OTY4NzQsImV4cCI6MjEwMDM3Mjg3NH0.o441SkmcKpRrq6rouBpFLpaymbnYlfJFYxQhRe34QKE';
+const HANDLES = {"Robin Gemperle":"robingemperle","Max Agut":"le_max__","Nicolas Chatelet":"nicolas.chatelet","Christoph Strasser":"straps_377","Robert Müller":"radbert_m","Martin Moritz":"_martin.mo","Jonas Verest":"jonas_vst","Jakub Tomasik":"jakub_tomasik_ultracycling","Wojciech Wronka":"wotowro","Pawel Pulawski":"pikopulawski","Omar Di Felice":"omardifelice","Riccardo Mosconi":"mosconi_riccardo","Manuel Rudaz":"manurudaz","Nils Oyen":"nils.1616","Laurens Van Gucht":"laurensvangucht","Guillaume Poinsot":"guillaume.poinsot","Lucas Strittmatter":"lucas_strittmatter","Riccardo Kuhar":"rikicro","Jos Koop":"koopjos","Nico Schleippmann":"Curbelix","Josh Ibbett":"joshibbett","Sebi Lehmann":"sebi_lehm","George Hodgkinson":"25hodgkinson","Markus Zimmermann":"m4rku5.z1mm3rm4nn","Ulf Bannick":"ulf.ba","Manuel Feldbaumer":"manifeldbaumer","Oliver Glen":"o.llie.ollie","Camille Albisser":"camillealbi","Sarah Bosslet":"sarahbosslet","Hannah Hiecke":"hannah_hiecke","Jakub Micorek":"jakub.micorek","Hélène Fromenty":"hfrome","Anna Carlqvist":"anna_carlqvist","Viggo Vea":"viggovea","Arthur Jan":"arthurjan.jpg","Elise Sauvinet":"elisecabergnon","Kristian Buljan":"krishatbockaufrad","Henri Do":"henki","Francesco Vettore":"francescovett","Nicole van Batenburg":"NicolevanBatenburg","Valentin Cuenot":"Cuenot_valentin","Rodrigue Lombard":"rodrigue__lombard","Daniel Molino":"instamolino","Markus Carlos hein":"markus.zhongguo","Luís Manuel Silva Carvalho":"lmsc.82","Maximilian Siering":"max.o.menos","Marten Sprecher":"marsprech","Joep van Luijt":"joepvanl","Maxime Prieur":"maxime_prieur_","Larissa Unsinn":"Larissa_martha_","Adrian Vogel":"adi_on_bike","Harald Rinner":"h.rinner","Gergely Bartalos":"ultrabartalos","Pierre-Yves Robert":"pierreyves.robert","Dragomir Titei":"dragomir_titei","Andreas Herrig":"flightaddict_ah","Adrien Charlot":"A_Charlot","Hsi Chun Tsai":"Zigzizagza","Aleksei Konev":"alekkonev","Matthew Spooner":"matt_still_tri_ing","Lukas Müller":"lukmueller","Peter Kronberger":"peter_kronberger","Daniel Schulze Waltrup":"daniel_shwa","Dan Sharp":"rukrymi","Anja Longyka":"longyka_nja","Simon Van Teutem":"simonvanteutem","Christoph Zabel":"zabelisator","Jannis Rieb":"cyciope","Mark Turnbull":"markjude.turnbull.cyclingcoach","Maciej Baranowski":"baran.of.ski","Martin Zettel":"martin.zettel","Oona Baumann":"uuna_uuna","Gabriel Delattre":"Del__gab","Noah Schmid":"schmoahnid","Julian Manrique":"Julianmanrique","Robin Skoge":"robin_sprenger","Christian Chesta":"2ch_Adventure","Sarah Cinquini":"sarah.cinquini","Bernhard Kämmerer":"bernimuc","Christian Pany":"christianpany","Jack Wright":"jackussamuele","Clayton Anderson":"hughyboy","Emiliano Baravalle":"emiliano.baravalle","Alexander Eder":"ultra.eda","Lisa Schrader":"lisa_schr","Alexander Stramma":"strmmbrsch","Matthew Falconer":"b1rdmn","Bart Pombreu":"bartpombreu","Michael Ærenlund Buch":"MiDaBu","Philip Renders":"gravel75trail","Byron Buck":"byron_buck","Nicolas Müller":"nicolascmueller","Marcin Zielkowski":"ultrazielik","Sam Wilson":"samzw_","Katharina Wirth":"kathi.wrt","Kim Heikkinen":"kim_1","Florent De Boisvilliers":"achilletendon33","Alexander Stojkovic":"stojksen","Malte Hager":"malte.cc","Pauline Neuber":"pauli._ne","Henry Jacobson":"henry_.jacobson","Michal Kramář":"reporter_in_shape","Robbie Jebb":"Robbie","Alberto Vaghi":"albe712","Walter Reiterer":"lederhosenracer","Jean-François Badias":"jbadias","Pierre Beck":"pierrepoulpe2","Nora Battermann":"fortunata_outdoors","Lukas Stiller":"lukas_k_stiller","Mohamed Jawhara":"mohamed_jha11","Chun man Lau":"Punkgarfield","Aneta Lamik":"roweroterapia","Floris Bakker":"floris_23","Falk Döring":"falk.doering.randonneur","Gerald Rumpf":"lebendigbleiben","Tomáš Žižlavský":"zizlavsky.t","Robert Tremblay":"robert.tremblay","John Read":"Johnny_e_read","Niko Dangel":"niko.dangel","Filip Bullens":"cojak","Tom Dockal":"thomd_89","Mathilde Germanier":"twentysevenspokes","Dan Jones":"danwildshepherd","Bambang Anggoro Jati":"bembenx_","Till Moosberger":"_oo_studio__","Luca Bessems":"lucabessems","Isaac Kuehnle-Nelson":"ikethepike","Cody Hughes":"cody_hughes91","Christo Dingozov":"dingo_mainata","Jean-paul Sachet":"jpaul_sac","Valerio Cecchini":"sgravell0","Carys Brimble":"carys_brimble","Darron Burns":"darron_burns","Emily Maille":"canadianrouleur","Maximilian Droste":"doktoroste","Sebastian Kerschbaumer":"i__am_sebastian","Alexander Latham-boal":"LATHAMBOAL","Kenneth Lamont":"Kennethlnomat","Nod Nelson":"nod.369","Tom Bryan":"tombryanyeah","Samuel Hussain":"sam_huss23","Cesare Pedrini":"cesare.pedrini","Maksym Matvieiev":"Maxveloalp","Nicole Farrier":"nicole.g.farrier","Erhard Wälchli":"erhardwalchl","Paul Rollings":"paulrollings","Jesko von Werthern":"jesko_werthern","Tobias Geißler":"tobi_the_cyclist","Stephen Dummett":"rising_tide_coaching","Lili Delannoy":"Lili","Erik Olsson":"theprimalswede","Jakob Wall":"_jakobwall_","Boris Krutov":"boris_krutov","Thomas Chateau":"rogerchuchard","Alain Rodriguez":"Alain_rdrgz","Ramona Troxler":"ramona.troxler","Hanif Meeran":"Hanif","Hauke Kottek":"hauke_kt","Max Kraus":"vignavecchia","Rene Wach":"reneneew","Frédéric Rudant":"fredrudan","Sofia Passaretti":"sofiapassarettti","Dennis Wolckenhauer":"searching.sasquatch","Artem Soldatkin":"_leipreachan","Patrick O'connor":"padupnorth","Sönke Kreft":"soekreft","Fritjof Schirmer":"Fite_on_Tour","Gabi Winck":"lumaca.gabi","Tim Lamb":"timbolamb","Ian Budden":"ian_adventuring","Karl Björklund":"khaleb2","Peter Corkill":"petercorkill","Zuzanna Bogucka":"zuzka__kluska_","Andrew Speers":"Andrewgspeers","Greg Fong":"greg.fong","Sebastian Van den bergen":"seb.vandenbergen","Hans Markus Broja":"hmb_quilent","Christian Trenkle":"cycling.blue","Lissa Breugelmans":"caughtinthevoid","Jürgen Ress":"Juergenress","Olli Büttel":"Ironmaennchen","Ro Alegre":"roalegreg","Sarah Steels":"legs_of_steels","Thibault Sabatier":"thibault_sabatier","Andreas Wittkemper":"andreas_wittkemper","Peter Magill":"peter_magill_1964","Grinshina Kartik":"grinshina","Rumen Vachev":"rumen_vachev","Poh Huat Tan":"p.h_tan","Dirk Hermans":"Dirk","Karin Eder":"dieradlfee","George Surjopurnomo":"g.surjopurnomo","Mike Passmann":"mikepassmann","Erekle Bagashvili":"ekkk4","Ronja Derr":"rroxy___","Lionel Bobb":"tabletable1","Luis Cardoso":"fuzzroyale","Maris Brugis":"marisbrugis","Rafael Martinez Gonzalez":"rafaubio","Satomi Yamada":"satomiyamada","Ben Strause":"benjaminstrause","Mex Wieshofer":"mexwieshofer","Bryn Thomas":"wombatting96","Benno Raj":"Benno","Ian Mitchinson":"ian_mitchinson","Thomas Martraire":"thomas._.mar","Lander Wantens":"Wantenslander","Joachim Pittraye":"cyclamen_joachim.pittraye","Ezekiel Amos":"zekesdexd","Mohamed Almarar":"international69","Daniel Huxley":"dhux2509","Romeo Garessus":"Romeo_v_ga","Sebastien Nolens":"sebicicleta","Marco Eberle":"marcoshappyworld","Jefferson Adams":"jeffersonhodgesadams","Stefan Lindkvist":"coachlindkvist777","Lennart Gensch":"mountainride","Sylwia Kuropatwa":"sylwia.qropatwa","Adrien Mabileau":"apy_ultracycling","Christian Dupraz":"veloele","Martin Reichert":"teammuellerreichert","Melanie Müller-reichert":"melaniemueller81","Damian Ludlow":"damianludlow","Paul Jennings":"saddlesore_jenko","Stéphane David":"picardbrothers_bikepacking","Andreas Steinke":"Cycling_for_Mutoto","Christel Vieth":"christelvieth","Bastien Sentubery":"baestiti","Mylene Vicente":"bike_and_ravee","Małgorzata Gryszczuk":"Histeria_jedzie","Kinga Perzyńska":"greymouseland","Michael Hunziker":"migreau","Björn Frey":"bartholin_cyclingandclown","Luisa Nichelson":"f.luis.ter","Andrea Nichelson":"andreanichelson"};
+const DATA_MS = Date.UTC(2026, 7, 8, 17, 44);    // when the rider positions were read
+const DATA_D = (DATA_MS - START_MS) / 864e5;    // race-days elapsed at the snapshot
+const CATNAME = { S: 'Solo', F: 'FLINTA', P: 'Pair' };
+const LABEL = { ahead: 'Inside', edge: 'On the edge', behind: 'Off the pace' };
+// Pictograms in the language of the wordmark: a full dot rides inside the limit,
+// a half dot is on the edge — and off the pace you are, literally, squared.
+function pictoInner(cls) {
+  if (cls === 'ahead') return '<circle cx="10" cy="10" r="7" fill="var(--ahead)"/>';
+  if (cls === 'edge') return '<circle cx="10" cy="10" r="6.6" fill="none" stroke="var(--edge)" stroke-width="2.4"/>' +
+    '<path d="M10 3.4A6.6 6.6 0 0 0 10 16.6Z" fill="var(--edge)"/>';
+  return '<rect x="3.6" y="3.6" width="12.8" height="12.8" fill="none" stroke="var(--behind)" stroke-width="2.4"/>';
+}
+function pictoMark(cx, cy, size, cls) {
+  const k = size / 20, x = cx - size / 2, y = cy - size / 2;
+  return '<g transform="translate(' + x.toFixed(1) + ',' + y.toFixed(1) + ') scale(' + k.toFixed(3) + ')">' + pictoInner(cls) + '</g>';
+}
+function pictoHTML(cls) { return '<svg viewBox="0 0 20 20" width="13" height="13" style="flex:none;vertical-align:-2px">' + pictoInner(cls) + '</svg>'; }
+function skullHTML(colorVar) { return '<svg viewBox="0 0 20 20" width="14" height="14" style="flex:none;vertical-align:-2px">' + skullInner(colorVar) + '</svg>'; }
+const MONTH = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+const RIDERS = RAW.trim().split('\n').map(function (l) {
+  const p = l.split(';');
+  const km = +p[2], kmd = +p[3];
+  // status field: '1' in classification, '0' out of GC (missed a control, still
+  // riding), 'D' official DNF (scratched).
+  return { name: p[0], pos: p[1], km: km, kmd: kmd, cat: p[4], idle: +p[5],
+           gc: p[6] === '1' || p[6] === 'F', dnf: p[6] === 'D', fin: p[6] === 'F',
+           // Active riders sit at the snapshot time (their true position now);
+           // a scratched rider sits where they stopped, a finisher at the moment
+           // they crossed the line (distance ÷ average pace, both frozen).
+           elapsed: (p[6] === 'D' || p[6] === 'F') ? km / kmd : DATA_D };
+});
+
+// Control point closing times, from the organiser's own configuration in the
+// live tracker. Missing a control's window costs General Classification
+// qualification — the rider may continue, but no official race time is awarded.
+const CHECKPOINTS = [
+  { name: 'CP1', place: 'Flåm',        ms: Date.UTC(2026, 6, 22,  9, 0) },
+  { name: 'CP2', place: 'Tatra',       ms: Date.UTC(2026, 6, 30,  9, 0) },
+  { name: 'CP3', place: 'Sarajevo',    ms: Date.UTC(2026, 7,  2, 21, 59) },
+  { name: 'CP4', place: 'Leskovik',    ms: Date.UTC(2026, 7,  5, 21, 59) }
+].map(function (c) { c.day = (c.ms - START_MS) / 864e5; return c; });
+
+// Cumulative route distance to each control. CP1 is anchored to real data — the
+// shortest distance covered by any rider who validated it (≈685 km). CP2–CP4 are
+// placed between that anchor and the finish in proportion to the great-circle
+// legs between the checkpoints' own coordinates, so they track the total-distance
+// slider. This is what turns the deadlines into a required-pace line: not one
+// straight run to Kalamata, but a leg-by-leg envelope whose steepest section
+// (CP1→CP2) is the real constraint right now.
+const CP1_KM = 685;
+const GC_FRAC = [0, 0.5244, 0.7218, 0.8735, 1];   // cumulative CP1→CPn / CP1→finish
+function cpDist(total) {
+  return CHECKPOINTS.map(function (c, i) { return CP1_KM + (total - CP1_KM) * GC_FRAC[i]; });
+}
+// The deadline envelope as [day, km] points: origin, each control, the finish.
+function envelope(total) {
+  var pts = [[0, 0]];
+  var d = cpDist(total);
+  CHECKPOINTS.forEach(function (c, i) { pts.push([c.day, d[i]]); });
+  pts.push([LIMIT_D, total]);
+  return pts;
+}
+// The pace a rider must now hold to still clear every deadline that binds them.
+// In the classification, that means every remaining control; once out of it,
+// only reaching Kalamata by the finish. The binding deadline is whichever
+// demands the most — max over the future points.
+function requiredPace(r, total) {
+  var d = cpDist(total);
+  var pts = r.gc
+    ? CHECKPOINTS.map(function (c, i) { return [c.day, d[i]]; }).concat([[LIMIT_D, total]])
+    : [[LIMIT_D, total]];
+  var req = 0, cp = null;
+  pts.forEach(function (p, i) {
+    if (p[0] <= r.elapsed) return;                 // deadline already in the past
+    var need = (p[1] - r.km) / (p[0] - r.elapsed); // km/day from here to make it
+    if (need > req) { req = need; cp = r.gc ? (i < CHECKPOINTS.length ? CHECKPOINTS[i] : null) : null; }
+  });
+  return { pace: Math.max(0, req), cp: cp };
+}
+
+// A calavera rather than a plain dot: these riders are out of the classification
+// but still on the road. Drawn as a 20x20 glyph, scaled and centred on the point.
+// A finisher's mark: a little chequered flag on a pole, drawn in the same
+// 20×20 language as the skull so both read at the same sizes.
+function flagInner() {
+  let f = '<rect x="4" y="1.5" width="1.7" height="17" fill="var(--ink)"/>' +
+          '<rect x="5.7" y="2.2" width="11.2" height="8.4" fill="var(--surface)"/>';
+  for (let r = 0; r < 4; r++) for (let c = 0; c < 4; c++)
+    if ((r + c) % 2 === 0)
+      f += '<rect x="' + (5.7 + c * 2.8) + '" y="' + (2.2 + r * 2.1) + '" width="2.8" height="2.1" fill="var(--ink)"/>';
+  return f + '<rect x="5.7" y="2.2" width="11.2" height="8.4" fill="none" stroke="var(--ink)" stroke-width="1"/>';
+}
+function flagMark(cx, cy, size) {
+  const k = size / 20, x = cx - size / 2, y = cy - size / 2;
+  return '<g transform="translate(' + x.toFixed(1) + ',' + y.toFixed(1) + ') scale(' + k.toFixed(3) + ')">' + flagInner() + '</g>';
+}
+function flagHTML() { return '<svg viewBox="0 0 20 20" width="14" height="14" style="flex:none;vertical-align:-2px">' + flagInner() + '</svg>'; }
+function skullInner(colorVar) {
+  return '<path d="M10 0.8C4.4 0.8 1.4 4.5 1.4 9c0 2.7 1.1 4.5 2.7 5.4v2.2c0 1.6 1.3 2.9 2.9 2.9h6c1.6 0 2.9-1.3 2.9-2.9v-2.2c1.6-0.9 2.7-2.7 2.7-5.4C18.6 4.5 15.6 0.8 10 0.8Z" fill="var(--' + colorVar + ')"/>' +
+    '<circle cx="6.5" cy="8.7" r="2.5" fill="var(--surface)"/>' +
+    '<circle cx="13.5" cy="8.7" r="2.5" fill="var(--surface)"/>' +
+    '<path d="M10 11.4l1.5 2.6h-3Z" fill="var(--surface)"/>' +
+    '<rect x="7.4" y="16.1" width="1.5" height="3.5" fill="var(--surface)"/>' +
+    '<rect x="11.1" y="16.1" width="1.5" height="3.5" fill="var(--surface)"/>';
+}
+function skull(cx, cy, size, colorVar) {
+  const k = size / 20, x = cx - size / 2, y = cy - size / 2;
+  return '<g transform="translate(' + x.toFixed(1) + ',' + y.toFixed(1) + ') scale(' + k.toFixed(3) + ')">' + skullInner(colorVar) + '</g>';
+}
+
+// 4450: the tracker route measures 4,442 km — known now that riders have finished on it.
+let state = { cat: 'ALL', q: '', total: 4450, riskOnly: false, sel: -1, zoom: 'full', view: null };
+
+// A "nice" gridline step for a given data range and target tick count.
+function niceStep(range, target) {
+  const raw = range / Math.max(1, target);
+  const pow = Math.pow(10, Math.floor(Math.log10(raw)));
+  const n = raw / pow;
+  const step = n < 1.5 ? 1 : n < 3 ? 2 : n < 7 ? 5 : 10;
+  return step * pow;
+}
+// The custom viewport, when the user has zoomed/panned, else the active preset.
+function viewport() {
+  if (state.view) return state.view;
+  const b = bounds();
+  return { xmin: b.xmin, xmax: b.xmax, ymin: b.ymin, ymax: b.ymax };
+}
+// Keep a viewport inside the race domain, with sane min/max spans.
+function clampView(v) {
+  const XD = 24, YD = state.total * 1.07;
+  const xr = Math.min(XD, Math.max(0.25, v.xmax - v.xmin));
+  const yr = Math.min(YD, Math.max(80, v.ymax - v.ymin));
+  const x0 = Math.max(0, Math.min(XD - xr, v.xmin));
+  const y0 = Math.max(0, Math.min(YD - yr, v.ymin));
+  return { xmin: x0, xmax: x0 + xr, ymin: y0, ymax: y0 + yr };
+}
+// Gesture events arrive far faster than a full SVG rebuild can paint; coalesce
+// them so at most one render runs per animation frame (state still updates on
+// every event, so nothing is lost — only the paints are batched).
+let renderQueued = false;
+function scheduleRender() {
+  if (renderQueued) return;
+  renderQueued = true;
+  requestAnimationFrame(function () { renderQueued = false; render(); });
+}
+// Zoom by factor f (<1 in, >1 out) keeping the data point (dcx,dcy) under the cursor.
+function zoomAround(dcx, dcy, f) {
+  if (!isFinite(dcx) || !isFinite(dcy) || !isFinite(f) || f <= 0) return;
+  const v = viewport();
+  state.view = clampView({
+    xmin: dcx - (dcx - v.xmin) * f, xmax: dcx + (v.xmax - dcx) * f,
+    ymin: dcy - (dcy - v.ymin) * f, ymax: dcy + (v.ymax - dcy) * f
+  });
+  state.sel = -1; highlight(-1); scheduleRender();
+}
+// Pan by a delta given in viewBox pixels.
+function panByVB(dvx, dvy) {
+  if (!isFinite(dvx) || !isFinite(dvy)) return;
+  const v = viewport();
+  const ddx = -dvx / PW * (v.xmax - v.xmin), ddy = dvy / PH * (v.ymax - v.ymin);
+  state.view = clampView({ xmin: v.xmin + ddx, xmax: v.xmax + ddx, ymin: v.ymin + ddy, ymax: v.ymax + ddy });
+  scheduleRender();
+}
+// Data coordinates under a client point on the SVG.
+function dataAt(clientX, clientY) {
+  const b = svg.getBoundingClientRect(), v = viewport();
+  const vx = (clientX - b.left) / b.width * VW, vy = (clientY - b.top) / b.height * VH;
+  return {
+    d: v.xmin + (vx - ML) / PW * (v.xmax - v.xmin),
+    k: v.ymin + (1 - (vy - MT) / PH) * (v.ymax - v.ymin),
+    vx: vx, vy: vy
+  };
+}
+
+const CATS = [['ALL', 'All'], ['S', 'Solo'], ['F', 'FLINTA'], ['P', 'Pairs']];
+const catBox = document.getElementById('cats');
+CATS.forEach(function (c) {
+  const b = document.createElement('button');
+  b.className = 'pill'; b.textContent = c[1];
+  b.setAttribute('aria-pressed', String(c[0] === state.cat));
+  b.onclick = function () {
+    state.cat = c[0]; state.sel = -1;
+    catBox.querySelectorAll('.pill').forEach(function (x) { x.setAttribute('aria-pressed', 'false'); });
+    b.setAttribute('aria-pressed', 'true'); render();
+  };
+  catBox.appendChild(b);
+});
+
+function classify(r) {
+  // The tracker's route ends at 4,442 km: a rider there has physically reached
+  // Kalamata (finish pending official verification) — safe whatever the slider says.
+  if (r.km >= 4440) return 'ahead';
+  const req = requiredPace(r, state.total).pace;
+  const m = req > 0 ? r.kmd / req - 1 : 1;
+  return m >= 0.10 ? 'ahead' : (m >= -0.05 ? 'edge' : 'behind');
+}
+function visible() {
+  const q = state.q.trim().toLowerCase();
+  return RIDERS.filter(function (r) {
+    if (state.cat !== 'ALL' && r.cat !== state.cat) return false;
+    if (state.riskOnly && (r.dnf || classify(r) === 'ahead')) return false;
+    if (q && r.name.toLowerCase().indexOf(q) === -1) return false;
+    return true;
+  });
+}
+function fmtDate(days) {
+  const t = new Date(START_MS + days * 864e5 + 2 * 36e5); // CEST = UTC+2
+  const p = function (n) { return String(n).padStart(2, '0'); };
+  return t.getUTCDate() + ' ' + MONTH[t.getUTCMonth()] + ' ' + p(t.getUTCHours()) + ':' + p(t.getUTCMinutes());
+}
+function kfmt(n) { return n.toLocaleString('en-GB'); }
+function fmtAbs(ms) {
+  const t = new Date(ms + 2 * 36e5), p = function (n) { return String(n).padStart(2, '0'); };
+  return t.getUTCDate() + ' ' + MONTH[t.getUTCMonth()] + ' ' + p(t.getUTCHours()) + ':' + p(t.getUTCMinutes());
+}
+// Race day -> wall-clock label. Sub-day steps read as times, with the date
+// carried by the midnight tick; day-scale steps read as dates.
+function axisLabel(days, step) {
+  const t = new Date(START_MS + days * 864e5 + 2 * 36e5);
+  const dd = t.getUTCDate(), mo = MONTH[t.getUTCMonth()], hh = t.getUTCHours(), mm = t.getUTCMinutes();
+  const p = function (n) { return String(n).padStart(2, '0'); };
+  if (step >= 1) return dd + ' ' + mo;
+  if (hh === 0 && mm === 0) return dd + ' ' + mo;
+  return p(hh) + ':' + p(mm);
+}
+
+const VW = 1000, VH = 566, ML = 62, MR = 22, MT = 22, MB = 46;
+const PW = VW - ML - MR, PH = VH - MT - MB;
+const svg = document.getElementById('plot');
+const tip = document.getElementById('tip');
+let hitList = [];
+// Current viewport. "Now" frames the live field so individual dots separate;
+// "Whole race" opens out to the cut-off. Both are recomputed on every render.
+let CUR = { xmax: 24, ymax: 5000, ystep: 1000, xstep: 2 };
+
+function bounds() {
+  if (state.zoom === 'full') {
+    return { xmin: 0, xmax: 24, ymin: 0, ymax: state.total * 1.07, ystep: 1000, xstep: 2 };
+  }
+  // A three-day window ending past the field horizontally; vertically a 700 km
+  // band anchored to the bottom of the still-racing field, so the strugglers — the
+  // tail this whole page is about — spread out and read individually. The leaders
+  // sit above the window (clipped); Whole race shows everyone.
+  let maxEl = 0, loKm = Infinity;
+  RIDERS.forEach(function (r) {
+    if (r.elapsed > maxEl) maxEl = r.elapsed;
+    if (!r.dnf && r.km < loKm) loKm = r.km;
+  });
+  const ymin = Math.max(0, Math.floor((loKm - 40) / 50) * 50);
+  const ymax = Math.min(state.total * 1.07, ymin + 700);
+  const xmin = Math.max(0, Math.floor((maxEl - 1.3) * 2) / 2);
+  return { xmin: xmin, xmax: xmin + 3, ymin: ymin, ymax: ymax, ystep: 200, xstep: 0.5 };
+}
+
+// Measure the rendered deadline labels and drop overlapping ones onto lower rows —
+// pixel-accurate packing that holds whatever the font metrics are.
+function layoutDeadlines() {
+  const labels = [].slice.call(svg.querySelectorAll('text.dl'));
+  const rowRight = [], TOP = MT + 12, ROW_H = 15, GAP = 12;
+  // Greedy interval packing is only correct on labels sorted by left edge —
+  // the finish label is end-anchored, so document order can invert the x order
+  // and push it rows deep into the plot.
+  const measured = [];
+  labels.forEach(function (el) {
+    try { measured.push({ el: el, bb: el.getBBox() }); } catch (e) {}
+  });
+  measured.sort(function (a, b) { return a.bb.x - b.bb.x; });
+  measured.forEach(function (m) {
+    const x0 = m.bb.x, x1 = m.bb.x + m.bb.width;
+    let row = 0;
+    while (rowRight[row] !== undefined && rowRight[row] > x0 - GAP) row++;
+    rowRight[row] = x1;
+    m.el.setAttribute('y', TOP + row * ROW_H);
+  });
+}
+
+function render() {
+  if (state.view) {
+    const v = state.view;
+    CUR = { xmin: v.xmin, xmax: v.xmax, ymin: v.ymin, ymax: v.ymax,
+            xstep: niceStep(v.xmax - v.xmin, 8), ystep: niceStep(v.ymax - v.ymin, 5) };
+  } else {
+    CUR = bounds();
+  }
+  const XMIN = CUR.xmin, XMAX = CUR.xmax, YMIN = CUR.ymin, YMAX = CUR.ymax;
+  const zoomed = (XMAX - XMIN) < 6;
+  const X = function (d) { return ML + (d - XMIN) / (XMAX - XMIN) * PW; };
+  const Y = function (k) { return MT + (1 - (k - YMIN) / (YMAX - YMIN)) * PH; };
+  const rows = visible();
+
+  // Headline pace = the steepest leg of the deadline envelope that is still
+  // ahead of the field's leader — the toughest average any rider must average
+  // over a whole segment. Right now that is CP1→CP2.
+  const env = envelope(state.total);
+  let hardest = { pace: 0, cp: null };
+  for (let i = 1; i < env.length; i++) {
+    if (env[i][0] <= NOW_D()) continue;
+    const pace = (env[i][1] - env[i - 1][1]) / (env[i][0] - env[i - 1][0]);
+    if (pace > hardest.pace) { hardest = { pace: pace, cp: CHECKPOINTS[i - 1] || null, seg: i }; }
+  }
+  const nextCp = CHECKPOINTS.filter(function (c) { return c.ms > NOW_MS; })[0];
+
+  const all = RIDERS.filter(function (r) {
+    return (state.cat === 'ALL' || r.cat === state.cat) && !r.dnf && r.gc;
+  });
+  const n = { ahead: 0, edge: 0, behind: 0 };
+  let finN = 0;
+  all.forEach(function (r) { if (r.fin) { finN++; return; } n[classify(r)]++; });
+  document.getElementById('s-req').innerHTML = hardest.pace
+    ? Math.round(hardest.pace) + '<small class="vu">km/day</small>' : '—';
+  document.getElementById('s-ahead').textContent = n.ahead;
+  document.getElementById('s-fin').textContent = finN;
+  document.getElementById('s-edge').textContent = n.edge;
+  document.getElementById('s-behind').textContent = n.behind;
+  document.getElementById('s-dnf').textContent = RIDERS.filter(function (r) {
+    return r.dnf && (state.cat === 'ALL' || r.cat === state.cat);
+  }).length;
+  document.getElementById('s-out').textContent = RIDERS.filter(function (r) {
+    return !r.gc && !r.dnf && (state.cat === 'ALL' || r.cat === state.cat);
+  }).length;
+  const reqSub = document.getElementById('s-req-sub');
+  if (reqSub && nextCp) reqSub.textContent = 'steepest leg · reach ' + nextCp.place + ' by ' + fmtAbs(nextCp.ms);
+  document.getElementById('totv').textContent = kfmt(state.total) + ' km';
+
+  let s = '';
+  s += '<rect x="0" y="0" width="' + VW + '" height="' + VH + '" fill="var(--surface)"/>';
+
+  const gridTop = (!state.view && state.zoom === 'full') ? state.total - 150 : YMAX;
+  for (let k = Math.ceil((YMIN + 1) / CUR.ystep) * CUR.ystep; k < gridTop; k += CUR.ystep) {
+    s += '<line x1="' + ML + '" y1="' + Y(k).toFixed(1) + '" x2="' + (ML + PW) + '" y2="' + Y(k).toFixed(1) +
+         '" stroke="var(--grid)" stroke-width="1"/>';
+    s += '<text x="' + (ML - 10) + '" y="' + (Y(k) + 4).toFixed(1) + '" text-anchor="end">' + kfmt(k) + '</text>';
+  }
+  // Ticks land on wall-clock boundaries (midnight / midday CEST), not on
+  // multiples of race-day — otherwise the date label never falls on a tick.
+  const stepMs = CUR.xstep * 864e5, TZ = 2 * 36e5;
+  const startMs = START_MS + XMIN * 864e5, endMs = START_MS + XMAX * 864e5;
+  for (let m = Math.ceil((startMs + TZ) / stepMs) * stepMs - TZ; m <= endMs; m += stepMs) {
+    const d = (m - START_MS) / 864e5;
+    const lab = axisLabel(d, CUR.xstep);
+    const isDate = /[A-Za-z]/.test(lab);
+    s += '<text x="' + X(d).toFixed(1) + '" y="' + (MT + PH + 20) + '" text-anchor="middle"' +
+         (isDate ? ' font-weight="600" fill="var(--ink-2)"' : '') + '>' + lab + '</text>';
+  }
+  s += '<text class="axname" x="' + (ML + PW / 2) + '" y="' + (MT + PH + 40) + '" text-anchor="middle">' +
+       (zoomed ? 'date and time · CEST' : 'date · CEST') + '</text>';
+
+  // Deadline ribbon along the top: every control closing plus the finish, as a
+  // vertical rule with a top label. Labels are packed into rows greedily — each
+  // one drops to the first row where it doesn't overlap a label already placed —
+  // so however close the control lines fall, the text never collides. The finish
+  // is the hard limit, so it is set apart in bold red.
+  const DEADLINES = CHECKPOINTS.map(function (c) {
+    return { day: c.day, ms: c.ms, tag: c.name, place: c.place, finish: false };
+  }).concat([{ day: LIMIT_D, ms: CUTOFF_MS, tag: 'Finish', place: 'Kalamata', finish: true }]);
+  // Render each label at row 0; a post-render pass (layoutDeadlines) measures the
+  // real text widths and drops overlapping ones onto lower rows, so the packing is
+  // pixel-accurate whatever the font does.
+  DEADLINES.forEach(function (c) {
+    if (c.day < XMIN || c.day > XMAX) return;
+    const gone = c.ms <= NOW_MS, x = X(c.day), rightSide = x > ML + PW * 0.68;
+    // Once a control is closed its place no longer matters — the short form
+    // frees ribbon width for the deadlines still in play.
+    const label = c.finish ? 'Finish · ' + (gone ? 'closed' : fmtAbs(c.ms))
+                : gone ? c.tag + ' · closed'
+                : c.tag + ' ' + c.place + ' · ' + fmtAbs(c.ms);
+    s += '<line x1="' + x.toFixed(1) + '" y1="' + MT + '" x2="' + x.toFixed(1) + '" y2="' + (MT + PH) +
+         '" stroke="var(--rule)" stroke-width="' + (c.finish ? 2 : 1.5) + '"/>';
+    s += '<text class="marklab dl" x="' + (x + (rightSide ? -7 : 7)).toFixed(1) + '" y="' + (MT + 12) +
+         '" text-anchor="' + (rightSide ? 'end' : 'start') + '" fill="var(--' + (c.finish ? 'behind' : 'ink-2') +
+         ')"' + (c.finish ? ' font-weight="700"' : '') + '>' + label + '</text>';
+  });
+  s += '<text class="axname" x="' + (ML - 46) + '" y="' + (MT + PH / 2) + '" text-anchor="middle" ' +
+       'transform="rotate(-90 ' + (ML - 46) + ' ' + (MT + PH / 2) + ')">kilometres covered</text>';
+  s += '<line x1="' + ML + '" y1="' + (MT + PH) + '" x2="' + (ML + PW) + '" y2="' + (MT + PH) + '" stroke="var(--rule)" stroke-width="1"/>';
+
+  // The finish distance as a horizontal reference; label at the left, below the
+  // line, clear of the top deadline ribbon.
+  if (state.total <= YMAX) {
+    s += '<line x1="' + ML + '" y1="' + Y(state.total).toFixed(1) + '" x2="' + (ML + PW) + '" y2="' + Y(state.total).toFixed(1) +
+         '" stroke="var(--rule)" stroke-width="1.5"/>';
+    s += '<text class="marklab" x="' + (ML + 8) + '" y="' + (Y(state.total) + 15).toFixed(1) + '" fill="var(--ink-2)">Kalamata · ' + kfmt(state.total) + ' km</text>';
+  }
+
+  // Everything below is clipped to the plot rectangle, so leaders whose marks sit
+  // above the zoomed window don't spill into the ribbon.
+  s += '<clipPath id="pc"><rect x="' + ML + '" y="' + MT + '" width="' + PW + '" height="' + PH + '"/></clipPath>';
+  s += '<g clip-path="url(#pc)">';
+
+  // Each rider's line runs from where they are now, y = km + kmd·(x − elapsed),
+  // leaving the frame at whichever comes first: the finish, the right edge, or the
+  // top edge. A scratched rider stopped, so draws no projection — just a marker at
+  // the point they abandoned.
+  hitList = [];
+  rows.forEach(function (r, i) {
+    const cls = r.dnf ? 'dnf' : classify(r);
+    // Scratched riders and finishers draw no projection — their story ended at
+    // that point; the marker (skull or flag) says how.
+    if (r.dnf || r.fin) { hitList.push({ r: r, cls: cls, end: r.elapsed }); return; }
+    const end = Math.min(r.elapsed + (state.total - r.km) / r.kmd, XMAX, r.elapsed + (YMAX - r.km) / r.kmd);
+    s += '<line x1="' + X(r.elapsed).toFixed(1) + '" y1="' + Y(r.km).toFixed(1) + '" x2="' + X(end).toFixed(1) +
+         '" y2="' + Y(r.km + r.kmd * (end - r.elapsed)).toFixed(1) + '" stroke="var(--' + cls +
+         ')" stroke-width="' + (zoomed ? 1.4 : 1.1) + '" opacity="' + (zoomed ? .42 : .34) + '" data-i="' + i + '"/>';
+    hitList.push({ r: r, cls: cls, end: end });
+  });
+
+  // The deadline envelope, drawn as one polyline through origin → each control
+  // → the finish. Its steepest leg — not the overall average — is the pace that
+  // actually binds. Evaluate km at any day by walking the segments.
+  const envKm = function (day) {
+    for (let i = 1; i < env.length; i++) {
+      if (day <= env[i][0]) {
+        const a = env[i - 1], b = env[i], t = (day - a[0]) / (b[0] - a[0]);
+        return a[1] + t * (b[1] - a[1]);
+      }
+    }
+    return env[env.length - 1][1];
+  };
+  // Vertices inside the viewport, plus the clipped entry/exit x, in order.
+  const xs = [XMIN].concat(env.map(function (p) { return p[0]; }).filter(function (x) { return x > XMIN && x < XMAX; })).concat([XMAX]);
+  let poly = '', pxFirst = null, pxLast = null;
+  xs.forEach(function (x) {
+    const ky = envKm(x);
+    const px = X(x);
+    if (pxFirst === null) pxFirst = px;
+    pxLast = px;
+    // Draw the true envelope km; the plot clip (#pc) trims whatever runs off the
+    // top of the band, so the line keeps rising past CP1 instead of stopping there.
+    poly += (poly ? ' L' : 'M') + px.toFixed(1) + ' ' + Y(ky).toFixed(1);
+  });
+  // Everything under the envelope is outside the classification: a faint wash
+  // makes the danger zone readable at a glance without shouting.
+  if (poly && pxLast > pxFirst) {
+    s += '<path d="' + poly + ' L' + pxLast.toFixed(1) + ' ' + (MT + PH) + ' L' + pxFirst.toFixed(1) + ' ' + (MT + PH) + ' Z" fill="var(--under)"/>';
+  }
+  s += '<path d="' + poly + '" fill="none" stroke="var(--ink)" stroke-width="2.5" stroke-linejoin="round"/>';
+  // Label the steepest still-future leg where it sits, clear of the dot column.
+  if (hardest.seg) {
+    const a = env[hardest.seg - 1], b = env[hardest.seg];
+    const mid = 0.5;
+    const lx = a[0] + (b[0] - a[0]) * mid, ly = a[1] + (b[1] - a[1]) * mid;
+    if (lx >= XMIN && lx <= XMAX && ly <= YMAX) {
+      s += '<text class="marklab" x="' + X(lx).toFixed(1) + '" y="' + (Y(ly) + 22).toFixed(1) +
+           '" fill="var(--ink)">' + Math.round(hardest.pace) + ' km/day to ' +
+           (hardest.cp ? hardest.cp.place : 'the finish') + '</text>';
+    }
+  }
+
+  // Marks: a scratched rider is a red skull; one out of the classification (still
+  // riding) a plain skull; everyone in it an emoji by pace, the cyclist mirrored
+  // to ride toward the finish.
+  rows.forEach(function (r, i) {
+    const cx = X(r.elapsed), cy = Y(r.km);
+    if (r.fin) {
+      s += flagMark(cx, cy, zoomed ? 17 : 14);
+    } else if (r.dnf) {
+      s += skull(cx, cy, zoomed ? 14 : 11, 'behind');
+    } else if (!r.gc) {
+      s += skull(cx, cy, zoomed ? 14 : 11, 'ink-2');
+    } else {
+      s += pictoMark(cx, cy, zoomed ? 15 : 12, hitList[i].cls);
+    }
+  });
+
+  s += '</g>';                       // close plot clip group
+  s += '<g id="hi" clip-path="url(#pc)"></g>';
+  svg.innerHTML = s;
+  layoutDeadlines();
+
+  const sorted = rows.slice().sort(function (a, b) { return a.kmd - b.kmd; });
+  document.getElementById('tcount').textContent = sorted.length + ' riders in the current selection.';
+  document.getElementById('tbody').innerHTML = sorted.map(function (r) {
+    const nm = '<td class="l">' + esc(r.name) + '</td><td class="l">' + CATNAME[r.cat] + '</td>' +
+      '<td class="num">' + r.pos + '</td><td class="num">' + kfmt(Math.round(r.km)) + '</td>' +
+      '<td class="num">' + r.kmd.toFixed(0) + '</td>';
+    if (r.fin) {
+      return '<tr>' + nm + '<td class="num">—</td><td class="num">—</td>' +
+        '<td class="num">' + fmtDate(r.elapsed) + '</td><td class="num">' + r.idle + '%</td>' +
+        '<td class="l"><span class="badge" style="color:var(--ahead)">' + flagHTML() + 'Finished</span></td>' +
+        '<td class="l"><span style="color:var(--muted)">in GC</span></td></tr>';
+    }
+    if (r.dnf) {
+      return '<tr>' + nm + '<td class="num">—</td><td class="num">—</td>' +
+        '<td class="num">' + fmtDate(r.elapsed) + '</td><td class="num">—</td>' +
+        '<td class="l"><span class="badge" style="color:var(--behind)">' + skullHTML('behind') + 'Scratched</span></td>' +
+        '<td class="l"><span class="badge" style="color:var(--behind)">Official DNF</span></td></tr>';
+    }
+    const rp = requiredPace(r, state.total), req = rp.pace;
+    const cls = classify(r), m = req > 0 ? (r.kmd / req - 1) * 100 : 100;
+    return '<tr>' + nm +
+      '<td class="num" style="color:var(--' + cls + ');font-weight:600">' + (m >= 0 ? '+' : '') + m.toFixed(0) + '%</td>' +
+      '<td class="num">' + (rp.cp ? rp.cp.name : 'finish') + '</td>' +
+      '<td class="num">' + fmtDate(r.elapsed + (state.total - r.km) / r.kmd) + '</td>' +
+      '<td class="num">' + r.idle + '%</td>' +
+      '<td class="l"><span class="badge" style="color:var(--' + cls + ')">' + pictoHTML(cls) + LABEL[cls] + '</span></td>' +
+      '<td class="l">' + (r.gc ? '<span style="color:var(--muted)">in GC</span>'
+                               : '<span class="badge" style="color:var(--ink)">' + skullHTML('ink-2') + 'Missed control</span>') + '</td></tr>';
+  }).join('');
+  if (!document.getElementById('mapview').hidden) renderMap();
+}
+function esc(t) { return t.replace(/&/g, '&amp;').replace(/</g, '&lt;'); }
+
+function highlight(idx, cx, cy) {
+  const g = document.getElementById('hi');
+  if (!g) return;
+  if (idx < 0) { g.innerHTML = ''; tip.classList.remove('on'); return; }
+  const h = hitList[idx], r = h.r;
+  const XMIN = CUR.xmin, XMAX = CUR.xmax, YMIN = CUR.ymin, YMAX = CUR.ymax;
+  const X = function (d) { return ML + (d - XMIN) / (XMAX - XMIN) * PW; };
+  const Y = function (k) { return MT + (1 - (k - YMIN) / (YMAX - YMIN)) * PH; };
+  const mx = X(r.elapsed), my = Y(r.km);
+  const halo = '<circle cx="' + mx.toFixed(1) + '" cy="' + my.toFixed(1) + '" r="15" fill="var(--surface)" opacity=".85"/>';
+  if (r.fin) {
+    g.innerHTML = halo + flagMark(mx, my, 26);
+    tip.innerHTML = '<div class="n">' + esc(r.name) + '</div><dl>' +
+      '<dt>Category</dt><dd>' + CATNAME[r.cat] + ' · ' + r.pos + '</dd>' +
+      '<dt>Covered</dt><dd>' + kfmt(Math.round(r.km)) + ' km</dd>' +
+      '<dt>Average</dt><dd>' + r.kmd.toFixed(0) + ' km/day</dd>' +
+      '<dt>Stopped</dt><dd>' + r.idle + '%</dd>' +
+      '<dt>Finished</dt><dd>' + fmtDate(r.elapsed) + '</dd></dl>' +
+      '<div class="st" style="color:var(--ahead)">' + flagHTML() + 'Finisher · inside the time limit</div>';
+  } else if (r.dnf) {
+    g.innerHTML = halo + skull(mx, my, 24, 'behind');
+    tip.innerHTML = '<div class="n">' + esc(r.name) + '</div><dl>' +
+      '<dt>Category</dt><dd>' + CATNAME[r.cat] + ' · ' + r.pos + '</dd>' +
+      '<dt>Reached</dt><dd>' + kfmt(Math.round(r.km)) + ' km</dd>' +
+      '<dt>Scratched</dt><dd>' + fmtDate(r.elapsed) + '</dd></dl>' +
+      '<div class="st" style="color:var(--behind)">' + skullHTML('behind') + 'Official DNF · abandoned</div>';
+  } else {
+    g.innerHTML =
+      '<line x1="' + mx.toFixed(1) + '" y1="' + my.toFixed(1) + '" x2="' + X(h.end).toFixed(1) +
+      '" y2="' + Y(r.km + r.kmd * (h.end - r.elapsed)).toFixed(1) + '" stroke="var(--' + h.cls + ')" stroke-width="2.5"/>' +
+      (r.gc ? halo + pictoMark(mx, my, 22, h.cls)
+            : halo + skull(mx, my, 24, 'ink-2'));
+    const rp = requiredPace(r, state.total), req = rp.pace;
+    const m = req > 0 ? (r.kmd / req - 1) * 100 : 100, pf = r.elapsed + (state.total - r.km) / r.kmd;
+    const bindLabel = rp.cp ? rp.cp.name + ' ' + rp.cp.place : 'the finish';
+    tip.innerHTML = '<div class="n">' + esc(r.name) + '</div><dl>' +
+      '<dt>Category</dt><dd>' + CATNAME[r.cat] + ' · ' + r.pos + '</dd>' +
+      '<dt>Covered</dt><dd>' + kfmt(Math.round(r.km)) + ' km</dd>' +
+      '<dt>Average</dt><dd>' + r.kmd.toFixed(0) + ' km/day</dd>' +
+      '<dt>Needs</dt><dd>' + Math.round(req) + ' km/day</dd>' +
+      '<dt>Next binds at</dt><dd>' + bindLabel + '</dd>' +
+      '<dt>Margin</dt><dd>' + (m >= 0 ? '+' : '') + m.toFixed(0) + '%</dd>' +
+      '<dt>Stopped</dt><dd>' + r.idle + '%</dd>' +
+      '<dt>Est. finish</dt><dd>' + fmtDate(pf) + '</dd></dl>' +
+      '<div class="st" style="color:var(--' + h.cls + ')">' + pictoHTML(h.cls) + LABEL[h.cls] +
+      (pf > LIMIT_D ? ' · ' + (pf - LIMIT_D).toFixed(1) + ' days late' : '') + '</div>' +
+      (r.gc ? '' : '<div class="st" style="color:var(--ink-2)">' + skullHTML('ink-2') + 'Missed a control · out of GC</div>');
+  }
+  const b = svg.getBoundingClientRect();
+  const px = b.left + (cx / VW) * b.width, py = b.top + (cy / VH) * b.height;
+  tip.classList.add('on');
+  const tw = tip.offsetWidth, th = tip.offsetHeight;
+  tip.style.left = Math.min(window.innerWidth - tw - 10, Math.max(10, px + 16)) + 'px';
+  tip.style.top = Math.max(10, py - th - 12) + 'px';
+}
+
+// --- pan / zoom / hover ---
+svg.style.touchAction = 'none';       // let us handle touch gestures ourselves
+let drag = null;                      // active mouse/pen drag
+
+svg.addEventListener('pointermove', function (e) {
+  if (e.pointerType === 'touch') return;         // touch handled by touch events
+  if (drag) {                                    // dragging → pan
+    const b = svg.getBoundingClientRect();
+    panByVB((e.clientX - drag.x) / b.width * VW, (e.clientY - drag.y) / b.height * VH);
+    drag.x = e.clientX; drag.y = e.clientY;
+    return;
+  }
+  const b = svg.getBoundingClientRect();
+  const vx = (e.clientX - b.left) / b.width * VW, vy = (e.clientY - b.top) / b.height * VH;
+  const XMIN = CUR.xmin, XMAX = CUR.xmax, YMIN = CUR.ymin, YMAX = CUR.ymax;
+  const dx = XMIN + (vx - ML) / PW * (XMAX - XMIN);
+  let best = -1, bd = 1e9, bx = 0, by = 0;
+  hitList.forEach(function (h, i) {
+    const d = Math.max(h.r.elapsed, Math.min(dx, h.end));
+    const yk = h.r.km + h.r.kmd * (d - h.r.elapsed);
+    const py = MT + (1 - (yk - YMIN) / (YMAX - YMIN)) * PH, px = ML + (d - XMIN) / (XMAX - XMIN) * PW;
+    const dist = Math.hypot(px - vx, py - vy);
+    if (dist < bd) { bd = dist; best = i; bx = px; by = py; }
+  });
+  if (bd > 26) best = -1;
+  state.sel = best;
+  highlight(best, bx, by);
+});
+svg.addEventListener('pointerleave', function () { if (!drag) { state.sel = -1; highlight(-1); } });
+svg.addEventListener('pointerdown', function (e) {
+  if (e.pointerType === 'touch') return;
+  drag = { x: e.clientX, y: e.clientY };
+  state.sel = -1; highlight(-1); svg.style.cursor = 'grabbing';
+  try { svg.setPointerCapture(e.pointerId); } catch (x) {}
+});
+function endDrag() { drag = null; svg.style.cursor = ''; }
+svg.addEventListener('pointerup', endDrag);
+svg.addEventListener('pointercancel', endDrag);
+
+svg.addEventListener('wheel', function (e) {
+  e.preventDefault();
+  const b = svg.getBoundingClientRect(), p = dataAt(e.clientX, e.clientY);
+  if (e.ctrlKey || e.metaKey) {                  // trackpad pinch / ctrl+wheel → zoom
+    zoomAround(p.d, p.k, Math.exp(e.deltaY * 0.01));
+  } else {                                        // two-finger swipe / wheel → pan
+    panByVB(-e.deltaX * VW / b.width, -e.deltaY * VH / b.height);
+  }
+}, { passive: false });
+
+let touchState = null;                            // one finger pans, two pinch-zoom
+function pinchFrom(e) {
+  const a = e.touches[0], c = e.touches[1];
+  return { mode: 'pinch', dist: Math.hypot(a.clientX - c.clientX, a.clientY - c.clientY),
+           cx: (a.clientX + c.clientX) / 2, cy: (a.clientY + c.clientY) / 2 };
+}
+svg.addEventListener('touchstart', function (e) {
+  e.preventDefault();      // keep iOS Safari from starting its own page pan/zoom here
+  if (e.touches.length === 1) touchState = { mode: 'pan', x: e.touches[0].clientX, y: e.touches[0].clientY };
+  else if (e.touches.length >= 2) touchState = pinchFrom(e);
+  state.sel = -1; highlight(-1);
+}, { passive: false });
+svg.addEventListener('touchmove', function (e) {
+  if (!touchState) return;
+  e.preventDefault();
+  const b = svg.getBoundingClientRect();
+  if (touchState.mode === 'pan' && e.touches.length === 1) {
+    const t = e.touches[0];
+    panByVB((t.clientX - touchState.x) / b.width * VW, (t.clientY - touchState.y) / b.height * VH);
+    touchState.x = t.clientX; touchState.y = t.clientY;
+  } else if (touchState.mode === 'pinch' && e.touches.length >= 2) {
+    const n = pinchFrom(e);
+    // two-finger drag pans by the centroid delta, spread/close zooms
+    panByVB((n.cx - touchState.cx) / b.width * VW, (n.cy - touchState.cy) / b.height * VH);
+    const p = dataAt(n.cx, n.cy);
+    zoomAround(p.d, p.k, touchState.dist / Math.max(1, n.dist));
+    touchState = n;
+  }
+}, { passive: false });
+svg.addEventListener('touchend', function (e) {
+  // lifting one finger of a pinch hands over to a pan with the remaining one
+  if (e.touches.length === 0) touchState = null;
+  else if (e.touches.length === 1) touchState = { mode: 'pan', x: e.touches[0].clientX, y: e.touches[0].clientY };
+  else touchState = pinchFrom(e);
+});
+
+// Safari reports trackpad pinch as proprietary gesture events (no ctrlKey+wheel):
+// scale is cumulative since gesturestart, so zoom by the ratio between events.
+// On iOS these fire alongside the touch events above — touchState guards the
+// double-handling; preventDefault still suppresses the native page zoom.
+let gestureScale = null;
+svg.addEventListener('gesturestart', function (e) { e.preventDefault(); gestureScale = e.scale || 1; });
+svg.addEventListener('gesturechange', function (e) {
+  e.preventDefault();
+  if (touchState) return;
+  const s = e.scale || gestureScale;
+  const p = dataAt(e.clientX, e.clientY);
+  zoomAround(p.d, p.k, gestureScale / Math.max(0.01, s));
+  gestureScale = s;
+});
+svg.addEventListener('gestureend', function (e) { e.preventDefault(); gestureScale = null; });
+
+function zoomCenter(f) { const v = viewport(); zoomAround((v.xmin + v.xmax) / 2, (v.ymin + v.ymax) / 2, f); }
+document.getElementById('zoom-in').onclick = function () { zoomCenter(0.65); };
+document.getElementById('zoom-out').onclick = function () { zoomCenter(1 / 0.65); };
+document.getElementById('zoom-reset').onclick = function () { state.view = null; state.sel = -1; highlight(-1); render(); };
+svg.addEventListener('keydown', function (e) {
+  if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+  e.preventDefault();
+  if (!hitList.length) return;
+  state.sel = (state.sel + (e.key === 'ArrowRight' ? 1 : -1) + hitList.length) % hitList.length;
+  const h = hitList[state.sel];
+  highlight(state.sel, ML + (h.r.elapsed - CUR.xmin) / (CUR.xmax - CUR.xmin) * PW, MT + (1 - (h.r.km - CUR.ymin) / (CUR.ymax - CUR.ymin)) * PH);
+});
+
+document.getElementById('q').addEventListener('input', function (e) { state.q = e.target.value; state.sel = -1; render(); });
+document.getElementById('tot').addEventListener('input', function (e) { state.total = +e.target.value; state.sel = -1; render(); });
+document.getElementById('risk').addEventListener('change', function (e) { state.riskOnly = e.target.checked; state.sel = -1; render(); });
+// Headline and freshness are derived from the data, so an automated refresh
+// only ever has to swap the RAW block and DATA_MS.
+(function () {
+  const out = RIDERS.filter(function (r) { return !r.gc && !r.dnf; }).length;
+  const dnf = RIDERS.filter(function (r) { return r.dnf; }).length;
+  const passed = CHECKPOINTS.filter(function (c) { return c.ms <= NOW_MS; });
+  const last = passed[passed.length - 1];
+  document.getElementById('cpline').textContent = last
+    ? last.name + ' ' + last.place + ' closed on ' + fmtAbs(last.ms) + ': ' + out +
+      (out === 1 ? ' rider has' : ' riders have') + ' since lost their classification, and ' +
+      dnf + ' more have scratched.'
+    : 'The first control closes on ' + fmtAbs(CHECKPOINTS[0].ms) + '.';
+  document.getElementById('freshness').textContent = fmtAbs(DATA_MS) + ' CEST';
+})();
+
+const zn = document.getElementById('z-now'), zf = document.getElementById('z-full');
+function setZoom(z) {
+  state.zoom = z; state.sel = -1; state.view = null;   // presets clear any custom zoom
+  zn.setAttribute('aria-pressed', String(z === 'now'));
+  zf.setAttribute('aria-pressed', String(z === 'full'));
+  highlight(-1); render();
+}
+zn.onclick = function () { setZoom('now'); };
+zf.onclick = function () { setZoom('full'); };
+
+const vc = document.getElementById('v-chart'), vt = document.getElementById('v-table'),
+      vm = document.getElementById('v-map');
+function setView(which) {
+  vc.setAttribute('aria-pressed', String(which === 'chart'));
+  vm.setAttribute('aria-pressed', String(which === 'map'));
+  vt.setAttribute('aria-pressed', String(which === 'table'));
+  document.getElementById('chartview').hidden = which !== 'chart';
+  document.getElementById('mapview').hidden = which !== 'map';
+  document.getElementById('tableview').hidden = which !== 'table';
+  if (which === 'map') renderMap();
+}
+vc.onclick = function () { setView('chart'); };
+vm.onclick = function () { setView('map'); };
+vt.onclick = function () { setView('table'); };
+
+// --- Map view: a stylised vertical Europe with the field along the corridor ---
+const MAPDATA = {"w":460,"h":820,"borders":["M376.4 363.7L344.6 364.1L323.4 360.8L327.3 347.9L351.1 338.4L369.2 343.5L376.8 348.2L374.9 356.3L376.4 363.7","M500 320.4L490.9 324L488.5 316.6L470.3 308.9L464.8 290.8L463.3 275.7L454.9 268.5L462.4 258.5L457.2 228.4L469.5 209.4L466.9 203.6L486.6 185L468.5 168.8M493.9 4","M218 10.5L224.3 24L218.3 39.5L201.2 38.8L190 74.6L191.1 123.2L202.1 141.3L196.3 182L182 205.1L174.4 224.1L162.8 203.8L128.8 241.8L105.7 249.3L81.9 232.8L75.7 197.4L70.2 117.1L86.1 93.6L131.7 62.3L165.8 22.4L197.3 -33.9","M90.9 497.4L99 504.2L123.9 509L115.2 526.6L113 544.6L108.2 548.9L100.4 546.6L100.9 553L88.3 566.9L88 578.1L96.3 574.2L102.2 585L101.5 591.8L106.6 600.9L100.6 608.3L105 626.7L114.4 629.7L112.4 639.9L96.8 653.1L62.7 646.8L37.6 654.3L35.6 668.2L15.6 671.2L-3.8 660.8L-10.1 665.7M-39.8 632.2L-36.5 584.4M-32.9 500.5L7.2 480L12.4 458.2L27.5 452.7L30 462.2L38 462.6L46 473.3L58.1 485.8L67 483.8L82 495.7L85.9 498L90.9 497.4","M135 664.6L146.2 655.8L149.1 675.6L143.4 693.1L135.5 688.5L131.6 673.2L135 664.6","M114 849.4L124.6 837.9L128.6 820.9L125.9 800.9L129.4 790.1L148.2 781.5L160.3 784L159.8 794.8L174.4 787L175.7 791L167 801.4L166.9 811.1L172.9 816.3L170.6 834.3L159.3 844.6L162.6 855.8L171.4 856.1","M-36.7 816L-18.1 812.3L-7.2 803.7L9.4 797.3L38.7 793.5L67.2 791.8L75.9 794.9L92.2 786.6L110.6 786.4L117.6 791.3L129.4 790.1L125.9 800.9L128.6 820.9L124.6 837.9L114 849.4","M174.4 224.1L182 205.1L196.3 182L202.1 141.3L191.1 123.2L190 74.6L201.2 38.8L218.3 39.5L224.3 24L218 10.5M396.6 -39.1L366.9 -27.4L350.1 1L352.8 25.2L325.4 56.3L292.1 88.7L279.5 139.6L291.8 164.2L308.3 183.2L292.4 220.9L274.5 228.5L267.9 282.1L258.2 310.9L237.2 308L227.4 331.9L207.5 333.2L201.9 304.7L187.5 269.5L174.4 224.1","M470.3 308.9L488.5 316.6L490.9 324L500 320.4M488.9 446.8L484.4 440.4L477.9 445.2L471.4 441.2L457.9 440.7L438.6 434.1L421.2 431.9L407.8 432.6L398.4 440L390.1 441.1L389.7 428.9L384.4 416L394.8 410.3L394.9 399.1L390.1 388.4L389.3 375.7L406 375.9L424.8 365L428.7 348.5L442.9 339L441.3 325.7L451.8 320.6L470.3 308.9","M494.9 601.9L487.1 597.7L479 601.6L471.3 597.2L475.6 594.6L478.7 586.2L483.4 578.4L482.2 574L485.8 572.1L487.4 575.4L497.6 576.2M499 571.9M494.1 561.9L491.7 551.5L485.4 547.4L486.6 538.9L478.9 532L471.7 531.1L459 523.2L447.6 525.7L443.5 529.4L436.1 529.4L431.8 535.4L419.1 537.8L413.2 541.7L405.2 535.5L394.1 535.4L383.4 532.6L376 538L374.8 531.2L365.2 524.3L368.6 514L373.4 507.2L377.1 508.8L372.7 497.1L388.4 475.2L396.9 472.1L398.7 464.6L390.1 441.1L398.4 440L407.8 432.6L421.2 431.9L438.6 434.1L457.9 440.7L471.4 441.2L477.9 445.2L484.4 440.4L488.9 446.8","M389.3 375.7L390.1 388.4L394.9 399.1L394.8 410.3L384.4 416L389.7 428.9L390.1 441.1L398.7 464.6L396.9 472.1L388.4 475.2L372.7 497.1L377.1 508.8L373.4 507.2L357 497.2L344.6 501L336.4 498.3L326.2 503.9L317.5 494.6L310.4 498.2L309.4 496.6L301.5 483.7L288.7 482.1L287 473.8L275.2 470.8L272.6 477.7L263.2 472.2L264.3 464.8L251.4 462.5L243.2 453.8L236.2 436.5L237.5 427L233.2 412.2L227 402.2L231.8 394.6L227.8 380.2L239.5 371.7L266.5 358.3L288.2 348.4L305.4 353.3L306.7 360.5L323.4 360.8L344.6 364.1L376.4 363.7L385.2 366.8L389.3 375.7","M277.1 531.9L275.8 542.2L266.1 542.3L269.4 547.8L263.7 563.8L260.4 568L245.3 568.6L236.6 574.2L222.4 572.3L197.6 565.9L193.8 557.3L176.8 561.6L174.8 566.3L164.3 562.8L155.5 562.1L147.7 557.6L150.3 551.4L149.7 547L154.8 545.6L163.6 552.6L166 546L181.2 547L193.6 542.5L201.9 543.3L207.3 548.4L208.9 544.2L206.4 527.7L212.6 524.5L218.7 512.6L231.5 520.9L241.3 510.4L247.3 508.5L260.7 516.3L268.8 515L276.8 519.8L275.4 523.1L277.1 531.9","M365.2 524.3L374.8 531.2L376 538L365.4 543.3L357.3 560.3L346.9 577L333 581.6L322.3 580.5L309 586.9L302.6 590.6L288.3 585.9L275.4 575.4L270 572.4L266.6 564L263.7 563.8L269.4 547.8L266.1 542.3L275.8 542.2L277.1 531.9L285.9 538.4L292.3 541.2L306.7 538L308.1 533L315 532.2L323.4 528.3L325.2 529.9L333.3 526.7L337.4 520.7L343.1 519.1L361.5 526.9L365.2 524.3","M443.5 529.4L447.6 525.7L459 523.2L471.7 531.1L478.9 532L486.6 538.9L485.4 547.4L491.7 551.5L494.1 561.9M499 571.9M497.6 576.2L487.4 575.4L485.8 572.1L482.2 574L483.4 578.4L478.7 586.2L475.6 594.6L471.3 597.2L468.2 586.1L470 575.6L469.5 564.8L459.5 550L454 539.4L448.7 531.9L443.5 529.4","M471.3 597.2L479 601.6L487.1 597.7L494.9 601.9L495.3 608.1L486.9 613.2L481.7 611L476.9 639.6L466.7 637.1L454.2 628.5L433.9 634L425.3 640L400 638.8L386.7 635.1L380 636.8L375.1 627.1L371.9 623L375.9 619L371.6 616L366.2 621.4L356.2 614.5L354.8 604.6L344.3 598.9L342.4 591.2L333 581.6L346.9 577L357.3 560.3L365.4 543.3L376 538L383.4 532.6L394.1 535.4L405.2 535.5L413.2 541.7L419.1 537.8L431.8 535.4L436.1 529.4L443.5 529.4L448.7 531.9L454 539.4L459.5 550L469.5 564.8L470 575.6L468.2 586.1L471.3 597.2","M441.3 325.7L442.9 339L428.7 348.5L424.8 365L406 375.9L389.3 375.7L385.2 366.8L376.4 363.7L374.9 356.3L376.8 348.2L369.2 343.5L351.1 338.4L347.4 313.1L367.2 303.8L396.1 305.8L413.1 302.7L415.5 309.1L424.7 311L441.3 325.7","M454.9 268.5L463.3 275.7L464.8 290.8L470.3 308.9L451.8 320.6L441.3 325.7L424.7 311L415.5 309.1L413.1 302.7L396.1 305.8L367.2 303.8L347.4 313.1L348 290.1L356.5 270.5L372.8 259.7L386.5 283.2L400.3 282.5L403.6 258.4L418.4 252.8L425.9 256.7L440.7 268.4L454.9 268.5","M466.9 203.6L469.5 209.4L457.2 228.4L462.4 258.5L454.9 268.5L440.7 268.4L425.9 256.7L418.4 252.8L403.6 258.4L405.6 239.5L399.3 243.6L388.4 232.1L386.9 213.2L408.7 204L430.4 199.1L449.1 204.6L466.9 203.6","M227.8 380.2L231.8 394.6L227 402.2L233.2 412.2L237.5 427L236.2 436.5L243.2 453.8L235.5 456.7L231 453.6L226.7 458.7L214.2 463.9L207.8 470.5L195.3 476.3L198.3 484.2L200.2 495.3L209 501.5L218.7 512.6L212.6 524.5L206.4 527.7L208.9 544.2L207.3 548.4L201.9 543.3L193.6 542.5L181.2 547L166 546L163.6 552.6L154.8 545.6L149.7 547L131.2 539.3L127.6 544.8L113 544.6L115.2 526.6L123.9 509L99 504.2L90.9 497.4L91.9 485.9L88.4 480L90.4 462L87.5 433.6L97.8 433.6L102.2 423.2L106.5 397.6L103.3 388L106.6 382L121.1 380.4L124.3 386.7L136 372.6L132.1 361.7L131.2 345.1L144.3 349L155.3 344.5L155.6 355.8L173.1 362.6L172.9 372.9L190.4 367.5L200.1 359.5L219.6 371L227.8 380.2","M375.1 627.1L380 636.8L386.7 635.1L400 638.8L425.3 640L433.9 634L454.2 628.5L466.7 637.1L476.9 639.6L467.9 649.2L461.7 665.8L467.2 678.8L452.3 675.8L434.8 683L434.6 694.2L418.9 696.4L406.7 688.5L392.9 694.7L380.2 694L378.9 679L370.3 671.7L373.1 668.5L371.3 665.7L374.2 658.4L380.7 651.1L372.3 641.1L370.8 632.5L375.1 627.1","M437.7 824.6L435.6 830.7L410.7 832.5L410.9 829L389.8 825L393.1 816.2L402.5 823.2L415.9 822L428.8 823.5L428.4 827.1L437.7 824.6","M380.2 694L392.9 694.7L406.7 688.5L418.9 696.4L434.6 694.2L434.8 683L443.1 689L437.8 703.1L433.7 705.6L423.2 705L414.2 702.8L393.3 708.7L405.2 721.2L396.5 724.8L386.9 724.8L377.8 713.4L374.6 718.3L378.4 731.5L387 741.8L380.5 746.5L390.2 756.6L398.7 762.8L398.9 775L382.9 769.3L388 780.2L377.1 782.4L383.6 801.1L372.2 801.4L358 792.2L351.6 775.2L348.5 760.9L341.8 750.9L332.9 738.5L331.8 732.2L339.8 721.5L340.8 714.3L346.5 711.1L346.8 705.2L358.1 703.2L364.7 698.3L374 698.7L376.9 694.8L380.2 694","M496.6 807L479.9 795.8L461.1 796.2L450.8 775L438.2 763.1L446.6 746.2L435.7 735.7L454.8 714.6L481.4 713.7L488.7 696.7","M434.8 683L452.3 675.8L467.2 678.8L469.2 687.6L484.3 694.9L481.2 700.4L460.7 701.7L453.3 708.6L438.9 720.6L433.5 710.2L433.7 705.6L437.8 703.1L443.1 689L434.8 683","M346.8 705.2L346.5 711.1L340.8 714.3L339.8 721.5L331.8 732.2L328.8 730.7L328.5 725.8L319 718.4L317.5 707.8L318.9 692.4L321.3 685.4L318.3 681.8L317.2 674.6L324.7 663.2L325.8 667.6L330.5 665.5L334.1 671.7L338.2 674L339.4 682.3L337.2 690L339.7 699.7L346.8 705.2","M270 572.4L275.4 575.4L288.3 585.9L302.6 590.6L309 586.9L313.2 596.4L318.7 603.3L312.1 612.3L304.2 607L292.3 607.3L277.5 603.3L269.4 603.8L265.7 608.8L259.5 603.3L255.9 613.2L264.3 624.4L268.1 631.7L276 640.5L282.6 645.7L289.1 655.4L304.4 664.1L302.4 668L286.2 659.5L276.2 651.2L260.5 644.2L246 627L249.5 625.2L241.6 615.2L241.3 607.1L230.1 603.3L224.9 613.6L219.8 605.6L220.1 597.3L232.8 597.7L236 593.6L241.8 597.6L248.6 598L248.5 591.3L254.5 588.8L256.2 578.9L270 572.4","M149.7 547L150.3 551.4L147.7 557.6L155.5 562.1L164.3 562.8L162.9 572.9L155.3 577.1L142.6 573.9L138.8 583.9L130.6 584.6L127.6 580.8L118 589L109.6 590.2L102.2 585L96.3 574.2L88 578.1L88.3 566.9L100.9 553L100.4 546.6L108.2 548.9L113 544.6L127.6 544.8L131.2 539.3L149.7 547","M88.4 480L91.9 485.9L90.9 497.4L85.9 498L82 495.7L83.9 481L88.4 480","M90.4 462L88.4 480L83.9 481L82 495.7L67 483.8L58.1 485.8L46 473.3L38 462.6L30 462.2L27.5 452.7L41.3 447.4L54 449.5L69.9 443.9L80.9 455.7L90.4 462","M103.3 388L106.5 397.6L102.2 423.2L97.8 433.6L87.5 433.6L90.4 462L80.9 455.7L69.9 443.9L54 449.5L41.3 447.4L50.2 439.9L65.3 399.1L88.9 387.2L103.3 388","M-10.1 665.7L-3.8 660.8L15.6 671.2L35.6 668.2L36.6 681.5L20.2 696.6L-1.9 701.3L-3.4 708.9L-14 721.2L-20.7 739.1L-14 751.6L-23.9 761.2L-27.7 775.2","M164.3 562.8L174.8 566.3L176.8 561.6L193.8 557.3L197.6 565.9L222.4 572.3L220.4 584.3L224.6 594.7L210.9 591.1L196.8 599.7L197.8 611.7L195.7 618.4L201.3 630.5L217.5 642.4L226.2 661.6L245.4 680L258.9 679.9L263.1 684.9L258.3 689.5L273.7 697.6L286.4 704.4L301.2 716L303 720.2L299.8 728.1L290.2 717.8L275.2 714.1L268 728.4L280.4 736.6L278.3 748L271.1 749.3L261.9 767.8L254.7 769.5L254.8 762.9L258.3 751.3L262.1 746.7L255.4 734L250.1 722.9L242.9 720.1L237.8 710.5L226.7 706.4L219.3 697.4L206.5 696L193 685.7L177.2 670.9L165.5 657.7L160.1 634.5L151.6 631.8L137.5 624L129.6 627.2L119.6 638.2L112.4 639.9L114.4 629.7L105 626.7L100.6 608.3L106.6 600.9L101.5 591.8L102.2 585L109.6 590.2L118 589L127.6 580.8L130.6 584.6L138.8 583.9L142.6 573.9L155.3 577.1L162.9 572.9L164.3 562.8","M238.8 764.5L251.9 762.6L245.7 779.5L248.3 786.1L244.7 796.9L231.4 789L222.7 786.7L198.6 775.9L201 764.8L221.2 766.8L238.8 764.5","M134.4 703.9L143 696.9L153.4 712.8L150.9 742L143.1 740.6L136.1 747.9L129.6 742.2L128.9 715.6L124.9 702.8L134.4 703.9","M155.3 344.5L144.3 349L131.2 345.1L124.2 328.6L123.7 297.6L126.6 289.3L131.6 280L146.7 278L152.8 269.4L166.7 260.4L166.1 276.6L161 286.8L163 295.4L172.4 300.1L168.2 311.6L163 308.3L150.6 330L155.3 344.5","M197.6 310.7L203.1 325.8L192.7 349.9L174.7 333.2L172.2 320.7L197.6 310.7","M-35.1 355L-23.3 359.7L-12.7 392.5L-7.8 403.6L13.2 409L11 426.8L2.2 434.8L9.1 448.9L-6.4 463L-29.5 462.8","M222.4 572.3L236.6 574.2L245.3 568.6L260.4 568L263.7 563.8L266.6 564L270 572.4L256.2 578.9L254.5 588.8L248.5 591.3L248.6 598L241.8 597.6L236 593.6L232.8 597.7L220.8 596.9L224.6 594.7L220.4 584.3L222.4 572.3","M493.9 4M468.5 168.8L437.2 171.6L406.8 184L378.7 191.2L368.7 172.6L352 161.3L355.9 126.7L347.5 93.9L355.7 72.2L371.4 48.4L410.8 5.9L422.3 -2.5L420.6 -19.6L396.6 -39.1","M373.4 507.2L368.6 514L365.2 524.3L361.5 526.9L343.1 519.1L337.4 520.7L333.3 526.7L325.2 529.9L323.4 528.3L315 532.2L308.1 533L306.7 538L292.3 541.2L285.9 538.4L277.1 531.9L275.4 523.1L276.8 519.8L279.2 514.2L286.9 514.6L292.8 512L293.2 509.5L296.5 508.3L297.7 502.4L301.6 501.3L304.3 496.6L309.4 496.6L310.4 498.2L317.5 494.6L326.2 503.9L336.4 498.3L344.6 501L357 497.2L373.4 507.2","M243.2 453.8L251.4 462.5L264.3 464.8L263.2 472.2L272.6 477.7L275.2 470.8L287 473.8L288.7 482.1L301.5 483.7L309.4 496.6L304.3 496.6L301.6 501.3L297.7 502.4L296.5 508.3L293.2 509.5L292.8 512L286.9 514.6L279.2 514.2L276.8 519.8L268.8 515L260.7 516.3L247.3 508.5L241.3 510.4L231.5 520.9L218.7 512.6L209 501.5L200.2 495.3L198.3 484.2L195.3 476.3L207.8 470.5L214.2 463.9L226.7 458.7L231 453.6L235.5 456.7L243.2 453.8","M304.4 664.1L289.1 655.4L282.6 645.7L276 640.5L268.1 631.7L264.3 624.4L255.9 613.2L259.5 603.3L265.7 608.8L269.4 603.8L277.5 603.3L292.3 607.3L304.2 607L312.1 612.3L318.3 612.2L314 622.7L322.3 631.8L319.8 642.8L315.7 643.9L312.5 646L306.9 651.4L304.4 664.1","M370.3 671.7L378.9 679L380.2 694L376.9 694.8L374 698.7L364.7 698.3L358.1 703.2L346.8 705.2L339.7 699.7L337.2 690L339.4 682.3L341.6 682.5L342.4 677.8L352.6 674.3L356.4 673.4L362.3 672.1L370.3 671.7","M309 586.9L322.3 580.5L333 581.6L342.4 591.2L344.3 598.9L354.8 604.6L356.2 614.5L366.2 621.4L371.6 616L375.9 619L371.9 623L375.1 627.1L370.8 632.5L372.3 641.1L380.7 651.1L374.2 658.4L371.3 665.7L373.1 668.5L370.3 671.7L362.3 672.1L356.4 673.4L355.9 671.7L357.9 669L359.8 663.4L357.4 663.5L354.1 659.2L351.2 658.1L349 654.4L345.7 653L343.3 649.7L340.1 651L337.8 658.7L333.7 660.4L335.1 658.4L328.5 653.6L322.8 651.1L320.3 647.9L315.7 643.9L319.8 642.8L322.3 631.8L314 622.7L318.3 612.2L312.1 612.3L318.7 603.3L313.2 596.4L309 586.9","M330.5 665.5L325.8 667.6L324.7 663.2L317.2 674.6L318.3 681.8L314.7 680L309.9 672.6L302.4 668L304.4 664.1L306.9 651.4L312.5 646L315.7 643.9L320.3 647.9L322.8 651.1L328.5 653.6L335.1 658.4L333.7 660.4L330.5 665.5","M339.4 682.3L338.2 674L334.1 671.7L330.5 665.5L333.7 660.4L337.8 658.7L340.1 651L343.3 649.7L345.7 653L349 654.4L351.2 658.1L354.1 659.2L357.4 663.5L359.8 663.4L357.9 669L355.9 671.7L356.4 673.4L352.6 674.3L342.4 677.8L341.6 682.5L339.4 682.3"],"labels":[["Norway",132.5,119.7],["Sweden",248.1,179.2],["Denmark",137.7,311],["Germany",154.9,412.9],["Poland",322.3,421.2],["Czechia",246.4,487.3],["Austria",229.1,550.1],["Hungary",322.3,560.1],["Croatia",258.5,594.5],["Bosnia",280.9,625.6],["Serbia",344.7,630.3],["Albania",326.6,703.9],["Greece",374.1,741.5],["Italy",187.7,646.7]],"route":[[163.4,63.2,0],[180.5,94.9,180],[138,140.7,500],[106.8,156.8,685],[113.5,165.5,726],[104.9,222.7,947],[154.9,264.5,1206],[163.6,332.1,1492],[192.9,364.5,1682],[234.3,390.4,1898],[275.7,418.4,2125],[277.5,454,2293],[279,481.5,2426],[281.4,481.3,2438],[319.6,504.5,2655],[322.1,510.5,2688],[322.3,535,2816],[312.8,547.6,2898],[299.9,582.3,3097],[303.3,608.9,3244],[302.3,636.2,3397],[310.2,660.7,3540],[320.6,674.5,3637],[336.1,679.7,3729],[339.6,720.6,3967],[344.7,732.8,4052],[349.9,748.1,4156],[357.7,775.3,4342],[365.6,788.1,4442]]};
+// Corridor interpolation: distance ridden -> projected point + segment normal.
+function mapP(km) {
+  const R = MAPDATA.route;
+  km = Math.max(0, Math.min(km, R[R.length - 1][2]));
+  let i = 1;
+  while (i < R.length - 1 && R[i][2] < km) i++;
+  const a = R[i - 1], b = R[i], t = (km - a[2]) / ((b[2] - a[2]) || 1);
+  const dx = b[0] - a[0], dy = b[1] - a[1], l = Math.hypot(dx, dy) || 1;
+  return { x: a[0] + dx * t, y: a[1] + dy * t, nx: -dy / l, ny: dx / l };
+}
+const MAP_CPS = [{ km: 685, l: 'CP1 Flåm' }, { km: 2655, l: 'CP2 Tatra' },
+                 { km: 3397, l: 'CP3 Sarajevo' }, { km: 3967, l: 'CP4 Leskovik' }];
+const mapSvg = document.getElementById('mapplot');
+let mapHits = [];
+function renderMap() {
+  const rows = visible();
+  let s = '';
+  MAPDATA.borders.forEach(function (d) {
+    s += '<path d="' + d + '" fill="none" stroke="var(--ink-2)" stroke-width="0.8" opacity=".35"/>';
+  });
+  MAPDATA.labels.forEach(function (l) {
+    s += '<text x="' + l[1] + '" y="' + l[2] + '" text-anchor="middle" class="axname" opacity=".75">' + l[0] + '</text>';
+  });
+  s += '<path d="' + MAPDATA.route.map(function (p, i) { return (i ? 'L' : 'M') + p[0].toFixed(1) + ' ' + p[1].toFixed(1); }).join('') +
+       '" fill="none" stroke="var(--ink-2)" stroke-width="1.5" opacity=".5" stroke-linejoin="round"/>';
+  MAP_CPS.forEach(function (c, i) {
+    const p = mapP(c.km), ms = CHECKPOINTS[i].ms, gone = ms <= Date.now();
+    s += '<circle cx="' + p.x.toFixed(1) + '" cy="' + p.y.toFixed(1) + '" r="3.2" fill="var(--surface)" stroke="var(--ink)" stroke-width="1.4"/>';
+    s += '<text class="marklab" x="' + (p.x + 8).toFixed(1) + '" y="' + (p.y - 8).toFixed(1) + '" fill="var(--ink-2)" font-size="10.5">' + c.l + '</text>';
+    s += '<text class="marklab" x="' + (p.x + 8).toFixed(1) + '" y="' + (p.y + 4).toFixed(1) + '" fill="var(--muted)" font-size="9.5">' +
+         (gone ? 'closed' : 'closes ' + fmtAbs(ms)) + '</text>';
+  });
+  const st = mapP(0), fi = mapP(4442);
+  s += '<text class="marklab" x="' + (st.x + 9).toFixed(1) + '" y="' + (st.y + 4).toFixed(1) + '" fill="var(--ink-2)" font-size="10.5">Trondheim · start</text>';
+  s += '<text class="marklab" x="' + (fi.x - 9).toFixed(1) + '" y="' + (fi.y + 12).toFixed(1) + '" text-anchor="end" fill="var(--ink-2)" font-size="10.5">Kalamata · finish</text>';
+  s += '<text class="marklab" x="' + (fi.x - 9).toFixed(1) + '" y="' + (fi.y + 24).toFixed(1) + '" text-anchor="end" fill="var(--muted)" font-size="9.5">cut-off ' + fmtAbs(CUTOFF_MS) + '</text>';
+
+  // riders along the corridor; deterministic sideways jitter so dots stack visibly
+  mapHits = [];
+  rows.forEach(function (r, i) {
+    const p = mapP(r.km), o = ((i * 37) % 9 - 4) * 2.0;
+    const x = r.fin ? p.x : p.x + p.nx * o, y = r.fin ? p.y : p.y + p.ny * o;
+    if (r.fin) {
+      s += flagMark(x, y - 6, 14);
+      s += '<text x="' + (x + 10).toFixed(1) + '" y="' + (y - 8).toFixed(1) + '" font-size="10" fill="var(--ink-2)">' + esc(r.name) + '</text>';
+    } else if (r.dnf) {
+      s += '<path d="M' + (x - 2.7).toFixed(1) + ' ' + (y - 2.7).toFixed(1) + 'L' + (x + 2.7).toFixed(1) + ' ' + (y + 2.7).toFixed(1) +
+           'M' + (x - 2.7).toFixed(1) + ' ' + (y + 2.7).toFixed(1) + 'L' + (x + 2.7).toFixed(1) + ' ' + (y - 2.7).toFixed(1) +
+           '" stroke="var(--behind)" stroke-width="1.4" opacity=".8"/>';
+    } else if (!r.gc) {
+      s += '<circle cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1) + '" r="2.6" fill="var(--ink-2)" opacity=".75"/>';
+    } else {
+      s += '<circle cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1) + '" r="2.8" fill="var(--' + classify(r) + ')" opacity=".85"/>';
+    }
+    mapHits.push({ x: x, y: y, r: r });
+  });
+
+  // the broom: where the minimum-GC-pace rider would be right now
+  const envT = [[START_MS, 0]].concat(CHECKPOINTS.map(function (c, i) { return [c.ms, MAP_CPS[i].km]; }))
+    .concat([[CUTOFF_MS, 4442]]);
+  let bk = 4442;
+  const nowMs = Date.now();
+  for (let i = 1; i < envT.length; i++) {
+    if (nowMs <= envT[i][0]) {
+      bk = envT[i - 1][1] + (envT[i][1] - envT[i - 1][1]) * (nowMs - envT[i - 1][0]) / (envT[i][0] - envT[i - 1][0]);
+      break;
+    }
+  }
+  const bp = mapP(bk), L = 82;
+  s += '<line x1="' + (bp.x - bp.nx * L).toFixed(1) + '" y1="' + (bp.y - bp.ny * L).toFixed(1) +
+       '" x2="' + (bp.x + bp.nx * L).toFixed(1) + '" y2="' + (bp.y + bp.ny * L).toFixed(1) +
+       '" stroke="var(--behind)" stroke-width="2.5" stroke-dasharray="6 5"/>';
+  // label at the western end of the line, where the map is empty
+  const sgn = bp.nx <= 0 ? 1 : -1;
+  s += '<text class="marklab" x="' + (bp.x + bp.nx * sgn * L - 6).toFixed(1) + '" y="' + (bp.y + bp.ny * sgn * L + 3).toFixed(1) +
+       '" text-anchor="end" fill="var(--behind)" font-size="10.5">broom wagon · ' + Math.round(bk) + ' km</text>';
+  mapSvg.innerHTML = s;
+}
+// Map zoom/pan: the whole scene lives in one viewBox, so zooming is a cheap
+// attribute change — no re-render, everything (dots, labels) scales natively.
+let mapVB = { x: 0, y: 0, w: 460, h: 820 };
+function applyMapVB() {
+  mapSvg.setAttribute('viewBox', mapVB.x.toFixed(1) + ' ' + mapVB.y.toFixed(1) + ' ' + mapVB.w.toFixed(1) + ' ' + mapVB.h.toFixed(1));
+}
+function mapClamp() {
+  mapVB.w = Math.min(460, Math.max(460 / 8, mapVB.w));
+  mapVB.h = mapVB.w * (820 / 460);
+  mapVB.x = Math.max(0, Math.min(460 - mapVB.w, mapVB.x));
+  mapVB.y = Math.max(0, Math.min(820 - mapVB.h, mapVB.y));
+}
+function mapPt(cx, cy) {
+  const b = mapSvg.getBoundingClientRect();
+  return [mapVB.x + (cx - b.left) / b.width * mapVB.w, mapVB.y + (cy - b.top) / b.height * mapVB.h];
+}
+function mapZoomAt(px, py, f) {
+  mapVB.x = px - (px - mapVB.x) * f;
+  mapVB.y = py - (py - mapVB.y) * f;
+  mapVB.w *= f;
+  mapClamp(); applyMapVB();
+}
+function mapPanPx(dx, dy) {
+  const b = mapSvg.getBoundingClientRect();
+  mapVB.x -= dx * mapVB.w / b.width;
+  mapVB.y -= dy * mapVB.h / b.height;
+  mapClamp(); applyMapVB();
+}
+mapSvg.style.touchAction = 'none';
+mapSvg.style.cursor = 'grab';
+mapSvg.addEventListener('wheel', function (e) {
+  e.preventDefault();
+  if (e.ctrlKey || e.metaKey) { const p = mapPt(e.clientX, e.clientY); mapZoomAt(p[0], p[1], Math.exp(e.deltaY * 0.01)); }
+  else mapPanPx(-e.deltaX, -e.deltaY);
+}, { passive: false });
+mapSvg.addEventListener('dblclick', function () { mapVB = { x: 0, y: 0, w: 460, h: 820 }; applyMapVB(); });
+let mapDrag = null, mapTouch = null;
+mapSvg.addEventListener('pointerdown', function (e) {
+  if (e.pointerType === 'touch') return;
+  mapDrag = { x: e.clientX, y: e.clientY };
+  mapSvg.style.cursor = 'grabbing';
+  try { mapSvg.setPointerCapture(e.pointerId); } catch (x) {}
+});
+function mapEndDrag() { mapDrag = null; mapSvg.style.cursor = 'grab'; }
+mapSvg.addEventListener('pointerup', mapEndDrag);
+mapSvg.addEventListener('pointercancel', mapEndDrag);
+function mapPinchFrom(e) {
+  const a = e.touches[0], c = e.touches[1];
+  return { mode: 'pinch', dist: Math.hypot(a.clientX - c.clientX, a.clientY - c.clientY),
+           cx: (a.clientX + c.clientX) / 2, cy: (a.clientY + c.clientY) / 2 };
+}
+mapSvg.addEventListener('touchstart', function (e) {
+  e.preventDefault();
+  if (e.touches.length === 1) mapTouch = { mode: 'pan', x: e.touches[0].clientX, y: e.touches[0].clientY };
+  else if (e.touches.length >= 2) mapTouch = mapPinchFrom(e);
+}, { passive: false });
+mapSvg.addEventListener('touchmove', function (e) {
+  if (!mapTouch) return;
+  e.preventDefault();
+  if (mapTouch.mode === 'pan' && e.touches.length === 1) {
+    const t = e.touches[0];
+    mapPanPx(t.clientX - mapTouch.x, t.clientY - mapTouch.y);
+    mapTouch.x = t.clientX; mapTouch.y = t.clientY;
+  } else if (mapTouch.mode === 'pinch' && e.touches.length >= 2) {
+    const n = mapPinchFrom(e);
+    mapPanPx(n.cx - mapTouch.cx, n.cy - mapTouch.cy);
+    const p = mapPt(n.cx, n.cy);
+    mapZoomAt(p[0], p[1], mapTouch.dist / Math.max(1, n.dist));
+    mapTouch = n;
+  }
+}, { passive: false });
+mapSvg.addEventListener('touchend', function (e) {
+  if (e.touches.length === 0) mapTouch = null;
+  else if (e.touches.length === 1) mapTouch = { mode: 'pan', x: e.touches[0].clientX, y: e.touches[0].clientY };
+  else mapTouch = mapPinchFrom(e);
+});
+let mapGesture = null;
+mapSvg.addEventListener('gesturestart', function (e) { e.preventDefault(); mapGesture = e.scale || 1; });
+mapSvg.addEventListener('gesturechange', function (e) {
+  e.preventDefault();
+  if (mapTouch) return;
+  const sc = e.scale || mapGesture;
+  const p = mapPt(e.clientX, e.clientY);
+  mapZoomAt(p[0], p[1], mapGesture / Math.max(0.01, sc));
+  mapGesture = sc;
+});
+mapSvg.addEventListener('gestureend', function (e) { e.preventDefault(); mapGesture = null; });
+mapSvg.addEventListener('pointermove', function (e) {
+  if (e.pointerType === 'touch') return;
+  if (mapDrag) {
+    mapPanPx(e.clientX - mapDrag.x, e.clientY - mapDrag.y);
+    mapDrag.x = e.clientX; mapDrag.y = e.clientY;
+    tip.classList.remove('on');
+    return;
+  }
+  const p = mapPt(e.clientX, e.clientY), vx = p[0], vy = p[1];
+  let best = null, bd = 1e9;
+  mapHits.forEach(function (h) {
+    const d = Math.hypot(h.x - vx, h.y - vy);
+    if (d < bd) { bd = d; best = h; }
+  });
+  if (!best || bd > 12 * (mapVB.w / 460)) { tip.classList.remove('on'); return; }
+  const r = best.r;
+  const stLine = r.fin ? 'Finisher · inside the time limit'
+    : r.dnf ? 'Scratched here · official DNF'
+    : !r.gc ? 'Out of GC · still riding'
+    : LABEL[classify(r)] + ' · ' + r.kmd.toFixed(0) + ' km/day';
+  tip.innerHTML = '<div class="n">' + esc(r.name) + '</div><dl>' +
+    '<dt>Category</dt><dd>' + CATNAME[r.cat] + ' · ' + r.pos + '</dd>' +
+    '<dt>Covered</dt><dd>' + kfmt(Math.round(r.km)) + ' km</dd></dl>' +
+    '<div class="st">' + stLine + '</div>';
+  tip.classList.add('on');
+  const tw = tip.offsetWidth, th = tip.offsetHeight;
+  tip.style.left = Math.min(window.innerWidth - tw - 10, Math.max(10, e.clientX + 14)) + 'px';
+  tip.style.top = Math.max(10, e.clientY - th - 12) + 'px';
+});
+mapSvg.addEventListener('pointerleave', function () { tip.classList.remove('on'); });
+
+render();
+
+/* ---------------- Wall of Support ---------------- */
+(function () {
+  const listEl = document.getElementById('wall-list');
+  const feedEl = document.getElementById('wall-feed');
+  const qEl = document.getElementById('wall-q');
+  const comp = document.getElementById('compose');
+  const compName = document.getElementById('compose-name');
+  const compIg = document.getElementById('compose-ig');
+  const compText = document.getElementById('compose-text');
+  const compCount = document.getElementById('compose-count');
+  const compSend = document.getElementById('compose-send');
+  const toastEl = document.getElementById('toast');
+  let current = null;
+
+  // The strugglers: still riding (not scratched), on the edge or off the pace.
+  // Off-the-pace first, then by how far under their required pace they sit.
+  function strugglers() {
+    return RIDERS.filter(function (r) {
+      if (r.dnf) return false;
+      const c = classify(r);
+      return c === 'edge' || c === 'behind';
+    }).map(function (r) {
+      const req = requiredPace(r, state.total).pace;
+      return { r: r, cls: classify(r), handle: HANDLES[r.name] || null, def: req > 0 ? r.kmd / req - 1 : 0 };
+    }).sort(function (a, b) {
+      if (a.cls !== b.cls) return a.cls === 'behind' ? -1 : 1;
+      return a.def - b.def;
+    });
+  }
+
+  function toast(msg) {
+    toastEl.textContent = msg; toastEl.classList.add('on');
+    clearTimeout(toast._t); toast._t = setTimeout(function () { toastEl.classList.remove('on'); }, 3400);
+  }
+
+  function renderList() {
+    const q = qEl.value.trim().toLowerCase();
+    const rows = strugglers().filter(function (s) { return !q || s.r.name.toLowerCase().indexOf(q) !== -1; });
+    listEl.innerHTML = rows.length ? rows.map(function (s, i) {
+      return '<button class="wr" data-i="' + i + '">' +
+        pictoHTML(s.cls) +
+        '<span class="wr-name">' + esc(s.r.name) + '</span>' +
+        (s.handle ? '<span class="wr-ig">@' + esc(s.handle) + '</span>' : '') +
+        '<span class="wr-cta">Cheer</span></button>';
+    }).join('') : '<p class="wall-empty">No matches.</p>';
+    listEl._rows = rows;
+  }
+  listEl.addEventListener('click', function (e) {
+    const b = e.target.closest('.wr'); if (!b) return;
+    openCompose(listEl._rows[+b.getAttribute('data-i')]);
+  });
+  qEl.addEventListener('input', renderList);
+
+  function openCompose(s) {
+    current = s;
+    compName.textContent = s.r.name;
+    if (s.handle) {
+      compIg.textContent = '@' + s.handle + ' · opens on send';
+      compIg.href = 'https://www.instagram.com/' + s.handle + '/';
+      compIg.style.display = '';
+    } else {
+      compIg.textContent = 'No Instagram found — your message still goes on the wall';
+      compIg.removeAttribute('href'); compIg.style.display = '';
+    }
+    compText.value = ''; compCount.textContent = '100'; compSend.disabled = false;
+    comp.hidden = false; compText.focus();
+  }
+  function closeCompose() { comp.hidden = true; current = null; }
+  document.getElementById('compose-x').onclick = closeCompose;
+  comp.addEventListener('click', function (e) { if (e.target === comp) closeCompose(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !comp.hidden) closeCompose(); });
+  compText.addEventListener('input', function () { compCount.textContent = 100 - compText.value.length; });
+
+  compSend.onclick = function () {
+    if (!current) return;
+    const msg = compText.value.trim();
+    if (!msg) { compText.focus(); return; }
+    compSend.disabled = true;
+    const body = { rider_name: current.r.name, rider_handle: current.handle, cat: current.cls, message: msg };
+    fetch(SUPA_URL + '/rest/v1/support_messages', {
+      method: 'POST',
+      headers: { apikey: SUPA_KEY, Authorization: 'Bearer ' + SUPA_KEY, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
+      body: JSON.stringify(body)
+    }).then(function (res) {
+      if (!res.ok) throw new Error('post failed ' + res.status);
+      // Copy for the personal DM, then open their Instagram.
+      if (navigator.clipboard) navigator.clipboard.writeText(msg).catch(function () {});
+      if (current.handle) window.open('https://www.instagram.com/' + current.handle + '/', '_blank', 'noopener');
+      closeCompose();
+      toast(current.handle ? 'On the wall. Message copied — paste it into their Instagram DM.' : 'Posted to the wall of support.');
+      setTimeout(loadFeed, 600);
+    }).catch(function () {
+      compSend.disabled = false;
+      toast('Could not send just now — please try again in a moment.');
+    });
+  };
+
+  function loadFeed() {
+    fetch(SUPA_URL + '/rest/v1/support_messages?status=eq.approved&select=rider_name,rider_handle,cat,message,created_at&order=created_at.desc&limit=80',
+      { headers: { apikey: SUPA_KEY, Authorization: 'Bearer ' + SUPA_KEY } })
+      .then(function (res) { if (!res.ok) throw new Error(res.status); return res.json(); })
+      .then(function (rows) {
+        if (!rows.length) { feedEl.innerHTML = '<p class="wall-empty">No messages yet — be the first to send one.</p>'; return; }
+        feedEl.innerHTML = rows.map(function (m) {
+          const ig = m.rider_handle
+            ? '<a href="https://www.instagram.com/' + esc(m.rider_handle) + '/" target="_blank" rel="noopener nofollow">@' + esc(m.rider_handle) + '</a>'
+            : '';
+          return '<div class="wm ' + (m.cat === 'behind' ? 'behind' : 'edge') + '">' +
+            '<div class="wm-to">To <b>' + esc(m.rider_name) + '</b> ' + ig + '</div>' +
+            '<div class="wm-msg">' + esc(m.message) + '</div></div>';
+        }).join('');
+      })
+      .catch(function () {
+        feedEl.innerHTML = '<p class="wall-empty">The live wall needs the published site — open it at the-last-dot.vercel.app.</p>';
+      });
+  }
+
+  renderList();
+  loadFeed();
+})();
+</script>
+
+</body>
+</html>
